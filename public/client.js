@@ -47,7 +47,6 @@ var write = function(name,date,text){
 		console.log(response);
 		if (response == "1")
 			$("#text").val("");
-		$("#write").removeClass("disable");
 		update();
 	})
 }
@@ -61,10 +60,47 @@ var update = function(){
 	read();
 }
 
+var disableWriteButton = function() {
+	$("#write").attr("disabled", true);
+	$("#write").addClass("disable");
+}
+
+var enableWriteButton = function() {
+	$("#write").attr("disabled", false);
+	$("#write").removeAttr("disabled");
+	$("#write").removeClass("disable");
+}
+
+// 「書き込む」ボタン押し下げ時
+var writeButton = function() {
+	disableWriteButton();
+	write($("#name").val(),new Date(),$("#text").val());
+	update();
+	enableWriteButton();
+}
+
 $(function(){
-	$("#write").click(function(){
-		$(this).addClass("disable");
-		write($("#name").val(),new Date(),$("#text").val());
+	// 「書き込むボタン」
+	$("#write").click(writeButton);
+	disableWriteButton();
+	// Ctrl+Enterで送信
+	$(window).keydown( function(e) {
+		if (e.ctrlKey && e.keyCode == 13)  {
+			if (document.activeElement.id == 'text') {
+				if ($("#text").val() != "") {
+					writeButton();
+				}
+			}
+			event.preventDefault();
+		}
+	});
+	// textareaの監視
+	$("#text").bind('keyup change', function() {
+		if ($(this).val() == "") {
+			disableWriteButton();
+		} else {
+			enableWriteButton();
+		}
 	})
 	update();
 	setInterval(update,5000);

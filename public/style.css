@@ -33,11 +33,11 @@
 
 #write{
     text-align: center;
-    width: 60px;
+    width: 70px;
     display: block;
     line-height: 26px;
     border-radius: 4px;
-    left: 456px;
+    left: 446px;
     height: 26px;
     background: white;
     position: absolute;
@@ -49,6 +49,7 @@
 #write.disable{
     background: gray;
     color: white;
+    cursor: default;
 }
 
 #content{
