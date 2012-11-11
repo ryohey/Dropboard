@@ -1,0 +1,80 @@
+#input{
+	height: 98px;
+	position: relative;
+	background: #484f58;
+}
+
+#text{
+	height: 50px;
+	padding: 5px;
+	left: 6px;
+	top: 2px;
+	position: absolute;
+	border-radius: 4px;
+	display: block;
+	border: none;
+	width: 500px;
+
+}
+
+#name:before{
+	content:"お名前";
+}
+
+#name{
+    padding: 5px;
+    border: none;
+    position: absolute;
+
+    top: 65px;
+    left: 3px;
+    border-radius: 4px;
+}
+
+#write{
+    text-align: center;
+    width: 60px;
+    display: block;
+    line-height: 26px;
+    border-radius: 4px;
+    left: 456px;
+    height: 26px;
+    background: white;
+    position: absolute;
+    top: 67px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#write.disable{
+    background: gray;
+    color: white;
+}
+
+#content{
+
+}
+
+article{
+position:relative;
+padding: 5px;
+border-bottom: 1px dotted lightgray;
+}
+
+article header{
+
+}
+
+article header time{
+color: lightblue;
+font-size: 12px;
+padding-left: 10px;
+}
+
+article a[rel="author"]{
+font-weight: bold;
+}
+
+article .content{
+	
+}
