@@ -5,6 +5,18 @@ var app = express();
 
 app.use(require('connect').bodyParser());
 
+app.post("/post", function(req, res){
+    var data = req.body;
+    if (typeof data.name !== undefined && typeof data.date !== undefined && typeof data.text !== undefined){
+        fs.writeFile('./data/'+data.name+"「"+data.text+"」"+'.json', JSON.stringify(data), function(err){
+            if (err)
+                res.send("0");
+            else
+                res.send("1");
+        });
+    }
+})
+
 app.post("/write", function(req, res){
     var data;
     try{
