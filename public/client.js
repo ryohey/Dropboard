@@ -31,6 +31,7 @@ var messageDiff = function(before,after){
 
 var messageHTML = function(data){
 	return $("<article/>")
+	    .addClass("box")
 		.append(
 			$("<header/>")
 				.append(
@@ -44,8 +45,7 @@ var messageHTML = function(data){
 				)
 		)
 		.append(
-			$("<div/>")
-				.addClass("content")
+			$("<p/>")
 				.text(data.text)
 		)
 }
@@ -59,7 +59,8 @@ var read = function(){
 		console.log(diff);
 		diff.sort(sortByDate);
 		$.each(diff,function(){
-			messageHTML(this).prependTo("#content")
+			//messageHTML(this).prependTo("#content");
+			$("#content").prepend(messageHTML(this)).masonry("reload");
 		})
 		lastData = data;
 	})
@@ -102,13 +103,44 @@ var writeButton = function() {
 	disableWriteButton();
 	write($("#name").val(),new Date(),$("#text").val());
 	update();
-	enableWriteButton();
 }
 
+// Masonry corner stamp
+$.Mason.prototype.resize = function(){
+	//this._getColomns();
+	this._reLayout();
+}
+$.Mason.prototype._reLayout = function( callback ) {
+	var freeCols = this.cols;
+	if ( this.options.cornerStampSelector ) {
+		var $cornerStamp = this.element.find( this.options.cornerStampSelector ),
+		cornerStampX = $cornerStamp.offset().left - 
+		( this.element.offset().left + this.offset.x + parseInt($cornerStamp.css('marginLeft')) );
+		freeCols = Math.floor( cornerStampX / this.columnWidth );
+	}
+    // reset columns
+    var i = this.cols;
+    this.colYs = [];
+    while (i--) {
+    	this.colYs.push( this.offset.y );
+    }
+
+    for ( i = freeCols; i < this.cols; i++ ) {
+    	this.colYs[i] = this.offset.y + $cornerStamp.outerHeight(true);
+    }
+
+    // apply layout logic to all bricks
+    this.layout( this.$bricks, callback );
+};
+
+
+
+// onload
 $(function(){
-	// 「書き込むボタン」
+	// 「書き込む」ボタン
 	$("#write").click(writeButton);
 	disableWriteButton();
+	
 	// Ctrl+Enterで送信
 	$(window).keydown( function(e) {
 		if (e.ctrlKey && e.keyCode == 13)  {
@@ -120,6 +152,7 @@ $(function(){
 			event.preventDefault();
 		}
 	});
+	
 	// textareaの監視
 	$("#text").bind('keyup change', function() {
 		if ($(this).val() == "") {
@@ -128,6 +161,16 @@ $(function(){
 			enableWriteButton();
 		}
 	})
+
+	// masonry
+	$("#content").masonry({
+		itemSelector: '.box',
+		isAnimated: !Modernizr.csstransitions,
+		cornerStampSelector: '#input'/*,
+		columnWidth: function(containerWidth) { return containerWidth/5; }*/
+	});
+
+	// 更新の設定
 	update();
 	setInterval(update,5000);
 })
