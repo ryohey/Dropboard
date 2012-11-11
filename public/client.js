@@ -30,6 +30,8 @@ var messageDiff = function(before,after){
 }
 
 var messageHTML = function(data){
+	var date = new Date(data.date);
+	var datestr = date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
 	return $("<article/>")
 	    .addClass("box")
 		.append(
@@ -41,7 +43,7 @@ var messageHTML = function(data){
 				)
 				.append(
 					$("<time/>")
-						.text(data.date)
+						.text(datestr)
 				)
 		)
 		.append(
