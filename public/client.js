@@ -7,34 +7,61 @@ var sortByDate = function(a, b){
     var bx = (new Date(b.date)).getTime();
     ax = ax?ax:0;
     bx = bx?bx:0;
-    return bx - ax;
+    return ax - bx;
 }
+
+var messageDiff = function(before,after){
+	var added = [];
+	var isExist = function(that){
+		var flag = false;
+		$.each(before, function(){
+			if (this.date == that.date && this.text == that.text && this.name == that.name){
+				flag = true;
+				return;
+			}
+		})
+		return flag;
+	}
+	$.each(after,function(){
+		if (!isExist(this))
+			added.push(this);
+	})
+	return added;
+}
+
+var messageHTML = function(data){
+	return $("<article/>")
+		.append(
+			$("<header/>")
+				.append(
+					$("<a/>")
+						.attr("rel","author")
+						.text(data.name)
+				)
+				.append(
+					$("<time/>")
+						.text(data.date)
+				)
+		)
+		.append(
+			$("<div/>")
+				.addClass("content")
+				.text(data.text)
+		)
+}
+
+var lastData = [];
 
 var read = function(){
 	$.get("/read",function(response){
 		var data = $.parseJSON(response);
-		data.sort(sortByDate);
-		$.each(data,function(){
-			$("<article/>")
-				.append(
-					$("<header/>")
-						.append(
-							$("<a/>")
-								.attr("rel","author")
-								.text(this.name)
-						)
-						.append(
-							$("<time/>")
-								.text(this.date)
-						)
-				)
-				.append(
-					$("<div/>")
-						.addClass("content")
-						.text(this.text)
-				)
-				.appendTo("#content")
+		var diff = messageDiff(lastData,data);
+		console.log(diff);
+		diff.sort(sortByDate);
+		$.each(diff,function(){
+			messageHTML(this).prependTo("#content")
 		})
+		lastData = data;
 	})
 }
 
@@ -56,7 +83,6 @@ var clear = function(){
 }
 
 var update = function(){
-	clear();
 	read();
 }
 

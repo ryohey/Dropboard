@@ -11,16 +11,43 @@ var getFiles = function(dataPath){
     files.forEach(function(fileName){
         if (fileName.match(/.+\.json/)){
             var file = fs.readFileSync(dataPath+fileName);
-            list.push(JSON.parse(file));
+            var data = null;
+            try{
+                data = JSON.parse(file)
+            }catch(e){
+                console.log(e)
+            }
+            if (data)
+                list.push(data);
         }
     });
     return list;
 };
 
+var isSet = function(arg){
+    if (typeof arg !== undefined)
+        if (arg !== "")
+            return true;
+    return false;
+}
+
+var shorten = function(str,length){
+    var s = str.replace(/\n|\\|\/|\:|\*|\?|\"|\<|\>|\|/g,"");
+    var postfix = "...";
+    if (s.length > length)
+        if (length > postfix.length)
+            return s.slice(0,length-postfix.length)+postfix;
+        else
+            return s.slice(0,length);
+    else
+        return s;
+        
+}
+
 app.post("/write", function(req, res){
     var data = req.body;
-    if (typeof data.name !== undefined && typeof data.date !== undefined && typeof data.text !== undefined){
-        fs.writeFile('./data/'+data.name+"「"+data.text+"」"+'.json', JSON.stringify(data), function(err){
+    if (isSet(data.name) && isSet(data.date) && isSet(data.text)){
+        fs.writeFile('./data/'+shorten(data.name,10)+"「"+shorten(data.text,20)+"」"+'.json', JSON.stringify(data), function(err){
             if (err)
                 res.send("0");
             else
