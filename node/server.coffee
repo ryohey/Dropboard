@@ -38,12 +38,10 @@ shorten = (str, length) ->
 
 app.post "/upload", (req, res) ->
   files = req.files.files
-  console.log typeof files
-  if files.length == 1
+  if typeof files.forEach isnt 'function'
     files = [files]
   saved = []
   files.forEach (file) ->
-    console.log file
     data = fs.readFileSync file.path
     if data
       newPath = __dirname + "/" + UPLOAD_PATH + file.name;

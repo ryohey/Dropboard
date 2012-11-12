@@ -1,3 +1,5 @@
+var lbAjax = new LBAjax;
+
 /* 発言フィードを生成 */
 var messageHTML = function(data) {
 	var date = new Date(data.date);
@@ -51,38 +53,6 @@ var messageHTML = function(data) {
 	return target;
 }
 
-/* 最新の投稿? */
-var lastData = [];
-
-/* 読み込む */
-var read = function(){
-	$.get("/read",function(response){
-		var data = $.parseJSON(response);
-		var diff = messageDiff(lastData,data);
-		console.log(diff);
-		diff.sort(sortByDate);
-		$.each(diff,function(){
-			messageHTML(this).prependTo("#content").show("slow");
-		})
-		lastData = data;
-	})
-}
-
-/* 書き込む */
-var write = function(name,date,text,file){
-	$.post("/write",{
-		"name":name,
-		"date":date,
-		"text":text,
-		"file":file
-	},function(response){
-		console.log(response);
-		if (response == "1")
-			$("#text").val("");
-		update();
-	})
-}
-
 /* 全消去 */
 var clear = function(){
 	$("#content").html("");
@@ -90,7 +60,11 @@ var clear = function(){
 
 /* アップデート処理 */
 var update = function(){
-	read();
+	lbAjax.update(function(data){
+		$.each(data,function(){
+			messageHTML(this).prependTo("#content").show("slow");
+		})
+	})
 }
 
 /* 書き込むボタン無効化 */
@@ -111,37 +85,30 @@ var writeButton = function() {
 	disableWriteButton();
 	var files = $("#text").data("files");
 	if (files)
-		uploadFiles(files,function(response){
+		lbAjax.upload(files,function(response){
+			console.log(response);
 			$("#text")
 				.data("files",null)
-	        	.removeClass("attached")
-			console.log(response);
-			write($("#name").val(),new Date(),$("#text").val(),response);
+	        	.removeClass("attached");
+			lbAjax.write({
+				name:$("#name").val(),
+				date:new Date(),
+				text:$("#text").val(),
+				file:response
+			},function(){
+				$("#text").val("");
+			});
 		});
 	else
-		write($("#name").val(),new Date(),$("#text").val());
+		lbAjax.write({
+			name:$("#name").val(),
+			date:new Date(),
+			text:$("#text").val()
+		},function(){
+			$("#text").val("");
+		});
 	update();
 }
-
-var uploadFiles = function (files,success) {
-    // FormData オブジェクトを用意
-    var fd = new FormData();
-
-    // ファイル情報を追加する
-    for (var i = 0; i < files.length; i++) {
-        fd.append("files", files[i]);
-    }
-
-    // XHR で送信
-    $.ajax({
-        url: "/upload",
-        type: "POST",
-        data: fd,
-        processData: false,
-        contentType: false,
-        success:success
-    });
-};
 
 // onload
 $(function(){
