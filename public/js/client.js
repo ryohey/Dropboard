@@ -148,10 +148,10 @@ $(function(){
 
 	// カラーセレクタ
 	$(".colorWhite").click(function() {
-		$("link").attr("href", "white.css");
+		$("link").attr("href", "css/white.css");
 	});
 	$(".colorBlack").click(function() {
-		$("link").attr("href", "black.css");
+		$("link").attr("href", "css/black.css");
 	});
 
 	// 更新の設定
