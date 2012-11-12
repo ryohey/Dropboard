@@ -9,7 +9,8 @@
  *------------------------------------------------------------------*/
 
  #content {
-
+    width: 420px;
+    margin: 0px auto;
  }
 
  /*------------------------------------------------------------------
@@ -84,11 +85,10 @@ article {
     background: #EEE;
     font-size: 15px;
     line-height: 1.4em;
-    float: left;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    width: 300px;
+    width: 400px;
 }
 
 article header{
