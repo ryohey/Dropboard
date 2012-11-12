@@ -19,12 +19,16 @@
 
 /* 入力フォームコンテナ */
 #input{
+    opacity: 0.9;
+    z-index: 10;
+    top: 0;
+    right: 0;
+    position: absolute;
     width: 400px;
     height: 170px;
     margin: 10px;
     padding: 10px;
-    background: #484f58;
-    float: right;
+    background: #484F58;
 }
 
 /* テキストボックス */
@@ -39,6 +43,10 @@
     top: 10px;
     padding: 5px;
     font-size: 15px;
+}
+
+#text.attached{
+    background: lightgreen;
 }
 
 /* 名前欄 */
@@ -114,6 +122,22 @@ article p{
     white-space: -moz-pre-wrap; /* Mozilla */
     white-space: -hp-pre-wrap;  /* HP Printers */
     word-wrap: break-word;      /* IE 5+ */
+}
+
+article .file a img{
+    max-width: 100px;
+}
+
+article .file a.otherfile{
+    text-decoration: none;
+    color: blue;
+    background: white;
+    border: 1px solid gray;
+    padding: 3px
+}
+
+article .file a.otherfile:hover{
+    border-color: blue;
 }
 
  /*------------------------------------------------------------------
