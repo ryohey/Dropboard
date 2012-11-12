@@ -3,9 +3,12 @@
 <head>
 	<meta charset="utf-8">
 	<title>LocalBoard</title>
-	<link rel="stylesheet" type="text/css" href="reset.css">
-	<link rel="stylesheet" type="text/css" href="style.css">
+    <style type="text/css">@import url("reset.css");</style>
+    <style type="text/css">@import url("style.css");</style>
+    <link href='white.css' rel='stylesheet' type='text/css' />
 	<script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="ajax.js"></script>
+    <script type="text/javascript" src="util.js"></script>
 	<script type="text/javascript" src="client.js"></script>
 </head>
 <body>
@@ -13,6 +16,12 @@
 	<input type="text" id="name">
 	<button class="button" id="write">書き込む</button>
 	<textarea id="text"></textarea>
+</div>
+<div id="colorSelector">
+    <ul>
+        <li class="colorWhite"></li>
+        <li class="colorBlack"></li>
+    </ul>
 </div>
 <div id="content">
 </div>
