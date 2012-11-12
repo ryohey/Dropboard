@@ -1,0 +1,185 @@
+/*==================================================================
+ *
+ *  style.css
+ *  
+ *==================================================================*/
+
+/*------------------------------------------------------------------
+ *  1. 全体設定
+ *------------------------------------------------------------------*/
+
+ #content {
+    width: 420px;
+    margin: 0px auto;
+ }
+
+ #colorSelector {
+    float: left;
+    padding: 5px;
+ }
+
+ #colorSelector li {
+    display: block;
+    width: 20px;
+    height: 20px;
+    float: left;
+    margin: 2px;
+    border: 1px solid #666;
+ }
+
+ li.colorWhite {
+    background-color: #fff;
+ }
+
+ li.colorBlack {
+    background-color: #000;
+ }
+
+ /*------------------------------------------------------------------
+  *  2. 入力フォーム
+  *------------------------------------------------------------------*/
+
+/* 入力フォームコンテナ */
+#input{
+    opacity: 0.9;
+    z-index: 10;
+    top: 0;
+    right: 0;
+    position: absolute;
+    width: 400px;
+    height: 170px;
+    margin: 10px;
+    padding: 10px;
+    background: #484F58;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+/* テキストボックス */
+#text{
+    clear: both;
+    height: 120px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    display: block;
+    border: none;
+    width: 390px;
+    position: relative;
+    top: 10px;
+    padding: 5px;
+    font-size: 15px;
+}
+
+#text.attached{
+    background: lightgreen;
+}
+
+/* 名前欄 */
+#name:before{
+    content:"お名前";
+}
+
+#name{
+    border: none;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;    
+    height: 26px;
+    width: 200px;
+    float: left;
+    padding: 0px 5px;
+}
+
+/* 書き込むボタン */
+#write{
+    text-align: center;
+    width: 70px;
+    display: block;
+    line-height: 26px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    height: 26px;
+    background: white;
+    font-size: 12px;
+    cursor: pointer;
+    float: right;
+}
+
+#write.disable{
+    background: gray;
+    color: white;
+    cursor: default;
+}
+
+ /*------------------------------------------------------------------
+  *  3. 発言フィード
+  *------------------------------------------------------------------*/
+
+article {
+    margin: 5px;
+    padding: 5px;
+    background: #EEE;
+    font-size: 15px;
+    line-height: 1.4em;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    width: 400px;
+}
+
+article header{
+
+}
+
+article header time{
+    color: #666;
+    font-size: 12px;
+    padding-left: 10px;
+    float: right;
+}
+
+article a[rel="author"]{
+    font-weight: bold;
+}
+
+article p{
+    white-space: pre;           /* CSS 2.0 */
+    white-space: pre-wrap;      /* CSS 2.1 */
+    white-space: pre-line;      /* CSS 3.0 */
+    white-space: -pre-wrap;     /* Opera 4-6 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    white-space: -moz-pre-wrap; /* Mozilla */
+    white-space: -hp-pre-wrap;  /* HP Printers */
+    word-wrap: break-word;      /* IE 5+ */
+}
+
+article .file a img{
+    max-width: 100px;
+}
+
+article .file a.otherfile{
+    text-decoration: none;
+    color: blue;
+    background: white;
+    border: 1px solid gray;
+    padding: 3px
+}
+
+article .file a.otherfile:hover{
+    border-color: blue;
+}
+
+ /*------------------------------------------------------------------
+  *  4. 基本要素
+  *------------------------------------------------------------------*/
+
+ /*------------------------------------------------------------------
+  *  5. その他
+  *------------------------------------------------------------------*/
+
+  .invisible {
+    display: none;
+  }
