@@ -1,9 +1,9 @@
 ﻿[Windows]
-start.bat
+start_win.bat
 をダブルクリッコする
 
 [Mac]
-start.command
+start_mac.command
 をダブルクリッコする
 
 もしかしたら実行権限なくて実行できないかもしれんから

@@ -61,12 +61,14 @@ shorten = function(str, length) {
 app.post("/upload", function(req, res) {
   var files, saved;
   files = req.files.files;
-  if (typeof files === "object") {
+  console.log(typeof files);
+  if (files.length === 1) {
     files = [files];
   }
   saved = [];
   files.forEach(function(file) {
     var data, newPath;
+    console.log(file);
     data = fs.readFileSync(file.path);
     if (data) {
       newPath = __dirname + "/" + UPLOAD_PATH + file.name;
