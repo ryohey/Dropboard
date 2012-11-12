@@ -1,0 +1,49 @@
+express = require("express")
+fs = require("fs")
+app = express()
+app.use require("connect").bodyParser()
+
+getFiles = (dataPath) ->
+  files = fs.readdirSync(dataPath)
+  list = []
+  files.forEach (fileName) ->
+    if fileName.match(/.+\.json/)
+      file = fs.readFileSync(dataPath + fileName) + ""
+      if file
+        data = null
+        try
+          data = JSON.parse(file)
+        catch e
+          console.log e
+        list.push data  if data
+
+  list
+
+isSet = (arg) ->
+  return arg? and arg isnt ""
+
+shorten = (str, length) ->
+  s = str.replace(/\n|\\|\/|\:|\*|\?|\"|\<|\>|\|/g, "")
+  postfix = "..."
+  if s.length > length
+    if length > postfix.length
+      s.slice(0, length - postfix.length) + postfix
+    else
+      s.slice 0, length
+  else
+    s
+
+app.post "/write", (req, res) ->
+  data = req.body
+  if isSet(data.name) and isSet(data.date) and isSet(data.text)
+    fs.writeFile "./data/" + shorten(data.name, 10) + "「" + shorten(data.text, 20) + "」" + ".json", JSON.stringify(data), (err) ->
+      if err
+        res.send "0"
+      else
+        res.send "1"
+
+app.get "/read", (req, res) ->
+  res.send JSON.stringify(getFiles("./data/"))
+
+app.use "/", express.static(__dirname + "/public")
+app.listen 3141
