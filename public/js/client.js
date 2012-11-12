@@ -108,6 +108,9 @@ var writeButton = function() {
 			$("#text").val("");
 		});
 	update();
+
+	// 名前のクッキーを焼く
+	$.cookie('name', $("#name").val(), {expires: 30});
 }
 
 // onload
@@ -149,10 +152,80 @@ $(function(){
 	// カラーセレクタ
 	$(".colorWhite").click(function() {
 		$("link").attr("href", "css/white.css");
+		$.cookie('color', "white.css", {expires: 30});
 	});
 	$(".colorBlack").click(function() {
 		$("link").attr("href", "css/black.css");
+		$.cookie('color', "black.css", {expires: 30});
 	});
+
+	// クッキー
+	if ($.cookie('color') != null) {
+		$("link").attr("href", "css/"+$.cookie('color'));
+	}
+	$("#name").val($.cookie('name'));
+
+	// goTop
+	var topBtn = $('#goTop');   
+    topBtn.hide();
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            topBtn.fadeIn();
+        } else {
+            topBtn.fadeOut();
+        }
+    });
+    topBtn.click(function () {
+        $('body,html').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+
+    // 投稿フォームを開く
+    var slide = $('#input');
+    var contents = $('#inputForm');
+    //開くボタン
+    var openBtn = $('#open-Button img');
+    var btnOpenFlag = false;
+    var openFlag = false;
+    var panelSwitch = function() {
+        //閉じる
+        if (openFlag == true ) {
+            slide.stop().animate({'width' : '200px','height' : '30px'}, 500);
+            openBtn.show();     //開くボタンにする
+        }
+        //開く
+        else if (openFlag == false) {
+            slide.stop().animate({'width' : '400px','height' : '200px'}, 500);
+            openBtn.hide();     //閉じるボタンにする
+        }
+    };
+    //開くボタンクリックしたら
+    $('#open-btn').click(function(){
+        panelSwitch();
+        openFlag = !openFlag;
+        btnOpenFlag = true;
+    });
+    //画面下位置を取得
+    var bottomPos = $(document).height() - $(window).height() - 500;
+    $(window).scroll(function () {
+        if (!btnOpenFlag) {
+            if ($(this).scrollTop() >= bottomPos) {
+                if (openFlag == false) {
+                    panelSwitch();
+                    openFlag = true;
+                }
+            } else {
+                if (openFlag) {
+                    panelSwitch();
+                    openFlag = false;
+                }
+            }
+        }
+    });
+
+
 
 	// 更新の設定
 	update();

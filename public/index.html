@@ -9,15 +9,19 @@
     </style>
     <link href='css/white.css' rel='stylesheet' type='text/css' />
 	<script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
     <script type="text/javascript" src="js/util.js"></script>
     <script type="text/javascript" src="js/ajax.js"></script>
 	<script type="text/javascript" src="js/client.js"></script>
 </head>
 <body>
 <div id="input">
-	<input type="text" id="name">
-	<button class="button" id="write">書き込む</button>
-	<textarea id="text"></textarea>
+    <div id="inputForm">
+       <input type="text" id="name">
+       <button class="button" id="write">書き込む</button>
+       <textarea id="text"></textarea>
+       <div id="openButton"><img src="img/open.gif" /></div>
+   </div>
 </div>
 <div id="colorSelector">
     <ul>
@@ -26,6 +30,9 @@
     </ul>
 </div>
 <div id="content">
+</div>
+<div id="goTop">
+    <a href="#content">TOP</a>
 </div>
 </body>
 </html>

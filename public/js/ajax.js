@@ -20,6 +20,14 @@ var LBAjax = function(){
 		})
 	}
 
+	/* 指定数だけ読み込む */
+	this.page = function(success,page,per){
+		$.get("/page/"+page+"/"+per,function(response){
+			var data = $.parseJSON(response);
+			success(data);
+		})
+	}
+
 	/* 最新のデータを取り出す */
 	this.update = function(success){
 		var _success = success;

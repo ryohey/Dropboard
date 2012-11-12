@@ -60,6 +60,26 @@ app.post "/write", (req, res) ->
       else
         res.send "1"
 
+
+sortByDate = (a, b) ->
+    unless a
+        return -1;
+    else unless b
+        return 1;
+    ax = (new Date(a.date)).getTime()
+    bx = (new Date(b.date)).getTime()
+    ax ?= 0
+    bx ?= 0
+    ax - bx
+
+app.get "/page/:page/:per", (req, res) ->
+  files = getFiles(DATA_PATH)
+  files.sort(sortByDate)
+  page = parseInt(req.params.page)
+  per = parseInt(req.params.per)
+  sliced = files.slice(page*per,(page+1)*per)
+  res.send JSON.stringify(sliced)
+
 app.get "/read", (req, res) ->
   res.send JSON.stringify(getFiles(DATA_PATH))
 

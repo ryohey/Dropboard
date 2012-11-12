@@ -40,7 +40,7 @@ var formatTwitString = function(str) {
 	str=' '+str;
 	str = str.replace(urlPattern,'<a href="$1" target="_blank">$1</a>');
 	str = str.replace(/([^\w])\@([\w\-]+)/gm,'$1@<a href="http://twitter.com/$2" target="_blank">$2</a>');
-	str = str.replace(hashPattern,'<a href="http://twitter.com/search?q=%23$2" target="_blank">#$1</a>');
+	str = str.replace(hashPattern,' <a href="http://twitter.com/search?q=%23$2" target="_blank">#$1</a>');
 	return str;
 }
 
