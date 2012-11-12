@@ -29,6 +29,16 @@ var messageDiff = function(before,after){
 	return added;
 }
 
+/* twitter風 */
+var formatTwitString = function(str) {
+	str=' '+str;
+	str = str.replace(/((ftp|https?):\/\/([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?)/gm,'<a href="$1" target="_blank">$1</a>');
+	str = str.replace(/([^\w])\@([\w\-]+)/gm,'$1@<a href="http://twitter.com/$2" target="_blank">$2</a>');
+	str = str.replace(/([^\w])\#([\w\-]+)/gm,'$1<a href="http://twitter.com/search?q=%23$2" target="_blank">#$2</a>');
+	return str;
+}
+
+/* 発言フィードを生成 */
 var messageHTML = function(data){
 	var date = new Date(data.date);
 	var datestr = date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
@@ -48,12 +58,14 @@ var messageHTML = function(data){
 		)
 		.append(
 			$("<p/>")
-				.text(data.text)
+				.append(formatTwitString(data.text))
 		)
 }
 
+/* 最新の投稿? */
 var lastData = [];
 
+/* 読み込む */
 var read = function(){
 	$.get("/read",function(response){
 		var data = $.parseJSON(response);
@@ -67,6 +79,7 @@ var read = function(){
 	})
 }
 
+/* 書き込む */
 var write = function(name,date,text){
 	$.post("/write",{
 		"name":name,
@@ -80,26 +93,30 @@ var write = function(name,date,text){
 	})
 }
 
+/* 全消去 */
 var clear = function(){
 	$("#content").html("");
 }
 
+/* アップデート処理 */
 var update = function(){
 	read();
 }
 
+/* 書き込むボタン無効化 */
 var disableWriteButton = function() {
 	$("#write").attr("disabled", true);
 	$("#write").addClass("disable");
 }
 
+/* 書き込むボタン有効化 */
 var enableWriteButton = function() {
 	$("#write").attr("disabled", false);
 	$("#write").removeAttr("disabled");
 	$("#write").removeClass("disable");
 }
 
-// 「書き込む」ボタン押し下げ時
+/* 「書き込む」ボタン押し下げ時 */
 var writeButton = function() {
 	disableWriteButton();
 	write($("#name").val(),new Date(),$("#text").val());
