@@ -30,20 +30,24 @@ var messageDiff = function(before,after){
 }
 
 /* twitter風 */
+var hashPattern = /(?:^|[^ｦ-ﾟー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9&_\/]+)[#＃]([ｦ-ﾟー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9_]*[ｦ-ﾟー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z]+[ｦ-ﾟー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9_]*)/gm;
+var urlPattern = /(https?:\/\/[a-zA-Z0-9;\/?:@&=\+$,\-_\.!~*'\(\)%#]+)/gm;
 var formatTwitString = function(str) {
 	str=' '+str;
-	str = str.replace(/((ftp|https?):\/\/([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?)/gm,'<a href="$1" target="_blank">$1</a>');
+	str = str.replace(urlPattern,'<a href="$1" target="_blank">$1</a>');
 	str = str.replace(/([^\w])\@([\w\-]+)/gm,'$1@<a href="http://twitter.com/$2" target="_blank">$2</a>');
-	str = str.replace(/([^\w])\#([\w\-]+)/gm,'$1<a href="http://twitter.com/search?q=%23$2" target="_blank">#$2</a>');
+	str = str.replace(hashPattern,'<a href="http://twitter.com/search?q=%23$2" target="_blank">#$1</a>');
 	return str;
 }
 
 /* 発言フィードを生成 */
-var messageHTML = function(data){
+var messageHTML = function(data) {
+	// エスケープ用要素
 	var date = new Date(data.date);
 	var datestr = date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
-	return $("<article/>")
+	var target =  $("<article/>")
 	    .addClass("box")
+	    .css("display", "none")
 		.append(
 			$("<header/>")
 				.append(
@@ -58,8 +62,9 @@ var messageHTML = function(data){
 		)
 		.append(
 			$("<p/>")
-				.append(formatTwitString(data.text))
-		)
+				.append(formatTwitString($("<div/>").text(data.text).html()))
+		);
+	return target;
 }
 
 /* 最新の投稿? */
@@ -73,7 +78,7 @@ var read = function(){
 		console.log(diff);
 		diff.sort(sortByDate);
 		$.each(diff,function(){
-			messageHTML(this).prependTo("#content");
+			messageHTML(this).prependTo("#content").show("slow");
 		})
 		lastData = data;
 	})
