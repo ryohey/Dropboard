@@ -76,7 +76,9 @@ app.get "/page/:page/:per", (req, res) ->
   files.sort(sortByDate)
   page = parseInt(req.params.page)
   per = parseInt(req.params.per)
-  sliced = files.slice(files.length - (page+1)*per,files.length - page*per)  #新しいやつからとってくる
+  start = Math.max(files.length - (page+1)*per, 0)
+  end = Math.max(files.length - page*per,0)
+  sliced = files.slice(start,end)  #新しいやつからとってくる
   res.send JSON.stringify(sliced)
 
 app.get "/read", (req, res) ->

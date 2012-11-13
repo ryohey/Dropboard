@@ -8,15 +8,22 @@
  *  1. 全体設定
  *------------------------------------------------------------------*/
 
+ body{
+    font-family: 'メイリオ',Meiryo,'ヒラギノ角ゴ Pro W3','Hiragino Kaku Gothic Pro',arial,helvetica,'ＭＳ Ｐゴシック',sans-serif;
+    line-height: 1.4;
+    font-size: 15px;
+ }
+
  #content {
     width: 420px;
     margin: 0px auto;
  }
 
  #colorSelector {
+    z-index: 10;
     position: fixed;
-    
     padding: 5px;
+    bottom: 0;
  }
 
  #colorSelector li {
@@ -26,7 +33,12 @@
     float: left;
     margin: 2px;
     border: 1px solid #666;
+    opacity: 0.5;
  }
+
+ #colorSelector li:hover {
+    opacity: 0.8;
+}
 
  li.colorWhite {
     background-color: #fff;
@@ -41,13 +53,14 @@
  }
 
 #goTop {
+    z-index: 10;
     position: fixed;
     bottom: 20px;
     right: 10px;
 }
 
 #goTop a {
-    background: #666;
+    background: rgba(0, 0, 0, 0.6);
     text-decoration: none;
     color: #fff;
     width: 70px;
@@ -61,7 +74,7 @@
 
 #goTop a:hover {
     text-decoration: none;
-    background: #999;
+    background: rgba(0, 0, 0, 0.8);
 }
 
 
@@ -84,6 +97,7 @@
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+    overflow: hidden;
 }
 
 /* テキストボックス */
@@ -104,6 +118,20 @@
 
 #text.attached{
     background: lightgreen;
+}
+
+#files{
+    color: #fff;
+    font-size: smaller;
+    list-style-type: none;
+    position: absolute;
+    top: 188px;
+    left: 40px;
+}
+
+#files li {
+    float: left;
+    padding-right: 1em;
 }
 
 /* 名前欄 */
@@ -152,6 +180,7 @@
     height: 20px; 
     background-repeat: no-repeat;
     background-image: url(../img/open.gif);   
+    cursor: pointer;
 }
 
 #openButton.close{
@@ -208,7 +237,9 @@ article .file a.otherfile{
     color: blue;
     background: white;
     border: 1px solid gray;
-    padding: 3px
+    padding: 3px;
+    display: inline-block;
+    margin: 5px;
 }
 
 article .file a.otherfile:hover{

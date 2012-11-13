@@ -1,4 +1,5 @@
 var lbAjax = new LBAjax;
+var lbNotify = new LBNotify;
 
 /* 発言フィードを生成 */
 var messageHTML = function(data) {
@@ -100,6 +101,7 @@ var writeButton = function() {
 			$("#text")
 				.data("files",null)
 	        	.removeClass("attached");
+	        $("#files").html("");
 			lbAjax.write({
 				name:$("#name").val(),
 				date:new Date(),
@@ -121,11 +123,18 @@ var writeButton = function() {
 	// 名前のクッキーを焼く
 	$.cookie('name', $("#name").val(), {expires: 30});
 
+    // ファイル情報削除
+    $('#files').empty();
+
     update();
 }
 
 // onload
 $(function(){
+	//通知を追加
+	lbNotify.elm.appendTo("body");
+	lbNotify.setPosition("bottom");
+
 	// 「書き込む」ボタン
 	$("#write").click(writeButton);
 	disableWriteButton();
@@ -154,6 +163,11 @@ $(function(){
 		.bind("drop", function (e) {
 	        // ドラッグされたファイル情報を取得
 	        var files = e.originalEvent.dataTransfer.files;
+	        console.log(files);
+	        $("#files").html("");
+	        $.each(files,function(){
+	        	$("#files").append($("<li/>").text(this.name));
+	        });
 	        $(this).data("files",files);
 	        $(this).addClass("attached");
 	        e.preventDefault(); 
@@ -189,20 +203,28 @@ $(function(){
     var panelSwitch = function() {
         //閉じる
         if (openFlag == true ) {
-            slide.stop().animate({'width' : '30px','height' : '20px'}, 500);
-            openDiv.stop().animate({'top' : '10px','right' : '15px'}, 500);
-            contents.hide('fast');
+            slide.stop().animate({'width' : '30px','height' : '20px'}, 300);
+            openDiv.stop().animate({'top' : '10px','right' : '15px'}, 300);
+            contents.hide();
             openDiv.removeClass("close");
             openFlag = false;
         }
         //開く
         else if (openFlag == false) {
-            slide.stop().animate({'width' : '400px','height' : '190px'}, 500);
-            openDiv.stop().animate({'top' : '182px','right' : '390px'}, 500);
-            contents.show('fast');
+            slide
+            	.stop()
+            	.animate({
+            		'width' : '400px',
+            		'height' : '190px'
+            	}, 300
+            	,function(){
+            		contents.show();
+            		$("#text").focus();
+            	});
+            openDiv.stop().animate({'top' : '182px','right' : '390px'}, 300);
+            
             openDiv.addClass("close");
             openFlag = true;
-            $("#text").focus();
         }
     };
     //開くボタンクリックしたら

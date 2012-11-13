@@ -2,6 +2,10 @@
 start_win.bat
 をダブルクリッコする
 
+または
+start_win_nowindow.vbs
+をダブルクリッコする（終了できなくなるけど）
+
 [Mac]
 start_mac.command
 をダブルクリッコする

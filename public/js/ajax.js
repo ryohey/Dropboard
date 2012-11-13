@@ -16,16 +16,20 @@ var LBAjax = function(){
 
 	/* すべてのデータを読み込む */
 	this.read = function(success){
+		lbNotify.progress("データ取得中");
 		$.get("/read",function(response){
 			var data = $.parseJSON(response);
+			lbNotify.hide();
 			success(data);
 		})
 	}
 
 	/* 指定数だけ読み込む */
 	this.page = function(success,page,per){
+		lbNotify.progress("データ取得中");
 		$.get("/page/"+page+"/"+per,function(response){
 			var data = $.parseJSON(response);
+			lbNotify.hide();
 			success(data);
 		})
 	}
@@ -53,9 +57,13 @@ var LBAjax = function(){
 
 	/* 書き込む */
 	this.write = function(data,success){
+		lbNotify.progress("送信中");
 		$.post("/write",data,function(response){
-			if (response == "1")
+			if (response == "1"){
+				lbNotify.hide();
 				success()
+			}else
+				lbNotify.warning("送信に失敗しました");
 		})
 	}
 
@@ -69,6 +77,7 @@ var LBAjax = function(){
 	        fd.append("files", files[i]);
 	    }
 
+		lbNotify.progress("アップロード中");
 	    // XHR で送信
 	    $.ajax({
 	        url: "/upload",
@@ -76,7 +85,10 @@ var LBAjax = function(){
 	        data: fd,
 	        processData: false,
 	        contentType: false,
-	        success:success
+	        success:function(){
+				lbNotify.hide();
+	        	success();
+	        }
 	    });
 	};
 }
