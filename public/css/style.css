@@ -36,6 +36,10 @@
     background-color: #000;
  }
 
+ li.colorHacker {
+    background-color: green;
+ }
+
 #goTop {
     position: fixed;
     bottom: 20px;
@@ -145,10 +149,14 @@
     top: 10px;
     right: 15px;
     width: 20px;
-    height: 20px;
-    background: url(../img/close.gif) no-repeat;    
+    height: 20px; 
+    background-repeat: no-repeat;
+    background-image: url(../img/open.gif);   
 }
 
+#openButton.close{
+    background-image: url(../img/close.gif);   
+}
  /*------------------------------------------------------------------
   *  3. 発言フィード
   *------------------------------------------------------------------*/

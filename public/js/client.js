@@ -67,6 +67,16 @@ var update = function(){
 	})
 }
 
+/* 古いデータを取ってくる */
+var more = function(){
+	lbAjax.more(function(data){
+		data.reverse();
+		$.each(data,function(){
+			messageHTML(this).appendTo("#content").show("slow");
+		})
+	})
+}
+
 /* 書き込むボタン無効化 */
 var disableWriteButton = function() {
 	$("#write").attr("disabled", true);
@@ -107,10 +117,11 @@ var writeButton = function() {
 		},function(){
 			$("#text").val("");
 		});
-	update();
 
 	// 名前のクッキーを焼く
 	$.cookie('name', $("#name").val(), {expires: 30});
+
+    update();
 }
 
 // onload
@@ -149,20 +160,7 @@ $(function(){
 	        e.stopPropagation();
 	    });
 
-	// カラーセレクタ
-	$(".colorWhite").click(function() {
-		$("link").attr("href", "css/white.css");
-		$.cookie('color', "white.css", {expires: 30});
-	});
-	$(".colorBlack").click(function() {
-		$("link").attr("href", "css/black.css");
-		$.cookie('color', "black.css", {expires: 30});
-	});
-
 	// クッキー
-	if ($.cookie('color') != null) {
-		$("link").attr("href", "css/"+$.cookie('color'));
-	}
 	$("#name").val($.cookie('name'));
 
 	// goTop
@@ -187,7 +185,6 @@ $(function(){
     var contents = $('#inputForm');
     //開くボタン
     var openDiv = $('#openButton');
-    var openBtn = $('#openButton img');
     var openFlag = true;
     var panelSwitch = function() {
         //閉じる
@@ -195,7 +192,7 @@ $(function(){
             slide.stop().animate({'width' : '30px','height' : '20px'}, 500);
             openDiv.stop().animate({'top' : '10px','right' : '15px'}, 500);
             contents.hide('fast');
-            openBtn.show();
+            openDiv.removeClass("close");
             openFlag = false;
         }
         //開く
@@ -203,8 +200,9 @@ $(function(){
             slide.stop().animate({'width' : '400px','height' : '190px'}, 500);
             openDiv.stop().animate({'top' : '182px','right' : '390px'}, 500);
             contents.show('fast');
-            openBtn.hide();
+            openDiv.addClass("close");
             openFlag = true;
+            $("#text").focus();
         }
     };
     //開くボタンクリックしたら
@@ -213,6 +211,12 @@ $(function(){
     });
     // 初期状態
     panelSwitch();
+
+    //下まで来たらもっと読み込む
+    $(window).bottom();
+    $(window).bind("bottom", function() {
+    	more();
+    });
 
 	// 更新の設定
 	update();

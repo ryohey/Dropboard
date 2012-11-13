@@ -7,6 +7,8 @@
 	こういう感じで
 */
 
+var MESSAGE_PER_PAGE = 20;
+
 var LBAjax = function(){
 	/* 前回読み込んだデータ */
 	this.lastData = [];
@@ -28,15 +30,25 @@ var LBAjax = function(){
 		})
 	}
 
-	/* 最新のデータを取り出す */
-	this.update = function(success){
+	/* 差分を取得 */
+	this._diff = function(success,page,per){
 		var _success = success;
-		_this.read(function(data){
+		_this.page(function(data){
 			var diff = messageDiff(_this.lastData,data);
 			diff.sort(sortByDate);
 			_success(diff);
-			_this.lastData = data;
-		})
+			_this.lastData = _this.lastData.concat(diff);
+		},page,per)
+	}
+
+	/* 最新のデータを取り出す */
+	this.update = function(success){
+		this._diff(success,0,MESSAGE_PER_PAGE);
+	}
+
+	/* 過去のデータを取り出す */
+	this.more = function(success){
+		this._diff(success,Math.floor(_this.lastData.length/MESSAGE_PER_PAGE),MESSAGE_PER_PAGE);
 	}
 
 	/* 書き込む */
