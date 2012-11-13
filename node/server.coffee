@@ -60,7 +60,6 @@ app.post "/write", (req, res) ->
       else
         res.send "1"
 
-
 sortByDate = (a, b) ->
     unless a
         return -1;
@@ -77,7 +76,7 @@ app.get "/page/:page/:per", (req, res) ->
   files.sort(sortByDate)
   page = parseInt(req.params.page)
   per = parseInt(req.params.per)
-  sliced = files.slice(page*per,(page+1)*per)
+  sliced = files.slice(files.length - (page+1)*per,files.length - page*per)  #新しいやつからとってくる
   res.send JSON.stringify(sliced)
 
 app.get "/read", (req, res) ->
