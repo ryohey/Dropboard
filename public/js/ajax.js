@@ -85,9 +85,9 @@ var LBAjax = function(){
 	        data: fd,
 	        processData: false,
 	        contentType: false,
-	        success:function(){
+	        success:function(response){
 				lbNotify.hide();
-	        	success();
+	        	success(response);
 	        }
 	    });
 	};

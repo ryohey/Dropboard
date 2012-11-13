@@ -1,16 +1,19 @@
 ﻿[Windows]
-start_win.bat
-をダブルクリッコする
-
-または
-start_win_nowindow.vbs
-をダブルクリッコする（終了できなくなるけど）
+LocalBoard_TaskTray.exe
+をダブルクリッコで起動した後
+タスクトレイのアイコンを右クリしていろいろする
 
 [Mac]
-start_mac.command
+LocalBoard.app
 をダブルクリッコする
 
-もしかしたら実行権限なくて実行できないかもしれんから
-そしたらターミナルで
-chmod 757 start.command
-変えると行けるはず
+[開発者向けサーバ起動方法]
+ターミナルで
+killall node_
+cd node
+node_ server.js
+
+コマンドプロンプトで
+taskkill /im node_.exe /F
+cd node
+node_.exe server.js
