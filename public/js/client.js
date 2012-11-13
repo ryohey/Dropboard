@@ -186,46 +186,33 @@ $(function(){
     var slide = $('#input');
     var contents = $('#inputForm');
     //開くボタン
-    var openBtn = $('#open-Button img');
-    var btnOpenFlag = false;
-    var openFlag = false;
+    var openDiv = $('#openButton');
+    var openBtn = $('#openButton img');
+    var openFlag = true;
     var panelSwitch = function() {
         //閉じる
         if (openFlag == true ) {
-            slide.stop().animate({'width' : '200px','height' : '30px'}, 500);
-            openBtn.show();     //開くボタンにする
+            slide.stop().animate({'width' : '30px','height' : '20px'}, 500);
+            openDiv.stop().animate({'top' : '10px','right' : '15px'}, 500);
+            contents.hide('fast');
+            openBtn.show();
+            openFlag = false;
         }
         //開く
         else if (openFlag == false) {
-            slide.stop().animate({'width' : '400px','height' : '200px'}, 500);
-            openBtn.hide();     //閉じるボタンにする
+            slide.stop().animate({'width' : '400px','height' : '190px'}, 500);
+            openDiv.stop().animate({'top' : '182px','right' : '390px'}, 500);
+            contents.show('fast');
+            openBtn.hide();
+            openFlag = true;
         }
     };
     //開くボタンクリックしたら
-    $('#open-btn').click(function(){
+    $('#openButton').click(function(){
         panelSwitch();
-        openFlag = !openFlag;
-        btnOpenFlag = true;
     });
-    //画面下位置を取得
-    var bottomPos = $(document).height() - $(window).height() - 500;
-    $(window).scroll(function () {
-        if (!btnOpenFlag) {
-            if ($(this).scrollTop() >= bottomPos) {
-                if (openFlag == false) {
-                    panelSwitch();
-                    openFlag = true;
-                }
-            } else {
-                if (openFlag) {
-                    panelSwitch();
-                    openFlag = false;
-                }
-            }
-        }
-    });
-
-
+    // 初期状態
+    panelSwitch();
 
 	// 更新の設定
 	update();

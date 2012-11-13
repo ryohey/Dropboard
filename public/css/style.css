@@ -14,7 +14,8 @@
  }
 
  #colorSelector {
-    float: left;
+    position: fixed;
+    
     padding: 5px;
  }
 
@@ -38,7 +39,7 @@
 #goTop {
     position: fixed;
     bottom: 20px;
-    right: 30px;
+    right: 10px;
 }
 
 #goTop a {
@@ -141,7 +142,11 @@
 
 #openButton {
     position: absolute;
-    background: url(img/close.gif);    
+    top: 10px;
+    right: 15px;
+    width: 20px;
+    height: 20px;
+    background: url(../img/close.gif) no-repeat;    
 }
 
  /*------------------------------------------------------------------
