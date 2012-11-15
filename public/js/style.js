@@ -10,5 +10,5 @@ $(function(){
 		$("link").attr("href", css);
 		$.cookie('color', css, {expires: 30});
 	});
-	$("#colorSelector ul li:first").click();
+	//$("#colorSelector ul li:first").click();
 })

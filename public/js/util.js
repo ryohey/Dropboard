@@ -80,3 +80,12 @@ var isImage = function(file){
 var isAudio = function(file){
 	return isFileType(file,["mp3","ogg","wav"]);
 }
+
+// 日付関係
+var to2keta = function(val) {
+    return (val < 10) ? '0'+val : val;
+}
+
+var naturalFormatDate = function(date) {
+    return date.getFullYear() + "/" + to2keta(date.getMonth()) + "/" + to2keta(date.getDate()) + " " + to2keta(date.getHours()) + ":" + to2keta(date.getMinutes());
+}

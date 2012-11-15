@@ -4,7 +4,7 @@ var lbNotify = new LBNotify;
 /* 発言フィードを生成 */
 var messageHTML = function(data) {
 	var date = new Date(data.date);
-	var datestr = date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
+	var datestr = naturalFormatDate(date);
 	var fileHTML = $("<div/>").addClass("file");
 	if (data.file)
 		try{
