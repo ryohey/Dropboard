@@ -1,4 +1,4 @@
-var DATA_PATH, PUBLIC_PATH, UPLOAD_PATH, app, express, fs, getFiles, isSet, shorten, sortByDate;
+var DATA_PATH, PUBLIC_PATH, UPLOAD_PATH, app, dir, dirs, express, fs, getFiles, isSet, shorten, sortByDate, _i, _len;
 
 express = require("express");
 
@@ -12,7 +12,19 @@ DATA_PATH = "../../../../data/";
 
 UPLOAD_PATH = "../../../../uploads/";
 
-PUBLIC_PATH = "../../../../public/";
+PUBLIC_PATH = "../public/";
+
+dirs = [DATA_PATH, UPLOAD_PATH];
+
+for (_i = 0, _len = dirs.length; _i < _len; _i++) {
+  dir = dirs[_i];
+  try {
+    fs.statSync(dir);
+  } catch (e) {
+    console.log("make directory:" + dir);
+    fs.mkdirSync(dir, 0777);
+  }
+}
 
 getFiles = function(dataPath) {
   var files, list;

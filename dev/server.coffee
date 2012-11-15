@@ -7,6 +7,16 @@ DATA_PATH = "../../../../data/"
 UPLOAD_PATH = "../../../../uploads/"
 PUBLIC_PATH = "../public/"
 
+#データディレクトリがない場合は作成
+dirs = [DATA_PATH, UPLOAD_PATH];
+for dir in dirs
+  try
+    fs.statSync(dir)
+  catch e
+    console.log("make directory:"+dir);
+    fs.mkdirSync(dir, 0777);
+
+
 getFiles = (dataPath) ->
   files = fs.readdirSync(dataPath)
   list = []
