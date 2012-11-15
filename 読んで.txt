@@ -1,10 +1,11 @@
 ﻿[Windows]
-LocalBoard_TaskTray.exe
-をダブルクリッコで起動した後
-タスクトレイのアイコンを右クリしていろいろする
+Dropboard.exe
+をダブルクリッコで起動
+タスクトレイのアイコンを
+右クリしたりダブクリしたりしていろいろする
 
 [Mac]
-LocalBoard.app
+DropBoard.app
 をダブルクリッコする
 
 [開発者向けサーバ起動方法]
