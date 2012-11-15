@@ -5,7 +5,7 @@ app.use require("connect").bodyParser()
 
 DATA_PATH = "../../../../data/"
 UPLOAD_PATH = "../../../../uploads/"
-PUBLIC_PATH = "../../../../public/"
+PUBLIC_PATH = "../public/"
 
 getFiles = (dataPath) ->
   files = fs.readdirSync(dataPath)
