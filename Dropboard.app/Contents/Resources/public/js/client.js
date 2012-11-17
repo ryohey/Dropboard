@@ -6,7 +6,7 @@ var messageHTML = function(data) {
 	var date = new Date(data.date);
 	var datestr = naturalFormatDate(date);
 	var fileHTML = $("<div/>").addClass("file");
-	if (data.file)
+	if (data.file) {
 		try{
 			var files = JSON.parse(data.file);
 			$.each(files,function(val,key){
@@ -14,9 +14,12 @@ var messageHTML = function(data) {
 							.attr("target","_blank")
 							.attr("href",key);
 				if (isImage(key)){
-					elm.append(
-						$("<img/>").attr("src",key)
-					)
+					elm
+						.fancybox()
+						.append(
+							$("<img/>").attr("src",key)
+
+						)
 				}else if (isAudio(key)){
 					//リンクはいらないのでelmを上書き
 					elm = $("<audio/>")
@@ -31,6 +34,8 @@ var messageHTML = function(data) {
 		}catch(e){
 
 		}
+    }
+
 	var target =  $("<article/>")
 	    .addClass("box")
 	    .css("display", "none")
@@ -240,7 +245,7 @@ $(function(){
     	more();
     });
 
-	// 更新の設定
-	update();
-	setInterval(update,5000);
+ 	// 更新の設定
+    update();
+    setInterval(update,5000);
 })
