@@ -133,4 +133,50 @@ app.use("/", express.static(__dirname + "/" + PUBLIC_PATH));
 
 app.use("/uploads", express.static(__dirname + "/" + UPLOAD_PATH));
 
-app.listen(3141);
+var os = require("os");
+var fs = require("fs");
+
+var portfile = os.tmpDir() + ".dropboard.port";
+var runtime_dir = __dirname;
+
+// macとwindowsではコロン(:)がディレクトリ名に使えない文字なので
+// :をセパレータとして使う
+// 実行しているディレクトリ:portの並びで保存する
+
+var port = 50000; //default port
+
+if(fs.existsSync(portfile)){
+    var detect = false;
+    var file = fs.readFileSync(portfile, "utf-8");
+    file.split("\n").forEach(function(line){
+        var pear = line.split(":");
+        if(pear.length == 2){
+            if(pear[0] === runtime_dir){
+                port = Number(pear[1]);
+                detect = true;
+            }
+        }
+
+    });
+
+    // 未登録なので新しく登録する
+    if(detect == false){
+        port = port + file.split("\n").length;
+        fs.appendFileSync(portfile, runtime_dir + ":" + port +"\n", "utf-8");
+    }
+}else{
+    // 新規に作成
+    fs.appendFileSync(portfile, runtime_dir + ":" + port +"\n", "utf-8");
+}
+
+
+// サーバ起動
+app.listen(port);
+
+// 生成したポート番号で起動
+var exec = require("child_process");
+if(os.type() === "Darwin"){
+    //mac
+    exec.exec("open http://localhost:" + port + "/");
+}
+
