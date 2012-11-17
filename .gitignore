@@ -1,4 +1,4 @@
-*.json
+uploads/*.json
 .DS_STORE
 uploads/*
 data/*
