@@ -136,39 +136,48 @@ app.use("/uploads", express.static(__dirname + "/" + UPLOAD_PATH));
 var os = require("os");
 var fs = require("fs");
 
-var portfile = os.tmpDir() + ".dropboard.port";
+var portfile = os.tmpDir() + "/.dropboard.port";
 var runtime_dir = __dirname;
 
 // macとwindowsではコロン(:)がディレクトリ名に使えない文字なので
-// :をセパレータとして使う
-// 実行しているディレクトリ:portの並びで保存する
+// ドライブ文字と被らない::をセパレータとして使う
+// 実行しているディレクトリ::portの並びで保存する
+var checkPort = function(){
+    var default_port = 50000;
+    var port = default_port;
+    var separator = "::";
 
-var port = 50000; //default port
-
-if(fs.existsSync(portfile)){
-    var detect = false;
-    var file = fs.readFileSync(portfile, "utf-8");
-    file.split("\n").forEach(function(line){
-        var pear = line.split(":");
-        if(pear.length == 2){
-            if(pear[0] === runtime_dir){
-                port = Number(pear[1]);
-                detect = true;
-            }
-        }
-
-    });
-
-    // 未登録なので新しく登録する
-    if(detect == false){
-        port = port + file.split("\n").length;
-        fs.appendFileSync(portfile, runtime_dir + ":" + port +"\n", "utf-8");
+    var dirToPortString = function(port){
+        return runtime_dir + separator + port +"\n";
     }
-}else{
-    // 新規に作成
-    fs.appendFileSync(portfile, runtime_dir + ":" + port +"\n", "utf-8");
-}
+    var detected = false;
+    var exists = fs.existsSync(portfile);
+    if(exists){
+        var file = fs.readFileSync(portfile, "utf-8");
+        var lines = file.split("\n");
+        lines.forEach(function(line){
+            var pear = line.split(separator);
+            if(pear.length == 2){
+                port = Number(pear[1]);
+                if(pear[0] === runtime_dir){
+                    detected = true;
+                }
+            }
 
+        });
+        if(!detected){
+            port = default_port + lines.length;
+        }
+    }
+    // 未登録なので新しく登録する
+    if (!detected || !exists){
+        fs.appendFileSync(portfile, dirToPortString(port), "utf-8");
+    }
+
+    return port;
+}
+var port = checkPort();
+var url = "http://localhost:" + port + "/";
 
 // サーバ起動
 app.listen(port);
@@ -177,6 +186,9 @@ app.listen(port);
 var exec = require("child_process");
 if(os.type() === "Darwin"){
     //mac
-    exec.exec("open http://localhost:" + port + "/");
+    exec.exec("open " + url);
+}else if (os.type() === "Windows_NT"){
+    exec.exec("start " + url);
 }
 
+console.log(url);
