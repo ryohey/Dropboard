@@ -18,7 +18,6 @@ var messageHTML = function(data) {
 						.fancybox()
 						.append(
 							$("<img/>").attr("src",key)
-
 						)
 				}else if (isAudio(key)){
 					//リンクはいらないのでelmを上書き
@@ -53,7 +52,7 @@ var messageHTML = function(data) {
 		)
 		.append(
 			$("<p/>")
-				.append(formatTwitString($("<div/>").text(data.text).html()))
+				.append(formatMessage(data.text))
 				.append(fileHTML)
 		);
 	return target;

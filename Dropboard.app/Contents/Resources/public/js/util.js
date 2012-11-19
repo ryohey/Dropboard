@@ -33,15 +33,58 @@ var messageDiff = function(before,after){
 	return added;
 }
 
-/* twitter風 */
-var hashPattern = /(?:^|[^ｦ-ﾟー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9&_\/]+)[#＃]([ｦ-ﾟー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9_]*[ｦ-ﾟー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z]+[ｦ-ﾟー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9_]*)/gm;
-var urlPattern = /(https?:\/\/[a-zA-Z0-9;\/?:@&=\+$,\-_\.!~*'\(\)%#]+)/gm;
-var formatTwitString = function(str) {
-	str=' '+str;
-	str = str.replace(urlPattern,'<a href="$1" target="_blank">$1</a>');
-	str = str.replace(/([^\w])\@([\w\-]+)/gm,'$1@<a href="http://twitter.com/$2" target="_blank">$2</a>');
-	str = str.replace(hashPattern,' <a href="http://twitter.com/search?q=%23$2" target="_blank">#$1</a>');
-	return str;
+/* テキスト中の特定の文字列をフォーマット */
+var formatMessage = function(str){
+	/* twitter風 */
+	var hashPattern = /(?:^|[^ｦ-ﾟー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9&_\/]+)[#＃]([ｦ-ﾟー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9_]*[ｦ-ﾟー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z]+[ｦ-ﾟー゛゜々ヾヽぁ-ヶ一-龠ａ-ｚＡ-Ｚ０-９a-zA-Z0-9_]*)/gm;
+	var urlPattern = /(https?:\/\/[a-zA-Z0-9;\/?:@&=\+$,\-_\.!~*'\(\)%#]+)/gm;
+
+	var h = function(str){
+		return $("<div/>").text(str).html();
+	}
+
+	var replaceURL = function(str){
+		//タグの中に入ってないURLだけ
+		str = str.replace(urlPattern,'<a href="$1" target="_blank">$1</a>');
+	}
+
+	var replaceTwitter = function(str) {
+		str = ' ' + str;
+		str = str.replace(/([^\w])\@([\w\-]+)/gm,'$1@<a href="http://twitter.com/$2" target="_blank">$2</a>');
+		str = str.replace(hashPattern,' <a href="http://twitter.com/search?q=%23$2" target="_blank">#$1</a>');
+		return str;
+	}
+
+	/* youtube対応　*/
+	var replaceYoutube = function(str){
+		var urls = str.match(urlPattern);
+		var iframes = [];
+		if (urls){
+			$.each(urls,function(index,value){
+				if (isYoutube(value)){
+					var src = value.replace(youtubeExp,"http\:\/\/www\.youtube\.com\/embed\/$1");
+					var elm = $("<iframe/>")
+						.attr({
+							"width":"300",
+							"height":"200",
+							"src":src,
+							"frameborder":"0",
+							"allowfullscreen":"true"
+						});
+					iframes.push({
+						"url" : value,
+						"html" : elm.wrap('<div>').parent().html()
+					});
+				}
+			});
+			$.each(iframes,function(index,value){
+				str = str.replace(value.url, value.html);
+			});
+		}
+		return str;
+	}
+
+	return replaceYoutube(h(str));
 }
 
 var parseURL = function(url) {
@@ -79,6 +122,15 @@ var isImage = function(file){
 
 var isAudio = function(file){
 	return isFileType(file,["mp3","ogg","wav"]);
+}
+
+
+var youtubeExp = /https?\:\/\/www\.youtube\.com\/watch\?v\=([a-zA-Z0-9]+?)&.*/gm;
+var isYoutube = function(url){
+	if (url.match(youtubeExp))
+		return true;
+	else
+		return false;
 }
 
 // 日付関係
