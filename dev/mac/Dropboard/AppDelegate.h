@@ -13,6 +13,9 @@
 @property (assign) IBOutlet NSWindow *window;
 @property (strong, nonatomic) NSString *boardUrl;
 
+/**
+ * ブラウザで Dropboard ページを開く.
+ */
 - (void)openBoard;
 
 @end
