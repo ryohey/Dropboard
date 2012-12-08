@@ -2,12 +2,20 @@ express = require("express")
 fs = require("fs")
 os = require("os")
 request = require("request")
+util = require('util')
 
 ### 定数 ###
 BASE_PATH = "../../../../"  # Dropboard.appの上
 DATA_PATH = BASE_PATH+"data/"
 UPLOAD_PATH = BASE_PATH+"uploads/"
 PUBLIC_PATH = "../public/"
+LOG_FILE = "log.txt"
+
+### 標準出力を上書き ###
+echo = console.log
+console.log = () ->
+  scr = util.format.apply(this, arguments) + '\n'   # console.logの実装と同じ
+  fs.appendFileSync LOG_FILE, scr
 
 ### app ###
 app = express()
@@ -185,5 +193,8 @@ io.sockets.on 'connection',  (socket) ->
 startListen = () ->
   server.listen port
 
+# サーバー起動
+startListen()
+
 # URLを出力して完了
-console.log url
+echo url
