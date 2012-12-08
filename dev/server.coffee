@@ -3,14 +3,17 @@ fs = require("fs")
 os = require("os")
 request = require("request")
 
-### teisuu ###
-DATA_PATH = "../../../../data/"
-UPLOAD_PATH = "../../../../uploads/"
+### 定数 ###
+BASE_PATH = "../../../../"  # Dropboard.appの上
+DATA_PATH = BASE_PATH+"data/"
+UPLOAD_PATH = BASE_PATH+"uploads/"
 PUBLIC_PATH = "../public/"
 
 ### app ###
 app = express()
 app.use require("connect").bodyParser()
+
+### static ###
 app.use "/", express.static(__dirname + "/" + PUBLIC_PATH)
 app.use "/uploads", express.static(__dirname + "/" + UPLOAD_PATH)
 
@@ -105,10 +108,12 @@ app.get "/exit", (req, res) ->
   console.log "httpからサーバーが終了されました"
   process.exit(0)
 
-### ポート番号の設定 ###
-# macとwindowsではコロン(:)がディレクトリ名に使えない文字なので
-# ドライブ文字と被らない::をセパレータとして使う
-# 実行しているディレクトリ::portの並びで保存する
+###* 
+ * ポート番号の設定
+ * macとwindowsではコロン(:)がディレクトリ名に使えない文字なので
+ * ドライブ文字と被らない::をセパレータとして使う
+ * 実行しているディレクトリ::portの並びで保存する
+ ###
 checkPort = ->
   dirToPortString = (port) ->
     runtime_dir + separator + port + "\n"
@@ -139,24 +144,46 @@ checkPort = ->
     fs.appendFileSync portfile, portDirString, "utf-8"
   port
 
+# ポート番号の取得
 port = checkPort()
 url = "http://localhost:" + port + "/"
 
-#起動に失敗した場合は起動済みDropboardを終了させる
-process.on('uncaughtException', (err) ->
+# 起動に失敗した場合は起動済みDropboardを終了させ、再度起動を試みる(それでも出来なかった場合は諦める)
+process.on 'uncaughtException', (err) ->
   if err.errno is 'EADDRINUSE'
     request url+"exit", (error, response, body) ->
-      app.listen port
-)
+      startListen()
 
-# サーバ起動
-app.listen port
+### WebSocketの準備 ###
+server = require('http').createServer(app)
+io = require('socket.io').listen(server)
+io.set('log level',  1) # 標準だとログが出まくるので抑制
+io.sockets.on 'connection',  (socket) ->
+  ###*
+   * クライアントからの接続時にDATA_PATHの
+   * 監視を開始する.
+   ###
+  watcher = fs.watch DATA_PATH, (event,  filename) ->
+    ###*
+     * ディレクトリに変更があった際にupdateイベントを
+     * クライアントにpushする.
+     ###
+    socket.emit 'update', {}
 
-# 生成したポート番号でブラウザを起動
-exec = require("child_process")
-switch os.type()
-  when "Darwin" then exec.exec "open " + url
-  when "Windows_NT" then exec.exec "start " + url
+  ###*
+   * クライアントから切断された際に
+   * ディレクトリの監視を停止する.
+   ###
+  socket.on 'disconnect', () ->
+    watcher.close()
+
+###*
+ * expressのインスタンスではなく
+ * httpServerのインスタンスでlistenすること！
+ * そうしないとsocket.io.jsが404になる.
+ ###
+startListen = () ->
+  server.listen port
 
 # URLを出力して完了
 console.log url
