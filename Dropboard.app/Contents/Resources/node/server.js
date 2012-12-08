@@ -43,6 +43,26 @@ console.log = function() {
 
 app = express();
 
+app.use(function(req, res, next){
+  var hostname = req.headers.host;
+  if(hostname == null || hostname == undefined){
+    /* hostヘッダーがついていないのはHTTP1.1では
+     * 規約違反である.*/
+    res.send(400);
+    return;
+  }
+  /*
+   * localhostへのアクセスのみ許可.
+   * 127.0.0.1も許可しない
+   */
+  if(hostname.match(/^localhost/) != null){
+    next();
+  }else{
+    /* localhost以外からのアクセスは400で応答 */
+    res.send(400);
+  }
+});
+
 app.use(require("connect").bodyParser());
 
 /* static
@@ -192,7 +212,7 @@ app.get("/exit", function(req, res) {
   return process.exit(0);
 });
 
-/** 
+/**
  * ポート番号の設定
  * macとwindowsではコロン(:)がディレクトリ名に使えない文字なので
  * ドライブ文字と被らない::をセパレータとして使う
