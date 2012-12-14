@@ -9,6 +9,7 @@ BASE_PATH = "../../../../"  # Dropboard.appの上
 DATA_PATH = BASE_PATH+"data/"
 UPLOAD_PATH = BASE_PATH+"uploads/"
 PUBLIC_PATH = "../public/"
+MESSAGE_EXT = ""  #dataディレクトリに保存するメッセージの拡張子
 LOG_FILE = "log.txt"
 
 ### 標準出力を上書き ###
@@ -19,6 +20,7 @@ console.log = () ->
 
 ### app ###
 app = express();
+app.use(require('connect').bodyParser());
 
 # localhost以外からのアクセスは400で応答
 app.use (req, res, next) ->
@@ -45,15 +47,13 @@ getFiles = (dataPath) ->
   files = fs.readdirSync(dataPath)
   list = []
   files.forEach (fileName) ->
-    if fileName.match(/.+\.json/)
-      file = fs.readFileSync(dataPath + fileName) + ""
-      if file
-        data = null
-        try
-          data = JSON.parse(file)
-        catch e
-          console.log e
-        list.push data  if data
+    file = fs.readFileSync(dataPath + fileName) + ""
+    if file
+      try
+        data = JSON.parse(file)
+        if data then list.push data
+      catch e
+        console.log e
   list
 
 isSet = (arg) ->
@@ -99,9 +99,13 @@ app.post "/upload", (req, res) ->
 
 app.post "/write", (req, res) ->
   data = req.body
+  console.log data
   if isSet(data.name) and isSet(data.date) and isSet(data.text)
-    fs.writeFile DATA_PATH + shorten(data.name, 10) + "「" + shorten(data.text, 20) + "」" + ".json", JSON.stringify(data), (err) ->
+    fileName = DATA_PATH + shorten(data.name, 10) + "「" + shorten(data.text, 20) + "」" + ".json"
+    console.log fileName
+    fs.writeFile fileName, JSON.stringify(data), (err) ->
       if err
+        console.log err
         res.send "0"
       else
         res.send "1"
