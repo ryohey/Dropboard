@@ -60,7 +60,7 @@ isSet = (arg) ->
   return arg? and arg isnt ""
 
 shorten = (str, length) ->
-  s = str.replace(/\n|\\|\/|\:|\*|\?|\"|\<|\>|\|/g, "")
+  s = str.replace(/\n|\\|\/|\:|\*|\?|\"|\<|\>|\|\.|/g, "")
   postfix = "..."
   if s.length > length
     if length > postfix.length
@@ -99,9 +99,13 @@ app.post "/upload", (req, res) ->
 
 app.post "/write", (req, res) ->
   data = req.body
-  console.log data
   if isSet(data.name) and isSet(data.date) and isSet(data.text)
     fileName = DATA_PATH + shorten(data.name, 10) + "「" + shorten(data.text, 20) + "」" + MESSAGE_EXT
+    #同名ファイル存在時に末尾に".ファイル数"をつける ドットはshortenでエスケープしているので使用可能
+    if fs.existsSync fileName then fileName += ".0"
+    fileCount = 0;
+    while fs.existsSync fileName
+      fileName = fileName.replace /\.[0-9]+$/, "."+(++fileCount)
     console.log fileName
     fs.writeFile fileName, JSON.stringify(data), (err) ->
       if err

@@ -111,7 +111,7 @@ isSet = function(arg) {
 
 shorten = function(str, length) {
   var postfix, s;
-  s = str.replace(/\n|\\|\/|\:|\*|\?|\"|\<|\>|\|/g, "");
+  s = str.replace(/\n|\\|\/|\:|\*|\?|\"|\<|\>|\|\.|/g, "");
   postfix = "...";
   if (s.length > length) {
     if (length > postfix.length) {
@@ -167,11 +167,17 @@ app.post("/upload", function(req, res) {
 });
 
 app.post("/write", function(req, res) {
-  var data, fileName;
+  var data, fileCount, fileName;
   data = req.body;
-  console.log(data);
   if (isSet(data.name) && isSet(data.date) && isSet(data.text)) {
     fileName = DATA_PATH + shorten(data.name, 10) + "「" + shorten(data.text, 20) + "」" + MESSAGE_EXT;
+    if (fs.existsSync(fileName)) {
+      fileName += ".0";
+    }
+    fileCount = 0;
+    while (fs.existsSync(fileName)) {
+      fileName = fileName.replace(/\.[0-9]+$/, "." + (++fileCount));
+    }
     console.log(fileName);
     return fs.writeFile(fileName, JSON.stringify(data), function(err) {
       if (err) {
