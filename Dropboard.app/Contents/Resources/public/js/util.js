@@ -44,8 +44,16 @@ var formatMessage = function(str){
 	}
 
 	var replaceURL = function(str){
-		//タグの中に入ってないURLだけ
-		str = str.replace(urlPattern,'<a href="$1" target="_blank">$1</a>');
+		//タグの中に入ってないURLだけ変えたい
+		var urls = str.match(urlPattern);
+		if (urls){
+			$.each(urls,function(index,value){
+				console.log(value,isYoutubeDomain(value),isTwitter(value));
+				if (!isYoutubeDomain(value) && !isTwitter(value))
+					str = str.replace(value,'<a href="'+value+'" target="_blank">'+value+'</a>');
+			});
+		}
+		return str;
 	}
 
 	var replaceTwitter = function(str) {
@@ -63,14 +71,18 @@ var formatMessage = function(str){
 			$.each(urls,function(index,value){
 				if (isYoutube(value)){
 					var src = value.replace(youtubeExp,"http\:\/\/www\.youtube\.com\/embed\/$1");
-					var elm = $("<iframe/>")
-						.attr({
-							"width":"300",
-							"height":"200",
-							"src":src,
-							"frameborder":"0",
-							"allowfullscreen":"true"
-						});
+					var elm = 
+					$("<div/>")
+						.append(
+							$("<iframe/>")
+								.attr({
+									"width":"300",
+									"height":"200",
+									"src":src,
+									"frameborder":"0",
+									"allowfullscreen":"true"
+								})
+						);
 					iframes.push({
 						"url" : value,
 						"html" : elm.wrap('<div>').parent().html()
@@ -84,7 +96,13 @@ var formatMessage = function(str){
 		return str;
 	}
 
-	return replaceYoutube(h(str));
+	return　replaceURL(
+				replaceTwitter(
+					replaceYoutube(
+						h(str)
+					)
+				)
+			);
 }
 
 var parseURL = function(url) {
@@ -124,10 +142,25 @@ var isAudio = function(file){
 	return isFileType(file,["mp3","ogg","wav"]);
 }
 
+var youtubeDomainExp = /https?\:\/\/www\.youtube\.com.*/gm;
+var isYoutubeDomain = function(url){
+	if (url.match(youtubeDomainExp))
+		return true;
+	else
+		return false;
+}
 
 var youtubeExp = /https?\:\/\/www\.youtube\.com\/watch\?v\=([a-zA-Z0-9]+?)&.*/gm;
 var isYoutube = function(url){
 	if (url.match(youtubeExp))
+		return true;
+	else
+		return false;
+}
+
+var twitterExp = /https?\:\/\/twitter\.com.*/gm;
+var isTwitter = function(url){
+	if (url.match(twitterExp))
 		return true;
 	else
 		return false;
