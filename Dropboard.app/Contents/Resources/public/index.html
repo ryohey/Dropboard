@@ -14,7 +14,7 @@
     <link href='css/white.css' rel='stylesheet' type='text/css' />
     <!-- jquery -->
     <script type="text/javascript" src="js/jquery.min.js"></script>
-    <!-- plug-ins -->    
+    <!-- plug-ins -->
     <script type="text/javascript" src="js/jquery.cookie.js"></script>
     <script type="text/javascript" src="js/jquery.bottom-1.0.js"></script>
     <script type="text/javascript" src="js/jquery.fancybox.pack.js"></script>
@@ -24,6 +24,13 @@
     <script type="text/javascript" src="js/notify.js"></script>
     <script type="text/javascript" src="js/client.js"></script>
     <script type="text/javascript" src="js/style.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io.connect('http://localhost');
+      socket.on('update',   function (data) {
+        update();
+      });
+    </script>
 </head>
 <body>
 <div id="input">
