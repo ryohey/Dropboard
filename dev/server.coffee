@@ -101,7 +101,7 @@ app.post "/write", (req, res) ->
   data = req.body
   console.log data
   if isSet(data.name) and isSet(data.date) and isSet(data.text)
-    fileName = DATA_PATH + shorten(data.name, 10) + "「" + shorten(data.text, 20) + "」" + ".json"
+    fileName = DATA_PATH + shorten(data.name, 10) + "「" + shorten(data.text, 20) + "」" + MESSAGE_EXT
     console.log fileName
     fs.writeFile fileName, JSON.stringify(data), (err) ->
       if err

@@ -171,7 +171,7 @@ app.post("/write", function(req, res) {
   data = req.body;
   console.log(data);
   if (isSet(data.name) && isSet(data.date) && isSet(data.text)) {
-    fileName = DATA_PATH + shorten(data.name, 10) + "「" + shorten(data.text, 20) + "」" + ".json";
+    fileName = DATA_PATH + shorten(data.name, 10) + "「" + shorten(data.text, 20) + "」" + MESSAGE_EXT;
     console.log(fileName);
     return fs.writeFile(fileName, JSON.stringify(data), function(err) {
       if (err) {
