@@ -1,14 +1,18 @@
-var BASE_PATH, DATA_PATH, LOG_FILE, MESSAGE_EXT, PUBLIC_PATH, UPLOAD_PATH, app, checkPort, dir, dirs, echo, express, fs, getFiles, io, isSet, os, port, request, server, shorten, sortByDate, startListen, url, util, _i, _len;
-
-express = require("express");
+var BASE_PATH, DATA_PATH, LOG_FILE, MESSAGE_EXT, PUBLIC_PATH, UPLOAD_PATH, app, checkPort, dir, dirs, echo, express, fs, getFiles, io, isDevelopMode, isSet, makeLogfileName, os, path, port, request, server, shorten, socket, sortByDate, startListen, url, util, _i, _len;
 
 fs = require("fs");
 
 os = require("os");
 
-request = require("request");
-
 util = require('util');
+
+path = require("path");
+
+express = require("./node_modules/express");
+
+request = require("./node_modules/request");
+
+socket = require('./node_modules/socket.io');
 
 /* 定数
 */
@@ -24,6 +28,44 @@ PUBLIC_PATH = "../public/";
 MESSAGE_EXT = "";
 
 LOG_FILE = "log.txt";
+
+/*
+ * node実行時に-dオプションが渡されていたらディベロップメントモード.
+ * node server.js -d
+*/
+
+isDevelopMode = function() {
+  if ((process.argv.length > 2) && (process.argv[2] === "-d")) return true;
+  return false;
+};
+
+/**
+ * Dropboard.exeが入っているディレクトリとその親ディレクトリの名前を
+ * 使用してlogファイル名を作る.
+ * 親ディレクトリも含める理由は現在のDropboard開発室の様に
+ * Dropboard開発室
+ *   |-dropboard
+ * のような配置をされると容易にファイル名がかぶってしまうので
+ * それを避けるために親ディレクトリも含めることにした.
+*/
+
+makeLogfileName = function() {
+  var baseDir, parentDir;
+  baseDir = path.basename(path.resolve(BASE_PATH));
+  parentDir = path.basename(path.dirname(path.resolve(BASE_PATH)));
+  return os.tmpDir() + parentDir + "_" + baseDir + ".log";
+};
+
+/**
+ * ディベロップメントモードじゃなかったら
+ * ログのファイルはテンポラリに保存する.
+*/
+
+if (isDevelopMode()) {
+  console.log("[Development mode]\nstart logging to " + LOG_FILE);
+} else {
+  LOG_FILE = makeLogfileName();
+}
 
 /* 標準出力を上書き
 */
@@ -247,7 +289,7 @@ process.on('uncaughtException', function(err) {
 
 server = require('http').createServer(app);
 
-io = require('socket.io').listen(server);
+io = socket.listen(server);
 
 io.set('log level', 1);
 
