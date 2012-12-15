@@ -78,6 +78,9 @@
         // 1行目の出力は Dropboard ページの URL
         _boardUrl = str;
     }
+    
+    NSLog(@"%@",_boardUrl);
+    [self openBoard];
 }
 
 /**
@@ -87,7 +90,7 @@
  */
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
     if (_alreadyActivated == NO) {
-        // 初回起動時は js からブラウザを起動するので何もしない
+        // 初回起動時はサーバ起動後に開く
         _alreadyActivated = YES;
         
     } else {
