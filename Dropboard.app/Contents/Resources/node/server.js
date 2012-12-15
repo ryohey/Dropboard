@@ -25,11 +25,45 @@ MESSAGE_EXT = "";
 
 LOG_FILE = "log.txt";
 
+/*
+ * node実行時に-dオプションが渡されていたらディベロップメントモード.
+ * node server.js -d
+ */
+var isDevelopMode = function() {
+  if((process.argv.length > 2) && (process.argv[2] === "-d")){
+    return true;
+  }
+  return false;
+}
+
+/*
+ * Dropboard.exeが入っているディレクトリとその親ディレクトリの名前を
+ * 使用してlogファイル名を作る.
+ * 親ディレクトリも含める理由は現在のDropboard開発室の様に
+ * Dropboard開発室
+ *   |-dropboard
+ * のような配置をされると容易にファイル名がかぶってしまうので
+ * それを避けるために親ディレクトリも含めることにした.
+ *
+ */
+var makeLogfileName = function() {
+  var path = require("path");
+  var baseDir = path.basename(path.resolve(BASE_PATH));
+  var parentDir = path.basename(path.dirname(path.resolve(BASE_PATH)));
+  return os.tmpDir() + parentDir + "_" +  baseDir + ".log";
+}
+
+/*
+ * ディベロップメントモードじゃなかったら
+ * ログのファイルはテンポラリに保存する.
+ */
+if(!isDevelopMode()){
+  LOG_FILE = makeLogfileName();
+}
+
 /* 標準出力を上書き
 */
-
 echo = console.log;
-
 console.log = function() {
   var scr;
   scr = util.format.apply(this, arguments) + '\n';
@@ -193,7 +227,7 @@ app.get("/exit", function(req, res) {
   return process.exit(0);
 });
 
-/** 
+/**
  * ポート番号の設定
  * macとwindowsではコロン(:)がディレクトリ名に使えない文字なので
  * ドライブ文字と被らない::をセパレータとして使う
