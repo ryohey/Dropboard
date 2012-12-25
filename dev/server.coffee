@@ -1,8 +1,10 @@
-express = require("express")
 fs = require("fs")
 os = require("os")
-request = require("request")
 util = require('util')
+path = require("path")
+express = require("./node_modules/express")
+request = require("./node_modules/request")
+socket = require('./node_modules/socket.io')
 
 ### 定数 ###
 BASE_PATH = "../../../../"  # Dropboard.appの上
@@ -11,6 +13,37 @@ UPLOAD_PATH = BASE_PATH+"uploads/"
 PUBLIC_PATH = "../public/"
 MESSAGE_EXT = ""  #dataディレクトリに保存するメッセージの拡張子
 LOG_FILE = "log.txt"
+
+###
+ * node実行時に-dオプションが渡されていたらディベロップメントモード.
+ * node server.js -d
+ ### 
+isDevelopMode = () ->
+  return true if (process.argv.length > 2) and (process.argv[2] is "-d")
+  false
+
+###*
+ * Dropboard.exeが入っているディレクトリとその親ディレクトリの名前を
+ * 使用してlogファイル名を作る.
+ * 親ディレクトリも含める理由は現在のDropboard開発室の様に
+ * Dropboard開発室
+ *   |-dropboard
+ * のような配置をされると容易にファイル名がかぶってしまうので
+ * それを避けるために親ディレクトリも含めることにした.
+ ###
+makeLogfileName = () ->
+  baseDir = path.basename(path.resolve(BASE_PATH))
+  parentDir = path.basename(path.dirname(path.resolve(BASE_PATH)))
+  os.tmpDir() + parentDir + "_" + baseDir + ".log"
+
+###*
+ * ディベロップメントモードじゃなかったら
+ * ログのファイルはテンポラリに保存する.
+ ### 
+if isDevelopMode()
+  console.log "[Development mode]\nstart logging to "+LOG_FILE  #場所を表示
+else
+  LOG_FILE = makeLogfileName()
 
 ### 標準出力を上書き ###
 echo = console.log
@@ -190,7 +223,7 @@ process.on 'uncaughtException', (err) ->
 
 ### WebSocketの準備 ###
 server = require('http').createServer(app)
-io = require('socket.io').listen(server)
+io = socket.listen(server)
 io.set('log level',  1) # 標準だとログが出まくるので抑制
 io.sockets.on 'connection',  (socket) ->
   ###*
