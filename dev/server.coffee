@@ -51,15 +51,14 @@ console.log = () ->
   scr = util.format.apply(this, arguments) + '\n'   # console.logの実装と同じ
   fs.appendFileSync LOG_FILE, scr
 
+### app ###
+app = express();
+app.use(require('connect').bodyParser());
 
 ### Template Setting ###
 app.engine 'html', require('ejs').__express
 app.set 'views', PUBLIC_PATH
 app.set 'view engine', 'html'
-
-### app ###
-app = express();
-app.use(require('connect').bodyParser());
 
 # localhost以外からのアクセスは400で応答
 app.use (req, res, next) ->
