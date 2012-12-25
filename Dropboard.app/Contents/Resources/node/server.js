@@ -53,11 +53,23 @@ app.use(function(req, res, next) {
   }
 });
 
+
+/*
+  Template
+*/ 
+app.engine('html', require('ejs').__express);
+app.set('views', PUBLIC_PATH);
+app.set('view engine', 'html');
+app.get('/', function(req, res){
+  res.render('index', {
+    title: "Dropboard"
+  });
+});
+
 /* static
 */
 
 app.use("/", express.static(__dirname + "/" + PUBLIC_PATH));
-
 app.use("/uploads", express.static(__dirname + "/" + UPLOAD_PATH));
 
 /* データディレクトリがない場合は作成

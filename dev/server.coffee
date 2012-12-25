@@ -18,6 +18,12 @@ console.log = () ->
   scr = util.format.apply(this, arguments) + '\n'   # console.logの実装と同じ
   fs.appendFileSync LOG_FILE, scr
 
+
+### Template Setting ###
+app.engine 'html', require('ejs').__express
+app.set 'views', PUBLIC_PATH
+app.set 'view engine', 'html'
+
 ### app ###
 app = express();
 app.use(require('connect').bodyParser());
@@ -82,6 +88,11 @@ sortByDate = (a, b) ->
     ax - bx
 
 ### API ###
+app.get '/', (req, res) ->
+  res.render('index', {
+    title: "Dropboard"
+  });
+  
 app.post "/upload", (req, res) ->
   files = req.files.files
   if typeof files.forEach isnt 'function'
