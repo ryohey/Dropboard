@@ -1,2 +1,3 @@
 #jsの統合とかminifyとかそのうちやる
-coffee -o Dropboard/Resources/node/ -bc Dropboard/server.coffee
+chmod 757 Dropboard/Resources/node/node_
+coffee -o Dropboard/Resources/node/ -bc server.coffee

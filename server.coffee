@@ -1,17 +1,73 @@
-express = require("express")
 fs = require("fs")
 os = require("os")
-request = require("request")
+util = require('util')
+path = require("path")
+express = require("./node_modules/express")
+request = require("./node_modules/request")
+socket = require('./node_modules/socket.io')
+ejs = require('./node_modules/ejs')
 
 ### 定数 ###
 BASE_PATH = "../../../../"  # Dropboard.appの上
 DATA_PATH = BASE_PATH+"data/"
 UPLOAD_PATH = BASE_PATH+"uploads/"
 PUBLIC_PATH = "../public/"
+MESSAGE_EXT = ""  #dataディレクトリに保存するメッセージの拡張子
+LOG_FILE = "log.txt"
+
+###
+ * node実行時に-dオプションが渡されていたらディベロップメントモード.
+ * node server.js -d
+ ### 
+isDevelopMode = () ->
+  return true if (process.argv.length > 2) and (process.argv[2] is "-d")
+  false
+
+###*
+ * Dropboard.exeが入っているディレクトリとその親ディレクトリの名前を
+ * 使用してlogファイル名を作る.
+ * 親ディレクトリも含める理由は現在のDropboard開発室の様に
+ * Dropboard開発室
+ *   |-dropboard
+ * のような配置をされると容易にファイル名がかぶってしまうので
+ * それを避けるために親ディレクトリも含めることにした.
+ ###
+makeLogfileName = () ->
+  baseDir = path.basename(path.resolve(BASE_PATH))
+  parentDir = path.basename(path.dirname(path.resolve(BASE_PATH)))
+  os.tmpDir() + parentDir + "_" + baseDir + ".log"
+
+###*
+ * ディベロップメントモードじゃなかったら
+ * ログのファイルはテンポラリに保存する.
+ ### 
+if isDevelopMode()
+  console.log "[Development mode]\nstart logging to "+LOG_FILE  #場所を表示
+else
+  LOG_FILE = makeLogfileName()
+
+### 標準出力を上書き ###
+echo = console.log
+console.log = () ->
+  scr = util.format.apply(this, arguments) + '\n'   # console.logの実装と同じ
+  fs.appendFileSync LOG_FILE, scr
 
 ### app ###
-app = express()
-app.use require("connect").bodyParser()
+app = express();
+app.use(require('connect').bodyParser());
+
+### localhost以外からのアクセスは400で応答 ###
+app.use (req, res, next) ->
+  hostname = req.headers.host
+  if hostname?.match(/^localhost/)?.length?
+    next()
+  else
+    res.send(400)
+
+### Template Setting ###
+app.engine 'html', ejs.__express
+app.set 'views', PUBLIC_PATH
+app.set 'view engine', 'html'
 
 ### static ###
 app.use "/", express.static(__dirname + "/" + PUBLIC_PATH)
@@ -30,22 +86,20 @@ getFiles = (dataPath) ->
   files = fs.readdirSync(dataPath)
   list = []
   files.forEach (fileName) ->
-    if fileName.match(/.+\.json/)
-      file = fs.readFileSync(dataPath + fileName) + ""
-      if file
-        data = null
-        try
-          data = JSON.parse(file)
-        catch e
-          console.log e
-        list.push data  if data
+    file = fs.readFileSync(dataPath + fileName) + ""
+    if file
+      try
+        data = JSON.parse(file)
+        if data then list.push data
+      catch e
+        console.log e
   list
 
 isSet = (arg) ->
   return arg? and arg isnt ""
 
 shorten = (str, length) ->
-  s = str.replace(/\n|\\|\/|\:|\*|\?|\"|\<|\>|\|/g, "")
+  s = str.replace(/\n|\\|\/|\:|\*|\?|\"|\<|\>|\|\.|/g, "")
   postfix = "..."
   if s.length > length
     if length > postfix.length
@@ -67,6 +121,11 @@ sortByDate = (a, b) ->
     ax - bx
 
 ### API ###
+app.get '/', (req, res) ->
+  res.render('index', {
+    title: "Dropboard"
+  });
+  
 app.post "/upload", (req, res) ->
   files = req.files.files
   if typeof files.forEach isnt 'function'
@@ -85,8 +144,16 @@ app.post "/upload", (req, res) ->
 app.post "/write", (req, res) ->
   data = req.body
   if isSet(data.name) and isSet(data.date) and isSet(data.text)
-    fs.writeFile DATA_PATH + shorten(data.name, 10) + "「" + shorten(data.text, 20) + "」" + ".json", JSON.stringify(data), (err) ->
+    fileName = DATA_PATH + shorten(data.name, 10) + "「" + shorten(data.text, 20) + "」" + MESSAGE_EXT
+    #同名ファイル存在時に末尾に".ファイル数"をつける ドットはshortenでエスケープしているので使用可能
+    if fs.existsSync fileName then fileName += ".0"
+    fileCount = 0;
+    while fs.existsSync fileName
+      fileName = fileName.replace /\.[0-9]+$/, "."+(++fileCount)
+    console.log fileName
+    fs.writeFile fileName, JSON.stringify(data), (err) ->
       if err
+        console.log err
         res.send "0"
       else
         res.send "1"
@@ -156,7 +223,7 @@ process.on 'uncaughtException', (err) ->
 
 ### WebSocketの準備 ###
 server = require('http').createServer(app)
-io = require('socket.io').listen(server)
+io = socket.listen(server)
 io.set('log level',  1) # 標準だとログが出まくるので抑制
 io.sockets.on 'connection',  (socket) ->
   ###*
@@ -185,5 +252,8 @@ io.sockets.on 'connection',  (socket) ->
 startListen = () ->
   server.listen port
 
+# サーバー起動
+startListen()
+
 # URLを出力して完了
-console.log url
+echo url
