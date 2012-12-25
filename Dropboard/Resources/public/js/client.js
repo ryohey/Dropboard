@@ -246,5 +246,4 @@ $(function(){
 
  	// 更新の設定
     update();
-    setInterval(update,5000);
 })

@@ -1,7 +1,0 @@
-
-.DS_Store
-
-# ignore project user data
-*.xcodeproj/xcuserdata
-*.xcodeproj/project.xcworkspace/xcuserdata
-
