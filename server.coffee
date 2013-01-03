@@ -12,6 +12,7 @@ BASE_PATH = "../../../../"  # Dropboard.appの上
 DATA_PATH = BASE_PATH+"data/"
 UPLOAD_PATH = BASE_PATH+"uploads/"
 PUBLIC_PATH = "../public/"
+VIEW_PATH = "../views/"
 MESSAGE_EXT = ""  #dataディレクトリに保存するメッセージの拡張子
 LOG_FILE = "log.txt"
 
@@ -66,7 +67,7 @@ app.use (req, res, next) ->
 
 ### Template Setting ###
 app.engine 'html', ejs.__express
-app.set 'views', PUBLIC_PATH
+app.set 'views', VIEW_PATH
 app.set 'view engine', 'html'
 
 ### static ###
