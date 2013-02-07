@@ -14,21 +14,13 @@ var LBAjax = function(){
 	this.lastData = [];
 	var _this = this;
 
-	/* すべてのデータを読み込む */
-	this.read = function(success){
-		lbNotify.progress("データ取得中");
-		$.get("/read",function(response){
-			var data = $.parseJSON(response);
-			lbNotify.hide();
-			success(data);
-		})
-	}
-
 	/* 指定数だけ読み込む */
 	this.page = function(success,page,per){
 		lbNotify.progress("データ取得中");
-		$.get("/page/"+page+"/"+per,function(response){
-			var data = $.parseJSON(response);
+		$.get("/timeline",{
+			page: page,
+			per: per
+		}, function(data){
 			lbNotify.hide();
 			success(data);
 		})
@@ -58,7 +50,7 @@ var LBAjax = function(){
 	/* 書き込む */
 	this.write = function(data,success){
 		lbNotify.progress("送信中");
-		$.post("/write",data,function(response){
+		$.post("/timeline",data,function(response){
 			if (response == "1"){
 				lbNotify.hide();
 				success()
