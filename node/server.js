@@ -1,4 +1,4 @@
-var BASE_PATH, DATA_PATH, Log, PUBLIC_PATH, Port, Timeline, Upload, VIEW_PATH, Watcher, app, appName, ejs, express, io, isDevelopMode, log, path, port, request, server, socket, startListen, timeline, upload, url, watcher;
+var BASE_PATH, Calendar, DATA_PATH, Log, PUBLIC_PATH, Port, Timeline, Upload, VIEW_PATH, Watcher, app, appName, calendar, crypto, ejs, express, fs, io, isDevelopMode, log, md5, partials, path, port, request, server, socket, startListen, timeline, upload, url, watcher;
 
 express = require("./node_modules/express");
 
@@ -9,6 +9,12 @@ socket = require('./node_modules/socket.io');
 ejs = require('./node_modules/ejs');
 
 path = require("./node_modules/path");
+
+partials = require('./node_modules/express-partials');
+
+crypto = require('crypto');
+
+fs = require("fs");
 
 /* my modules
 */
@@ -23,16 +29,25 @@ Port = require("./my_modules/port");
 
 Upload = require("./my_modules/upload");
 
+Calendar = require("./my_modules/calendar");
+
 /* 定数
 */
 
 BASE_PATH = "../";
 
-DATA_PATH = BASE_PATH + "data/";
+DATA_PATH = __dirname + "/" + BASE_PATH + "data/";
 
 PUBLIC_PATH = "../public/";
 
-VIEW_PATH = "../views/";
+VIEW_PATH = __dirname + BASE_PATH + "../views/";
+
+/* benri
+*/
+
+md5 = function(str) {
+  return crypto.createHash('md5').update(str).digest("hex");
+};
 
 /*
  * node実行時に-dオプションが渡されていたらディベロップメントモード.
@@ -57,14 +72,16 @@ app = express();
 
 app.use(require('connect').bodyParser());
 
+app.use(partials());
+
 /* Template Setting
 */
 
 app.engine('.html', ejs.__express);
 
-app.set('view engine', 'html');
+app.set('view engine', 'ejs');
 
-app.set('views', __dirname + "/../views/");
+app.set('views', VIEW_PATH);
 
 /* static
 */
@@ -91,19 +108,29 @@ upload = new Upload();
 
 timeline = new Timeline();
 
+calendar = new Calendar();
+
+upload.appName = appName;
+
+timeline.appName = appName;
+
+calendar.appName = appName;
+
 upload.bind(app);
 
 timeline.bind(app);
 
-app.get('/', function(req, res) {
-  return res.render('index', {
-    title: appName
-  });
-});
+calendar.bind(app);
 
 app.get("/exit", function(req, res) {
   console.log("httpからサーバーが終了されました");
   return process.exit(0);
+});
+
+app.get("/", function(req, res) {
+  return res.render("index", {
+    title: appName
+  });
 });
 
 process.on('uncaughtException', function(err) {
@@ -118,7 +145,7 @@ server = require('http').createServer(app);
 
 io = socket.listen(server);
 
-watcher = new Watcher(io, DATA_PATH);
+watcher = new Watcher(io, DATA_PATH + "timeline/");
 
 watcher.start();
 

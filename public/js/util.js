@@ -48,7 +48,6 @@ var formatMessage = function(str){
 		var urls = str.match(urlPattern);
 		if (urls){
 			$.each(urls,function(index,value){
-				console.log(value,isYoutubeDomain(value),isTwitter(value));
 				if (!isYoutubeDomain(value) && !isTwitter(value))
 					str = str.replace(value,'<a href="'+value+'" target="_blank">'+value+'</a>');
 			});
@@ -73,11 +72,12 @@ var formatMessage = function(str){
 					var src = value.replace(youtubeExp,"http\:\/\/www\.youtube\.com\/embed\/$1");
 					var elm = 
 					$("<div/>")
+						.addClass("video")
 						.append(
 							$("<iframe/>")
 								.attr({
-									"width":"300",
-									"height":"200",
+									"width":"640",
+									"height":"360",
 									"src":src,
 									"frameborder":"0",
 									"allowfullscreen":"true"
@@ -150,7 +150,7 @@ var isYoutubeDomain = function(url){
 		return false;
 }
 
-var youtubeExp = /https?\:\/\/www\.youtube\.com\/watch\?v\=([a-zA-Z0-9]+?)&.*/gm;
+var youtubeExp = /https?\:\/\/www\.youtube\.com\/watch\?v\=([a-zA-Z0-9]+).*/gm;
 var isYoutube = function(url){
 	if (url.match(youtubeExp))
 		return true;

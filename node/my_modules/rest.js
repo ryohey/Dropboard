@@ -5,6 +5,7 @@ Reader = require("./reader");
 Rest = (function() {
 
   function Rest(name) {
+    this.name = name;
     this.route = "/" + name;
     this.dataPath = "data/" + name + "/";
     this.reader = new Reader(this.dataPath);

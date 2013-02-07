@@ -7,7 +7,7 @@
 	こういう感じで
 */
 
-var MESSAGE_PER_PAGE = 20;
+var MESSAGE_PER_PAGE = 10;
 
 var LBAjax = function(){
 	/* 前回読み込んだデータ */
@@ -17,7 +17,7 @@ var LBAjax = function(){
 	/* 指定数だけ読み込む */
 	this.page = function(success,page,per){
 		lbNotify.progress("データ取得中");
-		$.get("/timeline",{
+		$.getJSON("/timeline",{
 			page: page,
 			per: per
 		}, function(data){

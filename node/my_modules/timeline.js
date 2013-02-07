@@ -21,22 +21,11 @@ Timeline = (function(_super) {
     this.ext = "";
   }
 
-  Timeline.prototype.makeFileName = function(data) {
-    var fileCount, fileName;
-    fileName = this.dataPath + this.shorten(data.name, 10) + "「" + this.shorten(data.text, 20) + "」" + this.ext;
-    if (fs.existsSync(fileName)) fileName += ".0";
-    fileCount = 0;
-    while (fs.existsSync(fileName)) {
-      fileName = fileName.replace(/\.[0-9]+$/, "." + (++fileCount));
-    }
-    return fileName;
-  };
-
   Timeline.prototype.post = function(req, res) {
     var data, fileName;
     data = req.body;
     if (this.isSet(data.name && this.isSet(data.date && this.isSet(data.text)))) {
-      fileName = this.makeFileName(data);
+      fileName = this.digest(data);
       return fs.writeFile(fileName, JSON.stringify(data), function(err) {
         if (err) console.log(err);
         return res.send(!err);
@@ -45,13 +34,34 @@ Timeline = (function(_super) {
   };
 
   Timeline.prototype.get = function(req, res) {
-    var all, data, page, per, sorted;
-    page = parseInt(req.query.page);
-    per = parseInt(req.query.per);
-    all = this.reader.get().all();
-    sorted = Q(all).sortByDate();
-    data = Q(sorted).page(page, per);
-    return res.send(data);
+    var _this = this;
+    return res.format({
+      json: function() {
+        var all, data, page, per, sorted;
+        page = parseInt(req.query.page);
+        per = parseInt(req.query.per);
+        all = _this.reader.get().all();
+        sorted = Q(all).sortByDate();
+        data = Q(sorted).page(page, per);
+        return res.send(data);
+      },
+      html: function() {
+        return res.render(_this.name, {
+          title: _this.appName
+        });
+      }
+    });
+  };
+
+  Timeline.prototype.digest = function(data) {
+    var fileCount, fileName;
+    fileName = this.dataPath + this.shorten(data.name, 10) + "「" + this.shorten(data.text, 20) + "」" + this.ext;
+    if (fs.existsSync(fileName)) fileName += ".0";
+    fileCount = 0;
+    while (fs.existsSync(fileName)) {
+      fileName = fileName.replace(/\.[0-9]+$/, "." + (++fileCount));
+    }
+    return fileName;
   };
 
   Timeline.prototype.isSet = function(arg) {

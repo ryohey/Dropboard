@@ -1,1 +1,1 @@
-coffee -o ./ -wbc client.coffee
+coffee -o ./ -wbc *.coffee

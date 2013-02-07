@@ -17,10 +17,12 @@ Watcher = (function() {
       */
       var watcher;
       watcher = fs.watch(this.path, function(event, filename) {
+        console.log("update!");
         /**
          * ディレクトリに変更があった際にupdateイベントを
          * クライアントにpushする.
-        */        return socket.emit('update', {});
+        */
+        return socket.emit('update', {});
       });
       /**
        * クライアントから切断された際に

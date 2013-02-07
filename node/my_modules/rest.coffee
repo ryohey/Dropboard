@@ -2,6 +2,7 @@ Reader = require("./reader")
 
 class Rest
   constructor : (name) ->
+    @name = name
     @route = "/"+name
     @dataPath = "data/"+name+"/"
     @reader = new Reader(@dataPath)

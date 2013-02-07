@@ -12,6 +12,7 @@ class Watcher
        * 監視を開始する.
        ###
       watcher = fs.watch @path, (event,  filename) ->
+        console.log "update!"
         ###*
          * ディレクトリに変更があった際にupdateイベントを
          * クライアントにpushする.

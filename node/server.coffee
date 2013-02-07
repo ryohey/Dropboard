@@ -3,6 +3,10 @@ request = require "./node_modules/request"
 socket = require './node_modules/socket.io' 
 ejs = require './node_modules/ejs' 
 path = require "./node_modules/path"
+partials = require './node_modules/express-partials'
+
+crypto = require 'crypto'
+fs = require "fs"
 
 ### my modules ###
 Log =      require "./my_modules/log" 
@@ -10,12 +14,17 @@ Watcher =  require "./my_modules/watcher"
 Timeline = require "./my_modules/timeline" 
 Port =     require "./my_modules/port" 
 Upload =   require "./my_modules/upload" 
+Calendar =   require "./my_modules/calendar" 
 
 ### 定数 ###
 BASE_PATH = "../"  # Dropboard.appの上
-DATA_PATH = BASE_PATH+"data/"
+DATA_PATH = __dirname+"/"+BASE_PATH+"data/"
 PUBLIC_PATH = "../public/"
-VIEW_PATH = "../views/"
+VIEW_PATH = __dirname+BASE_PATH+"../views/"
+
+### benri ###
+md5 = (str) ->
+  crypto.createHash('md5').update(str).digest("hex")
 
 ###
  * node実行時に-dオプションが渡されていたらディベロップメントモード.
@@ -30,11 +39,12 @@ appName = path.basename path.resolve(__dirname, BASE_PATH)
 ### app ###
 app = express();
 app.use require('connect').bodyParser()
+app.use partials()
 
 ### Template Setting ###
 app.engine '.html', ejs.__express
-app.set 'view engine', 'html'
-app.set 'views', __dirname+"/../views/"
+app.set 'view engine', 'ejs'
+app.set 'views', VIEW_PATH
 
 ### static ###
 app.use "/", express.static(__dirname + "/" + PUBLIC_PATH)
@@ -50,18 +60,23 @@ app.use (req, res, next) ->
 ### API ###
 upload = new Upload();
 timeline = new Timeline();
+calendar = new Calendar();
+upload.appName = appName
+timeline.appName = appName
+calendar.appName = appName
 
 upload.bind(app)
 timeline.bind(app)
-
-app.get '/', (req, res) ->
-  res.render 'index', {
-    title: appName
-  }
+calendar.bind(app)
 
 app.get "/exit", (req, res) ->
   console.log "httpからサーバーが終了されました"
   process.exit(0)
+
+app.get "/", (req, res) ->
+  res.render "index", {
+    title: appName
+  }
 
 # 起動に失敗した場合は起動済みDropboardを終了させ、再度起動を試みる(それでも出来なかった場合は諦める)
 process.on 'uncaughtException', (err) ->
@@ -71,7 +86,7 @@ process.on 'uncaughtException', (err) ->
 
 server = require('http').createServer(app)
 io = socket.listen(server)
-watcher = new Watcher(io, DATA_PATH)
+watcher = new Watcher(io, DATA_PATH+"timeline/")
 watcher.start()
 
 # ポート番号の取得

@@ -1,2 +1,2 @@
 #jsの統合とかminifyとかそのうちやる
-nodemon node/server.js
+./node/node_ node/server.js
