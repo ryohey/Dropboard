@@ -14,6 +14,8 @@
  * Date: Tue Sep 4 23:38:33 2012 -0700
  *
  */
+
+var formatDate;
  
 (function($, undefined) {
 
@@ -1468,7 +1470,7 @@ function parseTime(s) { // returns minutes since start of day
 // TODO: use same function formatDate(date, [date2], format, [options])
 
 
-function formatDate(date, format, options) {
+formatDate = function(date, format, options) {
 	return formatDates(date, null, format, options);
 }
 

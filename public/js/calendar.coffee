@@ -22,7 +22,7 @@ $(() ->
         top: y
       })
       .show()
-    elm.find("input:last").focus()
+    elm.find("input:first").focus()
     elm
 
   $.getJSON "calendar", (events) ->
@@ -81,17 +81,50 @@ $(() ->
       dayClick: (date, allDay, jsEvent, view) ->
         false
       eventClick: (event, jsEvent, view) ->
+        console.log event.start
+        start = formatDate(event.start, "HH:mm")
+        if event.end
+          end = formatDate(event.end, "HH:mm")
+        else
+          end = "00:00"
         items = $("""
           <ul class="inputs">
             <li>タイトル<input type="text" class="title" value="#{event.title}"></li>
             <li><input type="checkbox" class="allDay" value="allDay" #{if event.allDay then "checked" else ""}>終日</li>
-            <li>開始<input type="text" class="start" value="#{event.start}"></li>
-            <li>終了<input type="text" class="end" value="#{event.end}"></li>
+            <li class="range">開始<input type="text" class="start" value="#{start}"></li>
+            <li class="range">終了<input type="text" class="end" value="#{end}"></li>
             <li><a class="delete">削除</a></li>
           </ul>
         """)
+        
+        showRange = () ->
+          unless items.find(".allDay").attr("checked")
+            items.find(".range").show()
+          else
+            items.find(".range").hide()
+
+        items.find(".allDay").change showRange
+        showRange()
+          
         contextMenu jsEvent.pageX, jsEvent.pageY, "イベントの編集", "キャンセル", "決定", items, (elm) ->
           elm.hide()
+          event.title = elm.find(".title").val()
+          hourExp = /([0-9]+)[\:：\s\,]([0-9]+)/
+          unless items.find(".allDay").attr("checked")
+            event.allDay = false
+            startArr = elm.find(".start").val().match hourExp
+            if startArr.length == 3
+              event.start.setHours(startArr[1])
+              event.start.setMinutes(startArr[2])
+            endArr = elm.find(".end").val().match hourExp
+            if endArr.length == 3
+              unless event.end then event.end = new Date(event.start)
+              event.end.setHours(endArr[1])
+              event.end.setMinutes(endArr[2])
+          else
+            event.allDay = true
+          calendar.fullCalendar("updateEvent", event)
+
       reportSelection: () ->
         false
       daySelectionMousedown: () ->

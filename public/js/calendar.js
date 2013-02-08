@@ -15,7 +15,7 @@ $(function() {
       left: x,
       top: y
     }).show();
-    elm.find("input:last").focus();
+    elm.find("input:first").focus();
     return elm;
   };
   return $.getJSON("calendar", function(events) {
@@ -77,10 +77,46 @@ $(function() {
         return false;
       },
       eventClick: function(event, jsEvent, view) {
-        var items;
-        items = $("<ul class=\"inputs\">\n  <li>タイトル<input type=\"text\" class=\"title\" value=\"" + event.title + "\"></li>\n  <li><input type=\"checkbox\" class=\"allDay\" value=\"allDay\" " + (event.allDay ? "checked" : "") + ">終日</li>\n  <li>開始<input type=\"text\" class=\"start\" value=\"" + event.start + "\"></li>\n  <li>終了<input type=\"text\" class=\"end\" value=\"" + event.end + "\"></li>\n  <li><a class=\"delete\">削除</a></li>\n</ul>");
+        var end, items, showRange, start;
+        console.log(event.start);
+        start = formatDate(event.start, "HH:mm");
+        if (event.end) {
+          end = formatDate(event.end, "HH:mm");
+        } else {
+          end = "00:00";
+        }
+        items = $("<ul class=\"inputs\">\n  <li>タイトル<input type=\"text\" class=\"title\" value=\"" + event.title + "\"></li>\n  <li><input type=\"checkbox\" class=\"allDay\" value=\"allDay\" " + (event.allDay ? "checked" : "") + ">終日</li>\n  <li class=\"range\">開始<input type=\"text\" class=\"start\" value=\"" + start + "\"></li>\n  <li class=\"range\">終了<input type=\"text\" class=\"end\" value=\"" + end + "\"></li>\n  <li><a class=\"delete\">削除</a></li>\n</ul>");
+        showRange = function() {
+          if (!items.find(".allDay").attr("checked")) {
+            return items.find(".range").show();
+          } else {
+            return items.find(".range").hide();
+          }
+        };
+        items.find(".allDay").change(showRange);
+        showRange();
         return contextMenu(jsEvent.pageX, jsEvent.pageY, "イベントの編集", "キャンセル", "決定", items, function(elm) {
-          return elm.hide();
+          var endArr, hourExp, startArr;
+          elm.hide();
+          event.title = elm.find(".title").val();
+          hourExp = /([0-9]+)[\:：\s\,]([0-9]+)/;
+          if (!items.find(".allDay").attr("checked")) {
+            event.allDay = false;
+            startArr = elm.find(".start").val().match(hourExp);
+            if (startArr.length === 3) {
+              event.start.setHours(startArr[1]);
+              event.start.setMinutes(startArr[2]);
+            }
+            endArr = elm.find(".end").val().match(hourExp);
+            if (endArr.length === 3) {
+              if (!event.end) event.end = new Date(event.start);
+              event.end.setHours(endArr[1]);
+              event.end.setMinutes(endArr[2]);
+            }
+          } else {
+            event.allDay = true;
+          }
+          return calendar.fullCalendar("updateEvent", event);
         });
       },
       reportSelection: function() {

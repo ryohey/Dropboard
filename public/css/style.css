@@ -431,6 +431,9 @@ cursor: pointer;
 background: rgb(0, 108, 192);
 border-radius: 15px;
 }
+#contextMenu .inputs{
+    list-style-type: none;
+}
 #contextMenu .inputs li {
     font-size: 12px;
     clear: both;
