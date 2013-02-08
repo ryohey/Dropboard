@@ -62,11 +62,14 @@
 }
 
 #goTop a {
+    font-size: 34px;
+    padding: 5px 17px;
+    vertical-align: middle;
+    -webkit-transform: rotate(90deg);
+    font-family: Arial;
     background: rgba(0, 0, 0, 0.6);
     text-decoration: none;
     color: #fff;
-    width: 70px;
-    padding: 15px 0;
     text-align: center;
     display: block;
     -webkit-border-radius: 5px;
@@ -389,4 +392,60 @@ h1 {
 
 #files li:before {
     content: "添付: ";
+}
+
+#contextMenu {
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.19);
+    position: absolute;
+    z-index: 10;
+    background: rgb(255, 255, 255);
+    border: 1px solid rgb(199, 199, 199);
+    border-radius: 4px;
+}
+#contextMenu header{
+    background: rgb(231, 231, 231);
+}
+#contextMenu h3 {
+    padding: 0.3em 1em;
+}
+#contextMenu footer {
+    margin-top: 1em;
+    padding: 0.3em 1em;
+    border-top: 1px solid rgb(214, 214, 214);
+}
+#contextMenu .cancel {
+color: white;
+font-size: 13px;
+display: inline-block;
+padding: 1px 6px;
+cursor: pointer;
+background: gray;
+border-radius: 9px;
+}
+#contextMenu .ok {
+color: white;
+font-size: 13px;
+display: inline-block;
+padding: 5px 9px;
+cursor: pointer;
+background: rgb(0, 108, 192);
+border-radius: 15px;
+}
+#contextMenu .inputs li {
+    font-size: 12px;
+    clear: both;
+    display: block;
+    padding: 0.4em 1em;
+}
+#contextMenu .inputs li input[type="text"] {
+    margin-left: 1em;
+    padding: 0.3em;
+}
+#contextMenu .delete {
+    display: inline-block;
+    color: rgb(255, 255, 255);
+    background: red;
+    border-radius: 5px;
+    padding: 0.3em 0.7em;
+    cursor: pointer;
 }
