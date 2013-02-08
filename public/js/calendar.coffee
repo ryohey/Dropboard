@@ -25,6 +25,12 @@ $(() ->
     elm.find("input:first").focus()
     elm
 
+  isLongEvent = (event) ->
+    if event.start? and event.end?
+      (formatDate(event.start, "yyyyMMdd") != formatDate(event.end, "yyyyMMdd"))
+    else
+      false
+
   $.getJSON "calendar", (events) ->
     calendar = $('#calendar').fullCalendar({
       header: {
@@ -83,14 +89,15 @@ $(() ->
       eventClick: (event, jsEvent, view) ->
         console.log event
         start = formatDate(event.start, "HH:mm")
-        if event.end
+        if event.end?
           end = formatDate(event.end, "HH:mm")
         else
           end = "00:00"
+
         items = $("""
           <ul class="inputs">
             <li>タイトル<input type="text" class="title" value="#{event.title}"></li>
-            <li><input type="checkbox" class="allDay" value="allDay" #{if event.allDay then "checked" else ""}>終日</li>
+            <li><input type="checkbox" class="allDay" value="allDay" #{if event.allDay or isLongEvent then "checked" else ""} #{if isLongEvent(event) then "disabled" else ""}>終日</li>
             <li class="range">開始<input type="text" class="start" value="#{start}"></li>
             <li class="range">終了<input type="text" class="end" value="#{end}"></li>
             <li><a class="delete">削除</a></li>
@@ -113,7 +120,8 @@ $(() ->
           elm.hide()
           event.title = elm.find(".title").val()
           hourExp = /([0-9]+)[\:：\s\,]([0-9]+)/
-          unless items.find(".allDay").attr("checked")
+          allDay = items.find(".allDay").attr("checked")
+          unless allDay
             event.allDay = false
             startArr = elm.find(".start").val().match hourExp
             if startArr.length == 3
@@ -135,7 +143,9 @@ $(() ->
       eventDrop: (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) ->
         false
       eventResize: (event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) ->
-        false
+        if isLongEvent(event)
+          event.allDay = true
+        calendar.fullCalendar("updateEvent", event)
       unselect: () ->
         false
       select: (start, end, allDay, jsEvent, view) ->

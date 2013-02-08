@@ -1,6 +1,6 @@
 
 $(function() {
-  var contextMenu;
+  var contextMenu, isLongEvent;
   contextMenu = function(x, y, title, cancelTitle, okTitle, items, complete) {
     var elm;
     elm = $("#contextMenu").html("<header>\n  <h3>" + title + "</h3>\n</header>\n<div class=\"content\"></div>\n<footer>\n  <a class=\"cancel\">" + cancelTitle + "</a>\n  <a class=\"ok\">" + okTitle + "</a>\n</footer>");
@@ -17,6 +17,13 @@ $(function() {
     }).show();
     elm.find("input:first").focus();
     return elm;
+  };
+  isLongEvent = function(event) {
+    if ((event.start != null) && (event.end != null)) {
+      return formatDate(event.start, "yyyyMMdd") !== formatDate(event.end, "yyyyMMdd");
+    } else {
+      return false;
+    }
   };
   return $.getJSON("calendar", function(events) {
     var calendar;
@@ -80,12 +87,12 @@ $(function() {
         var end, items, showRange, start;
         console.log(event);
         start = formatDate(event.start, "HH:mm");
-        if (event.end) {
+        if (event.end != null) {
           end = formatDate(event.end, "HH:mm");
         } else {
           end = "00:00";
         }
-        items = $("<ul class=\"inputs\">\n  <li>タイトル<input type=\"text\" class=\"title\" value=\"" + event.title + "\"></li>\n  <li><input type=\"checkbox\" class=\"allDay\" value=\"allDay\" " + (event.allDay ? "checked" : "") + ">終日</li>\n  <li class=\"range\">開始<input type=\"text\" class=\"start\" value=\"" + start + "\"></li>\n  <li class=\"range\">終了<input type=\"text\" class=\"end\" value=\"" + end + "\"></li>\n  <li><a class=\"delete\">削除</a></li>\n</ul>");
+        items = $("<ul class=\"inputs\">\n  <li>タイトル<input type=\"text\" class=\"title\" value=\"" + event.title + "\"></li>\n  <li><input type=\"checkbox\" class=\"allDay\" value=\"allDay\" " + (event.allDay || isLongEvent ? "checked" : "") + " " + (isLongEvent(event) ? "disabled" : "") + ">終日</li>\n  <li class=\"range\">開始<input type=\"text\" class=\"start\" value=\"" + start + "\"></li>\n  <li class=\"range\">終了<input type=\"text\" class=\"end\" value=\"" + end + "\"></li>\n  <li><a class=\"delete\">削除</a></li>\n</ul>");
         showRange = function() {
           if (!items.find(".allDay").attr("checked")) {
             return items.find(".range").show();
@@ -100,11 +107,12 @@ $(function() {
           return $("#contextMenu").hide();
         });
         return contextMenu(jsEvent.pageX, jsEvent.pageY, "イベントの編集", "キャンセル", "決定", items, function(elm) {
-          var endArr, hourExp, startArr;
+          var allDay, endArr, hourExp, startArr;
           elm.hide();
           event.title = elm.find(".title").val();
           hourExp = /([0-9]+)[\:：\s\,]([0-9]+)/;
-          if (!items.find(".allDay").attr("checked")) {
+          allDay = items.find(".allDay").attr("checked");
+          if (!allDay) {
             event.allDay = false;
             startArr = elm.find(".start").val().match(hourExp);
             if (startArr.length === 3) {
@@ -133,7 +141,8 @@ $(function() {
         return false;
       },
       eventResize: function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
-        return false;
+        if (isLongEvent(event)) event.allDay = true;
+        return calendar.fullCalendar("updateEvent", event);
       },
       unselect: function() {
         return false;
