@@ -81,7 +81,7 @@ $(() ->
       dayClick: (date, allDay, jsEvent, view) ->
         false
       eventClick: (event, jsEvent, view) ->
-        console.log event.start
+        console.log event
         start = formatDate(event.start, "HH:mm")
         if event.end
           end = formatDate(event.end, "HH:mm")
@@ -105,6 +105,9 @@ $(() ->
 
         items.find(".allDay").change showRange
         showRange()
+        items.find(".delete").click () ->
+          calendar.fullCalendar("removeEvents", event._id)
+          $("#contextMenu").hide()
           
         contextMenu jsEvent.pageX, jsEvent.pageY, "イベントの編集", "キャンセル", "決定", items, (elm) ->
           elm.hide()

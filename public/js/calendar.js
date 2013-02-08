@@ -78,7 +78,7 @@ $(function() {
       },
       eventClick: function(event, jsEvent, view) {
         var end, items, showRange, start;
-        console.log(event.start);
+        console.log(event);
         start = formatDate(event.start, "HH:mm");
         if (event.end) {
           end = formatDate(event.end, "HH:mm");
@@ -95,6 +95,10 @@ $(function() {
         };
         items.find(".allDay").change(showRange);
         showRange();
+        items.find(".delete").click(function() {
+          calendar.fullCalendar("removeEvents", event._id);
+          return $("#contextMenu").hide();
+        });
         return contextMenu(jsEvent.pageX, jsEvent.pageY, "イベントの編集", "キャンセル", "決定", items, function(elm) {
           var endArr, hourExp, startArr;
           elm.hide();
