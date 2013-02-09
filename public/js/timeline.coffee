@@ -86,7 +86,6 @@ writeButton = () ->
       $("#text")
         .data("files",null)
         .removeClass("attached")
-      $("#files").html("")
       lbAjax.write({
         name:userName
         date:new Date()
@@ -94,6 +93,7 @@ writeButton = () ->
         file:response
       },() -> 
         $("#text").val("")
+        update()
       )
   else
     lbAjax.write({
@@ -102,16 +102,15 @@ writeButton = () ->
       text:$("#text").val()
     },() ->
       $("#text").val("")
+      update()
     )
 
   #  名前のクッキーを焼く
   $.cookie('name', userName, {expires: 30})
 
   #  ファイル情報削除
-  $('#files').empty()
+  $("#files").html("").hide()
 
-  update()
-  
 $(() ->
 
   #  「書き込む」ボタン
@@ -137,16 +136,14 @@ $(() ->
     .bind("drop", (e) ->
       #  ドラッグされたファイル情報を取得
       files = e.originalEvent.dataTransfer.files
-      console.log(files)
-      $("#files").html("")
-      $.each(files,() ->
-        $("#files").append($("<li/>").text(this.name))
+      $("#files").show().html(
+        for file in files
+          $("<li/>").text(file.name)
       )
       $(this).data("files",files)
       $(this).addClass("attached")
       e.preventDefault() 
       e.stopPropagation()
-      $("#files").show()
     )
 
   #  goTop

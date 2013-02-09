@@ -95,14 +95,14 @@ writeButton = function() {
     lbAjax.upload(files, function(response) {
       console.log(response);
       $("#text").data("files", null).removeClass("attached");
-      $("#files").html("");
       return lbAjax.write({
         name: userName,
         date: new Date(),
         text: $("#text").val(),
         file: response
       }, function() {
-        return $("#text").val("");
+        $("#text").val("");
+        return update();
       });
     });
   } else {
@@ -111,14 +111,14 @@ writeButton = function() {
       date: new Date(),
       text: $("#text").val()
     }, function() {
-      return $("#text").val("");
+      $("#text").val("");
+      return update();
     });
   }
   $.cookie('name', userName, {
     expires: 30
   });
-  $('#files').empty();
-  return update();
+  return $("#files").html("").hide();
 };
 
 $(function() {
@@ -140,18 +140,21 @@ $(function() {
       return enableWriteButton();
     }
   }).bind("drop", function(e) {
-    var files;
+    var file, files;
     files = e.originalEvent.dataTransfer.files;
-    console.log(files);
-    $("#files").html("");
-    $.each(files, function() {
-      return $("#files").append($("<li/>").text(this.name));
-    });
+    $("#files").show().html((function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = files.length; _i < _len; _i++) {
+        file = files[_i];
+        _results.push($("<li/>").text(file.name));
+      }
+      return _results;
+    })());
     $(this).data("files", files);
     $(this).addClass("attached");
     e.preventDefault();
-    e.stopPropagation();
-    return $("#files").show();
+    return e.stopPropagation();
   });
   topBtn = $('#goTop');
   topBtn.hide();
