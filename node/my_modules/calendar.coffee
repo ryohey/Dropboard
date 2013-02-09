@@ -8,12 +8,8 @@ class Calendar extends Rest
 
   post : (req, res) =>
     data = req.body
-    fileName = @dataPath+@getScheduleName(data)
-    unless fs.existsSync fileName
-      fs.writeFile fileName, JSON.stringify(data), (err) ->
-        res.send !err
-    else
-      res.send false
+    fileName = @makePath(data)
+    @writeData(data, res, fileName)
 
   get : (req, res) =>
     res.format {
@@ -27,13 +23,33 @@ class Calendar extends Rest
 
   put : (req, res) =>
     data = req.body
-    fileName = @getScheduleName(data)
-    #なんかスケジュールごとのID的なやつを使って中身を書き換える
-    #もしくは削除してからpostで作成させる
+    data.allDay = data.allDay == "true"
+    fileName = @makePath(data)
+    fs.unlinkSync fileName
+    @writeData(data, res, fileName)
 
   delete : (req, res) =>
     data = req.body
-    fs.unlink @dataPath+@getScheduleName(data)
+    console.log "delete:"+data._id
+    data = req.body
+    fs.unlink @makePath(data), (err) ->
+      if err
+        res.send 500, "Can't Delete"
+      else
+        res.send 200, "Deleted"
+
+  writeData : (data, res, fileName) =>
+    unless fs.existsSync fileName
+      fs.writeFile fileName, JSON.stringify(data), (err) =>
+        if (err)
+          res.send 500, "Can't Write File"
+        else
+          res.send 200, "Created"
+    else
+      res.send 403, "File Already Exists"
+      
+  makePath : (data) =>
+    @dataPath+data._id
 
   getScheduleName : (data) =>
     (data.title+data.start).replace /[\s\\\/\:\*\?\"\<\>\|\#\{\}\%\&\~]/mg, ""

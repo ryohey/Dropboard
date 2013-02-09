@@ -4,7 +4,8 @@ class Rest
   constructor : (name) ->
     @name = name
     @route = "/"+name
-    @dataPath = "data/"+name+"/"
+    appPath = __dirname+"/../"+"../"
+    @dataPath = appPath+"data/"+name+"/"
     @reader = new Reader(@dataPath)
   bind : (app) ->
     app.post @route, @post

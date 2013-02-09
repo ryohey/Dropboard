@@ -1,4 +1,4 @@
-var BASE_PATH, Calendar, DATA_PATH, Log, PUBLIC_PATH, Port, Timeline, Upload, VIEW_PATH, Watcher, app, appName, calendar, crypto, ejs, express, fs, io, isDevelopMode, log, md5, partials, path, port, request, server, socket, startListen, timeline, upload, url, watcher;
+var BASE_PATH, Calendar, DATA_PATH, Log, PUBLIC_PATH, Port, Timeline, UPLOAD_PATH, Upload, VIEW_PATH, Watcher, app, appName, calendar, crypto, ejs, express, fs, io, isDevelopMode, log, md5, partials, path, port, request, server, socket, startListen, timeline, upload, url, watcher;
 
 express = require("./node_modules/express");
 
@@ -34,13 +34,15 @@ Calendar = require("./my_modules/calendar");
 /* 定数
 */
 
-BASE_PATH = "../";
+BASE_PATH = __dirname + "/../";
 
-DATA_PATH = __dirname + "/" + BASE_PATH + "data/";
+DATA_PATH = BASE_PATH + "data/";
 
-PUBLIC_PATH = "../public/";
+PUBLIC_PATH = BASE_PATH + "public/";
 
-VIEW_PATH = __dirname + BASE_PATH + "../views/";
+UPLOAD_PATH = BASE_PATH + "data/upload/";
+
+VIEW_PATH = BASE_PATH + "views/";
 
 /* benri
 */
@@ -86,7 +88,9 @@ app.set('views', VIEW_PATH);
 /* static
 */
 
-app.use("/", express.static(__dirname + "/" + PUBLIC_PATH));
+app.use("/", express.static(PUBLIC_PATH));
+
+app.use("/upload/", express.static(UPLOAD_PATH));
 
 /* localhost以外からのアクセスは400で応答
 */

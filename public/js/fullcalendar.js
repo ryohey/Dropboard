@@ -148,6 +148,7 @@ $.fn.fullCalendar = function(options) {
 	delete options.eventSources;
 	if (options.events) {
 		eventSources.push(options.events);
+		eventGUID += options.events.length;		//add by ryohey
 		delete options.events;
 	}
 	

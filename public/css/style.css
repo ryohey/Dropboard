@@ -255,11 +255,11 @@ article .file a.otherfile:hover{
     background: #4b4f55;
 }
 #side {
+    box-shadow: -1px 0px 0px rgb(204, 194, 194) inset;
     z-index: 10;
     position: fixed;
     top: 0;
     height: 100%;
-    border-right: 1px solid #d7d7d7;
     width: 170px;
     background: white;
 }
@@ -290,7 +290,7 @@ h1 {
     width: 0;
     height: 0;
     position: absolute;
-    top: 16px;
+    top: 18px;
     right: -14px;
     border: 7px solid transparent;
     border-left: 7px solid #6e757f;
@@ -331,6 +331,7 @@ h1 {
 }
 #calendar {
     margin: 1em;
+    margin-top: 70px;
 }
 .fc-content thead {
     color: rgb(131, 131, 131);
@@ -411,7 +412,7 @@ h1 {
 #contextMenu footer {
     margin-top: 1em;
     padding: 0.3em 1em;
-    border-top: 1px solid rgb(214, 214, 214);
+    border-top: 1px solid rgb(230, 230, 230);
 }
 #contextMenu .cancel {
 color: white;
@@ -455,4 +456,31 @@ border-radius: 15px;
 .fc-event-time {
     font-family: Verdana;
     font-size: 11px;
+}
+.fc-day-number {
+    font-family: Verdana;
+    font-size: 14px;
+}
+.fc-header {
+    height: 51px;
+    display: block;     
+    padding-left: 170px;     box-sizing: border-box;     text-align: center;     background: rgba(30, 39, 46, 0.97);     position: fixed;     top: 0;     left: 0;     width: 100%;
+    z-index: 9;
+    color: white;
+}
+.fc-header tbody {
+    padding: 9px;
+    width: 520px;
+    margin: 0 auto;
+    display: block;
+}
+.fc-header-title {
+    padding: 3px;
+    font-size: 18px;
+}
+#user .name {
+    border-radius: 3px;
+    border: 1px solid rgb(201, 201, 201);
+    padding: 5px;
+    margin: 1em;
 }

@@ -1,33 +1,185 @@
+var MyCalendar,
+  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-$(function() {
-  var contextMenu, isLongEvent;
-  contextMenu = function(x, y, title, cancelTitle, okTitle, items, complete) {
-    var elm;
-    elm = $("#contextMenu").html("<header>\n  <h3>" + title + "</h3>\n</header>\n<div class=\"content\"></div>\n<footer>\n  <a class=\"cancel\">" + cancelTitle + "</a>\n  <a class=\"ok\">" + okTitle + "</a>\n</footer>");
-    elm.find(".content").append(items);
-    elm.find(".ok").click(function() {
-      return complete(elm);
+MyCalendar = (function() {
+
+  function MyCalendar() {
+    this.createFullCalendar = __bind(this.createFullCalendar, this);
+    this.select = __bind(this.select, this);
+    this.eventClick = __bind(this.eventClick, this);
+    this.eventDrop = __bind(this.eventDrop, this);
+    this.updateEvent = __bind(this.updateEvent, this);
+    this.removeEvent = __bind(this.removeEvent, this);
+    this.viewDisplay = __bind(this.viewDisplay, this);
+    this.eventResize = __bind(this.eventResize, this);
+    this.isLongEvent = __bind(this.isLongEvent, this);
+    var _this = this;
+    $.getJSON("calendar", function(events) {
+      _this.elm = _this.createFullCalendar(events);
+      return _this.fc = _this.elm.data("fullCalendar");
     });
-    elm.find(".cancel").click(function() {
-      return elm.hide();
-    });
-    elm.css({
-      left: x,
-      top: y
-    }).show();
-    elm.find("input:first").focus();
-    return elm;
-  };
-  isLongEvent = function(event) {
+  }
+
+  MyCalendar.prototype.isLongEvent = function(event) {
     if ((event.start != null) && (event.end != null)) {
       return formatDate(event.start, "yyyyMMdd") !== formatDate(event.end, "yyyyMMdd");
     } else {
       return false;
     }
   };
-  return $.getJSON("calendar", function(events) {
-    var calendar;
-    return calendar = $('#calendar').fullCalendar({
+
+  /* fullcalendar callbacks
+  */
+
+  MyCalendar.prototype.eventResize = function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
+    if (this.isLongEvent(event)) event.allDay = true;
+    return this.updateEvent(event);
+  };
+
+  MyCalendar.prototype.viewDisplay = function(view) {
+    var _this = this;
+    return $.ajax({
+      url: "/calendar",
+      dataType: 'json',
+      type: "get",
+      data: {
+        "start": view.start.toString(),
+        "end": view.end.toString()
+      },
+      success: function(EventSource) {
+        _this.fc.removeEvents;
+        return _this.fc.addEventSource(EventSource);
+      }
+    });
+  };
+
+  MyCalendar.prototype.eventData = function(event) {
+    return {
+      title: event.title,
+      start: event.start,
+      end: event.end,
+      allDay: event.allDay,
+      _id: event._id
+    };
+  };
+
+  MyCalendar.prototype.removeEvent = function(event, complete, error) {
+    var _this = this;
+    return $.ajax({
+      url: '/calendar',
+      type: 'delete',
+      data: this.eventData(event),
+      success: function(res) {
+        _this.fc.removeEvents(event._id);
+        return typeof complete === "function" ? complete(res) : void 0;
+      },
+      error: function(res) {
+        return typeof error === "function" ? error(res) : void 0;
+      }
+    });
+  };
+
+  MyCalendar.prototype.updateEvent = function(event, complete, error) {
+    var _this = this;
+    return $.ajax({
+      url: '/calendar',
+      type: 'put',
+      data: this.eventData(event),
+      success: function(res) {
+        _this.fc.updateEvent(event);
+        return typeof complete === "function" ? complete(res) : void 0;
+      },
+      error: function(res) {
+        return typeof error === "function" ? error(res) : void 0;
+      }
+    });
+  };
+
+  MyCalendar.prototype.eventDrop = function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
+    return this.updateEvent(event);
+  };
+
+  MyCalendar.prototype.eventClick = function(event, jsEvent, view) {
+    var end, items, showRange, start,
+      _this = this;
+    console.log(event._id);
+    start = formatDate(event.start, "HH:mm");
+    if (event.end != null) {
+      end = formatDate(event.end, "HH:mm");
+    } else {
+      end = "00:00";
+    }
+    items = $("<ul class=\"inputs\">\n  <li>タイトル<input type=\"text\" class=\"title\" value=\"" + event.title + "\"></li>\n  <li><input type=\"checkbox\" class=\"allDay\" value=\"allDay\" " + (event.allDay || this.isLongEvent ? "checked" : "") + " " + (this.isLongEvent(event) ? "disabled" : "") + ">終日</li>\n  <li class=\"range\">開始<input type=\"text\" class=\"start\" value=\"" + start + "\"></li>\n  <li class=\"range\">終了<input type=\"text\" class=\"end\" value=\"" + end + "\"></li>\n  <li><a class=\"delete\">削除</a></li>\n</ul>");
+    showRange = function() {
+      if (!items.find(".allDay").attr("checked")) {
+        return items.find(".range").show();
+      } else {
+        return items.find(".range").hide();
+      }
+    };
+    items.find(".allDay").change(showRange);
+    showRange();
+    items.find(".delete").click(function() {
+      $("#contextMenu").hide();
+      return _this.removeEvent(event);
+    });
+    return contextMenu(jsEvent.pageX, jsEvent.pageY, "イベントの編集", "キャンセル", "決定", items, function(elm) {
+      var allDay, endArr, hourExp, startArr;
+      elm.hide();
+      event.title = elm.find(".title").val();
+      hourExp = /([0-9]+)[\:：\s\,]([0-9]+)/;
+      allDay = items.find(".allDay").attr("checked");
+      if (!allDay) {
+        event.allDay = false;
+        startArr = elm.find(".start").val().match(hourExp);
+        if (startArr.length === 3) {
+          event.start.setHours(startArr[1]);
+          event.start.setMinutes(startArr[2]);
+        }
+        endArr = elm.find(".end").val().match(hourExp);
+        if (endArr.length === 3) {
+          if (!event.end) event.end = new Date(event.start);
+          event.end.setHours(endArr[1]);
+          event.end.setMinutes(endArr[2]);
+        }
+      } else {
+        event.allDay = true;
+      }
+      return _this.updateEvent(event);
+    });
+  };
+
+  MyCalendar.prototype.select = function(start, end, allDay, jsEvent, view) {
+    var items,
+      _this = this;
+    items = $("<ul class=\"inputs\">\n  <li>タイトル<input type=\"text\" class=\"title\" value=\"\"></li>\n</ul>");
+    return contextMenu(jsEvent.pageX, jsEvent.pageY, "イベントの追加", "キャンセル", "決定", items, function(elm) {
+      var event, title;
+      elm.hide();
+      title = elm.find(".title").val();
+      if (title) {
+        event = {
+          title: title,
+          start: start,
+          end: end,
+          allDay: allDay
+        };
+        console.log("id:" + event._id);
+        _this.fc.renderEvent(event, true);
+        console.log("id:" + event._id);
+        return $.post("calendar", _this.eventData(event), function(res) {
+          if (!res) return _this.fc.removeEvents(event._id);
+        });
+      }
+    });
+  };
+
+  /*
+  */
+
+  MyCalendar.prototype.createFullCalendar = function(events) {
+    console.log(events);
+    return $('#calendar').fullCalendar({
       header: {
         left: 'prev,next today',
         center: 'title',
@@ -47,21 +199,6 @@ $(function() {
         '': 'H:mm',
         agenda: 'H:mm{ - H:mm}'
       },
-      /*viewDisplay: (view) ->
-        $.ajax({
-            url: "/calendar",
-            dataType: 'json',
-            type: "get",
-            data: {
-                "start": view.start.toString(),
-                "end": view.end.toString(),
-            },
-            success: (EventSource) ->
-                $('#calendar').fullCalendar('removeEvents');
-                $('#calendar').fullCalendar('addEventSource', EventSource);
-            }
-        })
-      */
       allDayText: "終日",
       axisFormat: 'H:mm',
       dayNames: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
@@ -79,97 +216,19 @@ $(function() {
       selectable: true,
       editable: true,
       selectHelper: true,
+      eventDrop: this.eventDrop,
       events: events,
-      dayClick: function(date, allDay, jsEvent, view) {
-        return false;
-      },
-      eventClick: function(event, jsEvent, view) {
-        var end, items, showRange, start;
-        console.log(event);
-        start = formatDate(event.start, "HH:mm");
-        if (event.end != null) {
-          end = formatDate(event.end, "HH:mm");
-        } else {
-          end = "00:00";
-        }
-        items = $("<ul class=\"inputs\">\n  <li>タイトル<input type=\"text\" class=\"title\" value=\"" + event.title + "\"></li>\n  <li><input type=\"checkbox\" class=\"allDay\" value=\"allDay\" " + (event.allDay || isLongEvent ? "checked" : "") + " " + (isLongEvent(event) ? "disabled" : "") + ">終日</li>\n  <li class=\"range\">開始<input type=\"text\" class=\"start\" value=\"" + start + "\"></li>\n  <li class=\"range\">終了<input type=\"text\" class=\"end\" value=\"" + end + "\"></li>\n  <li><a class=\"delete\">削除</a></li>\n</ul>");
-        showRange = function() {
-          if (!items.find(".allDay").attr("checked")) {
-            return items.find(".range").show();
-          } else {
-            return items.find(".range").hide();
-          }
-        };
-        items.find(".allDay").change(showRange);
-        showRange();
-        items.find(".delete").click(function() {
-          calendar.fullCalendar("removeEvents", event._id);
-          return $("#contextMenu").hide();
-        });
-        return contextMenu(jsEvent.pageX, jsEvent.pageY, "イベントの編集", "キャンセル", "決定", items, function(elm) {
-          var allDay, endArr, hourExp, startArr;
-          elm.hide();
-          event.title = elm.find(".title").val();
-          hourExp = /([0-9]+)[\:：\s\,]([0-9]+)/;
-          allDay = items.find(".allDay").attr("checked");
-          if (!allDay) {
-            event.allDay = false;
-            startArr = elm.find(".start").val().match(hourExp);
-            if (startArr.length === 3) {
-              event.start.setHours(startArr[1]);
-              event.start.setMinutes(startArr[2]);
-            }
-            endArr = elm.find(".end").val().match(hourExp);
-            if (endArr.length === 3) {
-              if (!event.end) event.end = new Date(event.start);
-              event.end.setHours(endArr[1]);
-              event.end.setMinutes(endArr[2]);
-            }
-          } else {
-            event.allDay = true;
-          }
-          return calendar.fullCalendar("updateEvent", event);
-        });
-      },
-      reportSelection: function() {
-        return false;
-      },
-      daySelectionMousedown: function() {
-        return false;
-      },
-      eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
-        return false;
-      },
-      eventResize: function(event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view) {
-        if (isLongEvent(event)) event.allDay = true;
-        return calendar.fullCalendar("updateEvent", event);
-      },
-      unselect: function() {
-        return false;
-      },
-      select: function(start, end, allDay, jsEvent, view) {
-        var items;
-        console.log(arguments);
-        items = $("<ul class=\"inputs\">\n  <li>タイトル<input type=\"text\" class=\"title\" value=\"\"></li>\n</ul>");
-        return contextMenu(jsEvent.pageX, jsEvent.pageY, "イベントの追加", "キャンセル", "決定", items, function(elm) {
-          var data, title;
-          elm.hide();
-          console.log(elm.find(".title"));
-          title = elm.find(".title").val();
-          if (title) {
-            data = {
-              title: title,
-              start: start,
-              end: end,
-              allDay: allDay
-            };
-            $.post("calendar", data, function(res) {
-              if (res) return calendar.fullCalendar('renderEvent', data, true);
-            });
-          }
-          return calendar.fullCalendar('unselect');
-        });
-      }
+      select: this.select,
+      eventClick: this.eventClick,
+      eventResize: this.eventResize
     });
-  });
+  };
+
+  return MyCalendar;
+
+})();
+
+$(function() {
+  var calendar;
+  return calendar = new MyCalendar();
 });

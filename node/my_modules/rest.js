@@ -5,9 +5,11 @@ Reader = require("./reader");
 Rest = (function() {
 
   function Rest(name) {
+    var appPath;
     this.name = name;
     this.route = "/" + name;
-    this.dataPath = "data/" + name + "/";
+    appPath = __dirname + "/../" + "../";
+    this.dataPath = appPath + "data/" + name + "/";
     this.reader = new Reader(this.dataPath);
   }
 

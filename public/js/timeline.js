@@ -87,7 +87,8 @@ enableWriteButton = function() {
 */
 
 writeButton = function() {
-  var files;
+  var files, userName;
+  userName = $("#user .name").val();
   disableWriteButton();
   files = $("#text").data("files");
   if (files) {
@@ -96,7 +97,7 @@ writeButton = function() {
       $("#text").data("files", null).removeClass("attached");
       $("#files").html("");
       return lbAjax.write({
-        name: $("#name").val(),
+        name: userName,
         date: new Date(),
         text: $("#text").val(),
         file: response
@@ -106,14 +107,14 @@ writeButton = function() {
     });
   } else {
     lbAjax.write({
-      name: $("#name").val(),
+      name: userName,
       date: new Date(),
       text: $("#text").val()
     }, function() {
       return $("#text").val("");
     });
   }
-  $.cookie('name', $("#name").val(), {
+  $.cookie('name', userName, {
     expires: 30
   });
   $('#files').empty();
@@ -152,7 +153,6 @@ $(function() {
     e.stopPropagation();
     return $("#files").show();
   });
-  $("#name").val($.cookie('name'));
   topBtn = $('#goTop');
   topBtn.hide();
   $(window).scroll(function() {

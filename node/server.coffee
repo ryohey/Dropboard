@@ -17,10 +17,11 @@ Upload =   require "./my_modules/upload"
 Calendar =   require "./my_modules/calendar" 
 
 ### 定数 ###
-BASE_PATH = "../"  # Dropboard.appの上
-DATA_PATH = __dirname+"/"+BASE_PATH+"data/"
-PUBLIC_PATH = "../public/"
-VIEW_PATH = __dirname+BASE_PATH+"../views/"
+BASE_PATH = __dirname+"/../"  # Dropboard.appの上
+DATA_PATH = BASE_PATH+"data/"
+PUBLIC_PATH = BASE_PATH+"public/"
+UPLOAD_PATH = BASE_PATH+"data/upload/"
+VIEW_PATH = BASE_PATH+"views/"
 
 ### benri ###
 md5 = (str) ->
@@ -47,7 +48,8 @@ app.set 'view engine', 'ejs'
 app.set 'views', VIEW_PATH
 
 ### static ###
-app.use "/", express.static(__dirname + "/" + PUBLIC_PATH)
+app.use "/", express.static(PUBLIC_PATH)
+app.use "/upload/", express.static(UPLOAD_PATH)
 
 ### localhost以外からのアクセスは400で応答 ###
 app.use (req, res, next) ->

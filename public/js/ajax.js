@@ -73,7 +73,7 @@ var LBAjax = function(){
 	    // XHR で送信
 	    $.ajax({
 	        url: "/upload",
-	        type: "POST",
+	        type: "post",
 	        data: fd,
 	        processData: false,
 	        contentType: false,

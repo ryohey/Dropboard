@@ -77,6 +77,7 @@ enableWriteButton = () ->
 
 ###  「書き込む」ボタン押し下げ時  ###
 writeButton = () ->
+  userName = $("#user .name").val();\
   disableWriteButton()
   files = $("#text").data("files")
   if (files)
@@ -87,24 +88,24 @@ writeButton = () ->
         .removeClass("attached")
       $("#files").html("")
       lbAjax.write({
-        name:$("#name").val(),
-        date:new Date(),
-        text:$("#text").val(),
+        name:userName
+        date:new Date()
+        text:$("#text").val()
         file:response
       },() -> 
         $("#text").val("")
       )
   else
     lbAjax.write({
-      name:$("#name").val(),
-      date:new Date(),
+      name:userName
+      date:new Date()
       text:$("#text").val()
     },() ->
       $("#text").val("")
     )
 
   #  名前のクッキーを焼く
-  $.cookie('name', $("#name").val(), {expires: 30})
+  $.cookie('name', userName, {expires: 30})
 
   #  ファイル情報削除
   $('#files').empty()
@@ -147,9 +148,6 @@ $(() ->
       e.stopPropagation()
       $("#files").show()
     )
-
-  #  クッキー
-  $("#name").val($.cookie('name'))
 
   #  goTop
   topBtn = $('#goTop')   

@@ -15,6 +15,8 @@ Calendar = (function(_super) {
 
   function Calendar() {
     this.getScheduleName = __bind(this.getScheduleName, this);
+    this.makePath = __bind(this.makePath, this);
+    this.writeData = __bind(this.writeData, this);
     this["delete"] = __bind(this["delete"], this);
     this.put = __bind(this.put, this);
     this.get = __bind(this.get, this);
@@ -24,14 +26,8 @@ Calendar = (function(_super) {
   Calendar.prototype.post = function(req, res) {
     var data, fileName;
     data = req.body;
-    fileName = this.dataPath + this.getScheduleName(data);
-    if (!fs.existsSync(fileName)) {
-      return fs.writeFile(fileName, JSON.stringify(data), function(err) {
-        return res.send(!err);
-      });
-    } else {
-      return res.send(false);
-    }
+    fileName = this.makePath(data);
+    return this.writeData(data, res, fileName);
   };
 
   Calendar.prototype.get = function(req, res) {
@@ -51,13 +47,43 @@ Calendar = (function(_super) {
   Calendar.prototype.put = function(req, res) {
     var data, fileName;
     data = req.body;
-    return fileName = this.getScheduleName(data);
+    data.allDay = data.allDay === "true";
+    fileName = this.makePath(data);
+    fs.unlinkSync(fileName);
+    return this.writeData(data, res, fileName);
   };
 
   Calendar.prototype["delete"] = function(req, res) {
     var data;
     data = req.body;
-    return fs.unlink(this.dataPath + this.getScheduleName(data));
+    console.log("delete:" + data._id);
+    data = req.body;
+    return fs.unlink(this.makePath(data), function(err) {
+      if (err) {
+        return res.send(500, "Can't Delete");
+      } else {
+        return res.send(200, "Deleted");
+      }
+    });
+  };
+
+  Calendar.prototype.writeData = function(data, res, fileName) {
+    var _this = this;
+    if (!fs.existsSync(fileName)) {
+      return fs.writeFile(fileName, JSON.stringify(data), function(err) {
+        if (err) {
+          return res.send(500, "Can't Write File");
+        } else {
+          return res.send(200, "Created");
+        }
+      });
+    } else {
+      return res.send(403, "File Already Exists");
+    }
+  };
+
+  Calendar.prototype.makePath = function(data) {
+    return this.dataPath + data._id;
   };
 
   Calendar.prototype.getScheduleName = function(data) {

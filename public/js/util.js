@@ -172,5 +172,5 @@ var to2keta = function(val) {
 }
 
 var naturalFormatDate = function(date) {
-    return date.getFullYear() + "/" + to2keta(date.getMonth()) + "/" + to2keta(date.getDate()) + " " + to2keta(date.getHours()) + ":" + to2keta(date.getMinutes());
+    return date.getFullYear() + "/" + to2keta(date.getMonth()+1) + "/" + to2keta(date.getDate()) + " " + to2keta(date.getHours()) + ":" + to2keta(date.getMinutes());
 }
