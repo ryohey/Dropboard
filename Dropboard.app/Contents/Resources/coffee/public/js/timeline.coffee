@@ -1,3 +1,4 @@
+documentTitle = document.title
 
 getFileHTML = (data) ->
   unless data.file then return ""
@@ -36,7 +37,7 @@ messageHTML = (data)  ->
   fileHTML = getFileHTML(data)
   
   return $("""
-    <article class="box">
+    <article class="box new">
       <header>
         <a rel="author">#{data.name}</a>
         <time>#{datestr}</text>
@@ -52,10 +53,19 @@ clear = () ->
   $("#posts").html("")
 
 ###  アップデート処理  ###
-update = () -> 
+update = (complete) -> 
   lbAjax.update (data) -> 
     $.each data, () -> 
       messageHTML(this).prependTo("#posts").show("slow")
+    updateTitle()
+    complete?()
+
+updateTitle = () ->
+  newCount = $("#posts article.new").length
+  if newCount > 0
+    document.title =  "(" + newCount + ")" + documentTitle
+  else
+    document.title =  documentTitle
 
 ###  古いデータを取ってくる  ###
 more = () -> 
@@ -119,13 +129,17 @@ $(() ->
   $("#write").click(writeButton)
   disableWriteButton()
   
-  #  Ctrl+Enterで送信
   $(window).keydown (e) ->
+    #  Ctrl+Enterで送信
     if e.ctrlKey and e.keyCode == 13
       if document.activeElement.id == 'text'
         if $("#text").val() != ""
           writeButton()
       event.preventDefault()
+
+    #  Escでフォーカスを外す
+    if e.keyCode == 27
+      $("#text").blur()
   
   #  textareaの監視
   $("#text")
@@ -185,6 +199,17 @@ $(() ->
   $(window).bind "bottom", () ->
     more()
 
+  # 既読チェック
+  checkUnread = () ->
+    $("#posts article").removeClass("new")
+    updateTitle()
+  setInterval () ->
+    if document.hasFocus()
+      checkUnread()
+  , 3000
+  window.onfocus = checkUnread
+  $(document).click checkUnread
+
   # 初回読み込み
-  update()
+  update checkUnread   #初回は全部既読にする
 )

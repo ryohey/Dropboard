@@ -179,14 +179,10 @@ MyCalendar = (function() {
           end: end,
           allDay: allDay
         };
-        console.log("id:" + event._id);
         _this.fc.renderEvent(event, true);
-        console.log("id:" + event._id);
-        return $.post("calendar", _this.eventData(event), function(res) {
-          if (!res) {
-            return _this.fc.removeEvents(event._id);
-          }
-        });
+        console.log("added id:" + event._id);
+        _this.fc.removeEvents(event._id);
+        return $.post("calendar", _this.eventData(event), function(res) {});
       }
     });
   };
@@ -250,7 +246,17 @@ $(function() {
   var calendar, socket;
   calendar = new MyCalendar();
   socket = io.connect('http://localhost');
-  return socket.on('update', function() {
+  socket.on('update', function() {
     return calendar.fc.refetchEvents();
+  });
+  return $(window).keydown(function(e) {
+    if (e.ctrlKey && e.keyCode === 13) {
+      if ($("#contextMenu").is(':visible')) {
+        $("#contextMenu .ok").click();
+      }
+    }
+    if (e.keyCode === 27) {
+      return $("#contextMenu").hide();
+    }
   });
 });

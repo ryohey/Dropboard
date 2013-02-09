@@ -1170,7 +1170,9 @@ function EventManager(options, _sources) {
 	function normalizeEvent(event) {
 		var source = event.source || {};
 		var ignoreTimezone = firstDefined(source.ignoreTimezone, options.ignoreTimezone);
-		event._id = event._id || (event.id === undefined ? '_fc' + eventGUID++ : event.id + '');
+		event._id = event._id || (event.id === undefined ? '_fc' + (++eventGUID) : event.id + '');
+		idNum = parseInt(event._id.replace(/.*?([0-9]+)+.*?/,"$1")); //added by ryohey
+		eventGUID = Math.max(idNum?idNum:0, eventGUID);	//added by ryohey
 		if (event.date) {
 			if (!event.start) {
 				event.start = event.date;

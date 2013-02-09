@@ -134,12 +134,10 @@ class MyCalendar
           end: end
           allDay: allDay
         }
-        console.log "id:"+event._id
         @fc.renderEvent event, true
-        console.log "id:"+event._id
+        console.log "added id:"+event._id
+        @fc.removeEvents event._id
         $.post "calendar", @eventData(event), (res) =>
-          unless res
-            @fc.removeEvents event._id
 
   ### ###
   createFullCalendar : (events) =>
@@ -196,4 +194,14 @@ $(() ->
   socket = io.connect('http://localhost')
   socket.on 'update', () ->
     calendar.fc.refetchEvents()
+
+  $(window).keydown (e) ->
+    #  Ctrl+Enterで決定
+    if e.ctrlKey and e.keyCode == 13
+      if $("#contextMenu").is(':visible')
+        $("#contextMenu .ok").click()
+
+    #  Escでフォーカスを外す
+    if e.keyCode == 27
+      $("#contextMenu").hide()
 )
