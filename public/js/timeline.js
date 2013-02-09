@@ -172,6 +172,7 @@ $(function() {
     return false;
   });
   $("#text").focus(function() {
+    $("#content header").addClass("active");
     $(this).animate({
       height: "100px"
     });
@@ -185,6 +186,8 @@ $(function() {
     });
     return $("#posts").animate({
       "margin-top": "70px"
+    }, function() {
+      return $("#content header").removeClass("active");
     });
   });
   $(window).bottom();

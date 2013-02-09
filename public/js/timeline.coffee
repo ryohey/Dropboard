@@ -162,6 +162,7 @@ $(() ->
 
   #  投稿フォームを開く
   $("#text").focus () ->
+    $("#content header").addClass("active")
     $(this).animate {
       height: "100px"
     }
@@ -174,7 +175,8 @@ $(() ->
     }
     $("#posts").animate {
       "margin-top": "70px"
-    }
+    }, () ->
+      $("#content header").removeClass("active")
 
   # 下まで来たらもっと読み込む
   $(window).bottom()

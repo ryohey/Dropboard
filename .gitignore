@@ -1,6 +1,3 @@
-uploads/*.json
 .DS_STORE
-uploads/*
 data/*
-log.txt
 

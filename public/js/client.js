@@ -8,7 +8,7 @@ lbNotify = new LBNotify;
 contextMenu = function(x, y, title, cancelTitle, okTitle, items, complete) {
   var elm;
   if (!$("#contextMenu").length) $("body").append("<div id='#contextMenu'></div>");
-  elm = $("#contextMenu").html("<header>\n  <h3>" + title + "</h3>\n</header>\n<div class=\"content\"></div>\n<footer>\n  <a class=\"cancel\">" + cancelTitle + "</a>\n  <a class=\"ok\">" + okTitle + "</a>\n</footer>");
+  elm = $("#contextMenu").html("<header>\n  <h3>" + title + "</h3>\n</header>\n<div class=\"content\"></div>\n<footer>\n  <a class=\"cancel button button_gray\">" + cancelTitle + "</a>\n  <a class=\"ok button button_blue\">" + okTitle + "</a>\n</footer>");
   elm.find(".content").append(items);
   elm.find(".ok").click(function() {
     return complete(elm);

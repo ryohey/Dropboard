@@ -12,8 +12,8 @@ contextMenu = (x, y, title, cancelTitle, okTitle, items, complete) =>
       </header>
       <div class="content"></div>
       <footer>
-        <a class="cancel">#{cancelTitle}</a>
-        <a class="ok">#{okTitle}</a>
+        <a class="cancel button button_gray">#{cancelTitle}</a>
+        <a class="ok button button_blue">#{okTitle}</a>
       </footer>
     """)
   elm.find(".content").append(items)
