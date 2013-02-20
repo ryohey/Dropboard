@@ -7,7 +7,7 @@
 	こういう感じで
 */
 
-var MESSAGE_PER_PAGE = 10;
+var MESSAGE_PER_PAGE = 15;
 
 var LBAjax = function(){
 	/* 前回読み込んだデータ */

@@ -24,8 +24,15 @@ Watcher = (function() {
        * 監視を開始する.
       */
 
-      var watcher;
+      var watcher, watcher2;
       watcher = fs.watch(_this.path, function(event, filename) {
+        /**
+         * ディレクトリに変更があった際にupdateイベントを
+         * クライアントにpushする.
+        */
+        return socket.emit('update');
+      });
+      watcher2 = fs.watch(_this.path + "note/note.txt", function(event, filename) {
         /**
          * ディレクトリに変更があった際にupdateイベントを
          * クライアントにpushする.
@@ -38,7 +45,8 @@ Watcher = (function() {
       */
 
       return socket.on('disconnect', function() {
-        return watcher.close();
+        watcher.close();
+        return watcher2.close();
       });
     });
   };

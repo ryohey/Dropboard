@@ -19,7 +19,8 @@ Port = (function() {
     this.defaultPort = defaultPort;
     this.runtime_dir = baseDir;
     this.separator = "::";
-    regName = os.tmpDir() + ".dropboard.port";
+    regName = os.tmpDir() + "/.dropboard.port";
+    console.log(regName);
     if (!fs.existsSync(regName)) {
       fs.writeFileSync(regName, "");
     }

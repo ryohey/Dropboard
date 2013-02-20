@@ -11,8 +11,9 @@ class Port
     @defaultPort = defaultPort
     @runtime_dir = baseDir
     @separator = "::" #ドライブ文字と被らない::をセパレータとして使う
-    regName = os.tmpDir() + ".dropboard.port"
+    regName = os.tmpDir() + "/.dropboard.port"
 
+    console.log regName
     #存在しなければ作成
     unless fs.existsSync regName
       fs.writeFileSync regName, ""

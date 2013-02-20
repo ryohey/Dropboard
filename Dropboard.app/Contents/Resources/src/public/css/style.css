@@ -17,6 +17,7 @@
 
  #content {
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     width: 100%;
     padding-left: 170px;
  }
@@ -89,6 +90,7 @@
 
 /* テキストボックス */
 #text{
+    resize: vertical;
     overflow: hidden;
     margin: 10px;
     height: 16px;
@@ -171,6 +173,7 @@
 article {
     overflow: hidden;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     margin: 5px auto;
     background: #EEE;
     font-size: 15px;
@@ -347,6 +350,7 @@ h1 {
     display: block;
     padding-left: 170px;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     text-align: center;
     background: rgba(209, 209, 209, 0.4);
     position: fixed;
@@ -406,6 +410,14 @@ h1 {
 }
 #contextMenu .delete {
 }
+#input{
+    position: relative;
+    width: 545px;
+    height: 51px;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
 .fc-event-time {
     font-family: Verdana;
     font-size: 11px;
@@ -417,7 +429,9 @@ h1 {
 .fc-header {
     height: 51px;
     display: block;     
-    padding-left: 170px;     box-sizing: border-box;     text-align: center;     
+    padding-left: 170px;     
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;     text-align: center;     
     background: rgba(228, 228, 228, 0.77);     position: fixed;     top: 0;     left: 0;     width: 100%;
     z-index: 9;
     color: rgb(97, 97, 97);
@@ -434,6 +448,7 @@ h1 {
 }
 #user .name {
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     width: 82%;
     border-radius: 3px;
     border: 1px solid rgb(201, 201, 201);
@@ -531,4 +546,16 @@ h1 {
 }
 #content>header.active {
     background: rgba(221, 221, 221, 0.96);
+}
+
+
+#note {
+    height: 410px;
+    margin: 1em 2em 2em 2em;
+    display: block;
+    width: 80%;
+}
+#send_note {
+    margin-top: 2em;
+    margin-left: 2em;
 }

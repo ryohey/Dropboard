@@ -54,7 +54,7 @@ Log = (function() {
     var baseDir, parentDir;
     baseDir = path.basename(path.resolve(this.basePath));
     parentDir = path.basename(path.dirname(path.resolve(this.basePath)));
-    return os.tmpDir() + parentDir + "_" + baseDir + ".log";
+    return os.tmpDir() + "/" + parentDir + "_" + baseDir + ".log";
   };
 
   return Log;

@@ -15,6 +15,7 @@ Timeline =  require __dirname+"/controllers/timeline"
 Upload =    require __dirname+"/controllers/upload" 
 Calendar =  require __dirname+"/controllers/calendar" 
 Index =     require __dirname+"/controllers/index" 
+Note =      require __dirname+"/controllers/note" 
 
 ### Application Configuration ###
 config = {
@@ -28,12 +29,11 @@ config = {
 }
 
 config.location = fs.realpathSync config.location
-config.name = config.location.replace /.*[\\\/](.+?)$/, "$1"  #extract last path component
+config.name = fs.realpathSync(config.location+"../../../../").replace(/.*[\\\/](.+?)$/, "$1");
 
 for key, value of config.paths
   config.paths[key] = path.join config.location, value
 
-console.log config
 
 ###
  * node実行時に-dオプションが渡されていたらディベロップメントモード.
@@ -65,11 +65,13 @@ index = new Index(config);
 upload = new Upload(config);
 timeline = new Timeline(config);
 calendar = new Calendar(config);
-
+note = new Note(config);
+  
 index.bind(app)
 upload.bind(app)
 timeline.bind(app)
 calendar.bind(app)
+note.bind(app)
 
 app.get "/exit", (req, res) ->
   console.log "httpからサーバーが終了されました"
@@ -88,7 +90,6 @@ watcher.start()
 
 # ポート番号の取得
 port = (new Port(50000, __dirname)).port 
-log.echo port
 
 ###*
  * expressのインスタンスではなく

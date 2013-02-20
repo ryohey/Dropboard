@@ -20,11 +20,19 @@ class Watcher
          ###
         socket.emit 'update'
 
+      watcher2 = fs.watch @path+"note/note.txt", (event,  filename) =>
+        ###*
+         * ディレクトリに変更があった際にupdateイベントを
+         * クライアントにpushする.
+         ###
+        socket.emit 'update'
+
       ###*
        * クライアントから切断された際に
        * ディレクトリの監視を停止する.
        ###
       socket.on 'disconnect', () ->
         watcher.close()
+        watcher2.close()
 
 module.exports = Watcher

@@ -40,6 +40,6 @@ class Log
   makeLogfileName : () ->
     baseDir = path.basename(path.resolve(@basePath))
     parentDir = path.basename(path.dirname(path.resolve(@basePath)))
-    os.tmpDir() + parentDir + "_" + baseDir + ".log"
+    os.tmpDir() + "/" + parentDir + "_" + baseDir + ".log"
 
 module.exports = Log

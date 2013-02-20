@@ -2,7 +2,7 @@
 /* bright modules
 */
 
-var Calendar, Index, Log, Port, Timeline, Upload, Watcher, app, calendar, config, ejs, express, fs, index, io, isDevelopMode, key, log, partials, path, port, request, server, socket, startListen, timeline, upload, url, value, watcher, _ref;
+var Calendar, Index, Log, Note, Port, Timeline, Upload, Watcher, app, calendar, config, ejs, express, fs, index, io, isDevelopMode, key, log, note, partials, path, port, request, server, socket, startListen, timeline, upload, url, value, watcher, _ref;
 
 express = require(__dirname + "/node_modules/express");
 
@@ -36,6 +36,8 @@ Calendar = require(__dirname + "/controllers/calendar");
 
 Index = require(__dirname + "/controllers/index");
 
+Note = require(__dirname + "/controllers/note");
+
 /* Application Configuration
 */
 
@@ -52,15 +54,13 @@ config = {
 
 config.location = fs.realpathSync(config.location);
 
-config.name = config.location.replace(/.*[\\\/](.+?)$/, "$1");
+config.name = fs.realpathSync(config.location + "../../../../").replace(/.*[\\\/](.+?)$/, "$1");
 
 _ref = config.paths;
 for (key in _ref) {
   value = _ref[key];
   config.paths[key] = path.join(config.location, value);
 }
-
-console.log(config);
 
 /*
  * node実行時に-dオプションが渡されていたらディベロップメントモード.
@@ -120,6 +120,8 @@ timeline = new Timeline(config);
 
 calendar = new Calendar(config);
 
+note = new Note(config);
+
 index.bind(app);
 
 upload.bind(app);
@@ -127,6 +129,8 @@ upload.bind(app);
 timeline.bind(app);
 
 calendar.bind(app);
+
+note.bind(app);
 
 app.get("/exit", function(req, res) {
   console.log("httpからサーバーが終了されました");
@@ -150,8 +154,6 @@ watcher = new Watcher(io, config.paths.data);
 watcher.start();
 
 port = (new Port(50000, __dirname)).port;
-
-log.echo(port);
 
 /**
  * expressのインスタンスではなく
