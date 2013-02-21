@@ -17,14 +17,6 @@ body {
   *------------------------------------------------------------------*/
 
 /* 入力フォームコンテナ */
-#input{
-    position: relative;
-    width: 520px;
-    height: 51px;
-    display: block;
-    margin: 0 auto;
-    text-align: center;
-}
 
 /* テキストボックス */
 #text{

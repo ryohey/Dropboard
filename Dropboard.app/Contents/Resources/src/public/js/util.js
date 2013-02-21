@@ -150,7 +150,7 @@ var isYoutubeDomain = function(url){
 		return false;
 }
 
-var youtubeExp = /https?\:\/\/www\.youtube\.com\/watch\?v\=([a-zA-Z0-9]+).*/gm;
+var youtubeExp = /https?\:\/\/www\.youtube\.com\/watch\?v\=([a-zA-Z0-9_-]+).*/gm;
 var isYoutube = function(url){
 	if (url.match(youtubeExp))
 		return true;
