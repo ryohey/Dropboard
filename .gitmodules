@@ -1,0 +1,3 @@
+[submodule "win"]
+	path = win
+	url = git@bitbucket.org:hellnear/dropboard-winapp.git
