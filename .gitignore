@@ -1,3 +1,2 @@
 .DS_STORE
-data/*
-Dropboard.app/Contents/Resources/data/*
+core/data/*
