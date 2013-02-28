@@ -180,17 +180,17 @@ $(() ->
   #  投稿フォームを開く
   $("#text").focus () ->
     $("#content header").addClass("active")
-    $(this).animate {
+    $(this).stop().animate {
       height: "100px"
     }
-    $("#posts").animate {
+    $("#posts").stop().animate {
       "margin-top": "156px"
     }
   $("#text").blur () ->
-    $(this).animate {
+    $(this).stop().animate {
       height: "16px"
     }
-    $("#posts").animate {
+    $("#posts").stop().animate {
       "margin-top": "70px"
     }, () ->
       $("#content header").removeClass("active")
@@ -211,7 +211,7 @@ $(() ->
   window.onfocus = () ->
     checkUnread
     $("#text").blur()
-    
+
   $(document).click checkUnread
 
   # 初回読み込み

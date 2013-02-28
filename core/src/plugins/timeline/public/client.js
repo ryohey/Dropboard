@@ -206,18 +206,18 @@ $(function() {
   });
   $("#text").focus(function() {
     $("#content header").addClass("active");
-    $(this).animate({
+    $(this).stop().animate({
       height: "100px"
     });
-    return $("#posts").animate({
+    return $("#posts").stop().animate({
       "margin-top": "156px"
     });
   });
   $("#text").blur(function() {
-    $(this).animate({
+    $(this).stop().animate({
       height: "16px"
     });
-    return $("#posts").animate({
+    return $("#posts").stop().animate({
       "margin-top": "70px"
     }, function() {
       return $("#content header").removeClass("active");
