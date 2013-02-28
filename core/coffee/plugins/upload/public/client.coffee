@@ -5,9 +5,9 @@ $ ->
       when "image"
         $(@).html("<img src=\"#{url.url}\" class=\"item\">")
       when "audio"
-        $(@).replaceWith("<audio src=\"#{url.url}\" controls=\"controls\" class=\"item\">")
+        $(@).replaceWith("<audio src=\"#{url.url}\" controls=\"controls\" class=\"item\" preload=\"none\">")
       when "video"
-        $(@).replaceWith("<video src=\"#{url.url}\" controls=\"controls\" class=\"item\">")
+        $(@).replaceWith("<video src=\"#{url.url}\" controls=\"controls\" class=\"item\" preload=\"none\">")
       else
         $(@).addClass("item")
     console.log url.type

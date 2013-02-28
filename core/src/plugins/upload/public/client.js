@@ -9,10 +9,10 @@ $(function() {
         $(this).html("<img src=\"" + url.url + "\" class=\"item\">");
         break;
       case "audio":
-        $(this).replaceWith("<audio src=\"" + url.url + "\" controls=\"controls\" class=\"item\">");
+        $(this).replaceWith("<audio src=\"" + url.url + "\" controls=\"controls\" class=\"item\" preload=\"none\">");
         break;
       case "video":
-        $(this).replaceWith("<video src=\"" + url.url + "\" controls=\"controls\" class=\"item\">");
+        $(this).replaceWith("<video src=\"" + url.url + "\" controls=\"controls\" class=\"item\" preload=\"none\">");
         break;
       default:
         $(this).addClass("item");

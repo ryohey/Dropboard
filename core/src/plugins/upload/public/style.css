@@ -1,7 +1,7 @@
 #uploads .item {
   display: inline-block;
   float: left;
-  background: #e6e6e6;
+  background: white;
   width: 250px;
   border: 5px white solid;
   overflow: hidden; }
