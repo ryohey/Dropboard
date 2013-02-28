@@ -1,15 +1,15 @@
 <div id="side">
 	<header>
-		<h1><%= title %></h1>
+		<h1><%= config.name %></h1>
 	</header>
 	<div id="user">
 		<input type="text" class="name">
 	</div>
 	<nav>
 		<ul>
-			<li><a href="/timeline" class="timeline">タイムライン</a></li>
-			<li><a href="/calendar" class="calendar">カレンダー</a></li>
-			<li><a href="/note" class="note">ノート</a></li>
+			<% for(var i=0; i<config.menu.length; ++i){ %>
+			<li><a href="/<%= config.menu[i].url %>" class="<%= config.menu[i].url %>"><%= config.menu[i].name %></a></li>
+			<% } %>
 		</ul>
 	</nav>
 </div>

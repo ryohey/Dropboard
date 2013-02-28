@@ -23,7 +23,13 @@ class Plugin
               if stat2.isDirectory()
                 app.use "/plugins/"+fileName, express.static(filePath2)
 
+    dropboard.config.menu = []
     for plugin in plugins
       plugin.init(dropboard)
+      if plugin.menu
+        dropboard.config.menu.push {
+          name: plugin.menu
+          url: plugin.name
+        }
 
 module.exports = Plugin
