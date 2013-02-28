@@ -17,8 +17,6 @@ MyCalendar = (function() {
 
     this.removeEvent = __bind(this.removeEvent, this);
 
-    this.viewDisplay = __bind(this.viewDisplay, this);
-
     this.eventResize = __bind(this.eventResize, this);
 
     this.isLongEvent = __bind(this.isLongEvent, this);
@@ -47,23 +45,6 @@ MyCalendar = (function() {
       event.allDay = true;
     }
     return this.updateEvent(event);
-  };
-
-  MyCalendar.prototype.viewDisplay = function(view) {
-    var _this = this;
-    return $.ajax({
-      url: "/calendar",
-      dataType: 'json',
-      type: "get",
-      data: {
-        "start": view.start.toString(),
-        "end": view.end.toString()
-      },
-      success: function(EventSource) {
-        _this.fc.removeEvents;
-        return _this.fc.addEventSource(EventSource);
-      }
-    });
   };
 
   MyCalendar.prototype.eventData = function(event) {

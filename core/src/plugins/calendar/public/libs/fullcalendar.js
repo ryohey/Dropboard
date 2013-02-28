@@ -2329,6 +2329,25 @@ function BasicView(element, calendar, viewName) {
 	
 	
 	function setHeight(height) {
+		// add
+		var calendarMaxHeight = ($(window).height() - 200)
+		var minHeight = calendarMaxHeight/rowCnt;
+
+		bodyFirstCells.each(function(i, _cell) {
+			if (i < rowCnt) {
+				cell = $(_cell);
+				setMinHeight(
+					cell.find('> div'),
+					minHeight
+				);
+			}
+		});
+
+		return false;
+
+		// original code below
+
+
 		viewHeight = height;
 		
 		var bodyHeight = viewHeight - head.height();
@@ -2342,13 +2361,14 @@ function BasicView(element, calendar, viewName) {
 			rowHeight = Math.floor(bodyHeight / rowCnt);
 			rowHeightLast = bodyHeight - rowHeight * (rowCnt-1);
 		}
-		
+
 		bodyFirstCells.each(function(i, _cell) {
 			if (i < rowCnt) {
 				cell = $(_cell);
+				var minHeight = (i==rowCnt-1 ? rowHeightLast : rowHeight) - vsides(cell);
 				setMinHeight(
 					cell.find('> div'),
-					(i==rowCnt-1 ? rowHeightLast : rowHeight) - vsides(cell)
+					minHeight
 				);
 			}
 		});

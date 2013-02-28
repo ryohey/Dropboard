@@ -16,20 +16,6 @@ class MyCalendar
       event.allDay = true
     @updateEvent event
 
-  viewDisplay : (view) =>
-    $.ajax {
-      url: "/calendar"
-      dataType: 'json'
-      type: "get"
-      data: {
-        "start": view.start.toString()
-        "end": view.end.toString()
-      }
-      success: (EventSource) =>
-        @fc.removeEvents
-        @fc.addEventSource EventSource
-    }
-
   ##サーバに送るときに使う
   eventData : (event) ->
     {
