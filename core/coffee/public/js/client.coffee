@@ -20,6 +20,19 @@ contextMenu = (x, y, title, cancelTitle, okTitle, items, complete) =>
     complete(elm)
   elm.find(".cancel").click () ->
     elm.hide()
+
+  height = elm.height()
+  width = elm.width()
+  wWidth = $(window).width()
+  wHeight = $(window).height()
+
+  if wHeight < height + y
+    y = y - height
+
+  if wWidth < width + x
+    x = wWidth - width
+
+
   elm
     .css({
       left: x
