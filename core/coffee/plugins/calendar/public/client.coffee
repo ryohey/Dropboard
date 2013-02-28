@@ -78,7 +78,7 @@ class MyCalendar
     items = $("""
       <ul class="inputs">
         <li>タイトル<input type="text" class="title" value="#{event.title}"></li>
-        <li><input type="checkbox" class="allDay" value="allDay" #{if event.allDay or @isLongEvent then "checked" else ""} #{if @isLongEvent(event) then "disabled" else ""}>終日</li>
+        <li><input type="checkbox" class="allDay" value="allDay" #{if event.allDay or @isLongEvent(event) then "checked" else ""} #{if @isLongEvent(event) then "disabled" else ""}>終日</li>
         <li class="range">開始<input type="text" class="start" value="#{start}"></li>
         <li class="range">終了<input type="text" class="end" value="#{end}"></li>
         <li><a class="delete button button_red">削除</a></li>

@@ -122,7 +122,7 @@ MyCalendar = (function() {
     } else {
       end = "00:00";
     }
-    items = $("<ul class=\"inputs\">\n  <li>タイトル<input type=\"text\" class=\"title\" value=\"" + event.title + "\"></li>\n  <li><input type=\"checkbox\" class=\"allDay\" value=\"allDay\" " + (event.allDay || this.isLongEvent ? "checked" : "") + " " + (this.isLongEvent(event) ? "disabled" : "") + ">終日</li>\n  <li class=\"range\">開始<input type=\"text\" class=\"start\" value=\"" + start + "\"></li>\n  <li class=\"range\">終了<input type=\"text\" class=\"end\" value=\"" + end + "\"></li>\n  <li><a class=\"delete button button_red\">削除</a></li>\n</ul>");
+    items = $("<ul class=\"inputs\">\n  <li>タイトル<input type=\"text\" class=\"title\" value=\"" + event.title + "\"></li>\n  <li><input type=\"checkbox\" class=\"allDay\" value=\"allDay\" " + (event.allDay || this.isLongEvent(event) ? "checked" : "") + " " + (this.isLongEvent(event) ? "disabled" : "") + ">終日</li>\n  <li class=\"range\">開始<input type=\"text\" class=\"start\" value=\"" + start + "\"></li>\n  <li class=\"range\">終了<input type=\"text\" class=\"end\" value=\"" + end + "\"></li>\n  <li><a class=\"delete button button_red\">削除</a></li>\n</ul>");
     showRange = function() {
       if (!items.find(".allDay").attr("checked")) {
         return items.find(".range").show();
