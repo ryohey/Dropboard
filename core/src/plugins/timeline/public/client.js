@@ -235,8 +235,11 @@ $(function() {
     if (document.hasFocus()) {
       return checkUnread();
     }
-  }, 3000);
-  window.onfocus = checkUnread;
+  }, 2000);
+  window.onfocus = function() {
+    checkUnread;
+    return $("#text").blur();
+  };
   $(document).click(checkUnread);
   return update(checkUnread);
 });

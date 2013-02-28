@@ -207,8 +207,11 @@ $(() ->
   setInterval () ->
     if document.hasFocus()
       checkUnread()
-  , 3000
-  window.onfocus = checkUnread
+  , 2000
+  window.onfocus = () ->
+    checkUnread
+    $("#text").blur()
+    
   $(document).click checkUnread
 
   # 初回読み込み
