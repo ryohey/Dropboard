@@ -24,6 +24,11 @@ class Plugin
                 app.use "/plugins/"+fileName, express.static(filePath2)
 
     dropboard.config.menu = []
+    plugins.sort (a,b) ->
+      a.priority ?= 0
+      b.priority ?= 0
+      b.priority - a.priority
+      
     for plugin in plugins
       plugin.init(dropboard)
       if plugin.menu

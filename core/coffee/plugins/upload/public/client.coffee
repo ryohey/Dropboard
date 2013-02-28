@@ -3,7 +3,9 @@ $ ->
     url = new URLParser $(@).attr("href")
     switch url.type
       when "image"
-        $(@).html("<img src=\"#{url.url}\" class=\"item\">")
+        $(@)
+          .html("<img src=\"#{url.url}\" class=\"item\">")
+          .fancybox()
       when "audio"
         $(@).replaceWith("<audio src=\"#{url.url}\" controls=\"controls\" class=\"item\" preload=\"none\">")
       when "video"

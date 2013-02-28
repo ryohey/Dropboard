@@ -6,7 +6,7 @@ $(function() {
     url = new URLParser($(this).attr("href"));
     switch (url.type) {
       case "image":
-        $(this).html("<img src=\"" + url.url + "\" class=\"item\">");
+        $(this).html("<img src=\"" + url.url + "\" class=\"item\">").fancybox();
         break;
       case "audio":
         $(this).replaceWith("<audio src=\"" + url.url + "\" controls=\"controls\" class=\"item\" preload=\"none\">");

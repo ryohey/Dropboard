@@ -9,6 +9,10 @@ class Timeline extends Rest
     super("timeline", appConfig)
     @ext = ""  #dataディレクトリに保存するメッセージの拡張子
 
+  bind : (app) ->
+    super(app)
+    app.get "/archive", @archive
+
   post : (req, res) =>
     data = req.body
     if @isSet data.name and @isSet data.date and @isSet data.text
@@ -19,6 +23,15 @@ class Timeline extends Rest
         res.send !err
     else
       res.send 400, "invalid input"
+
+  archive : (req, res) =>
+    allData = JSON.stringify(@reader.get().all())
+    for file in fs.readdirSync @dataPath
+      filePath = @dataPath+file
+      fs.unlink filePath if fs.existsSync filePath
+    fs.writeFile @dataPath+"/archive", allData
+    res.set {Location: "/timeline"}
+    res.send 302
 
   get : (req, res) =>
     res.format {
