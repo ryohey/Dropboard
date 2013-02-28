@@ -17,8 +17,11 @@ body
  *------------------------------------------------------------------*/
 
 /* 入力フォームコンテナ */
-
-#input!
+#content > header
+  background: rgba(0,0,0,0.5)
+  border-bottom: 1px solid lime
+  &.active
+    background: rgba(0,0,0,0.5)
 
 /* テキストボックス */
 
@@ -67,7 +70,6 @@ article
     border-left: 5px solid
   header time
     color: #666
-  p!
   .file a
     img!
     &.otherfile
@@ -76,6 +78,10 @@ article
       border-color: gray
       &:hover
         border-color: blue
+  .file
+    border-left: 1px lime dotted
+    border-top: none
+    background: rgb(0, 0, 0)
 
 /*------------------------------------------------------------------
  *  4. 基本要素
@@ -84,8 +90,5 @@ article
 /*------------------------------------------------------------------
  *  5. その他
  *------------------------------------------------------------------*/
-
-#openButton
-  background-image: url(../img/open_hacker.gif)
-  &.close
-    background-image: url(../img/close_hacker.gif)
+#side ul li a.active:after
+  border-right-color: black

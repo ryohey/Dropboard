@@ -13,6 +13,12 @@ body {
  *  2. 入力フォーム
  *------------------------------------------------------------------ */
 /* 入力フォームコンテナ */
+#content > header {
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid lime; }
+  #content > header.active {
+    background: rgba(0, 0, 0, 0.5); }
+
 /* テキストボックス */
 #text {
   border-radius: 0px;
@@ -62,6 +68,10 @@ article {
     border-color: gray; }
     article .file a.otherfile:hover {
       border-color: blue; }
+  article .file {
+    border-left: 1px lime dotted;
+    border-top: none;
+    background: black; }
 
 /*------------------------------------------------------------------
  *  4. 基本要素
@@ -69,7 +79,5 @@ article {
 /*------------------------------------------------------------------
  *  5. その他
  *------------------------------------------------------------------ */
-#openButton {
-  background-image: url(../img/open_hacker.gif); }
-  #openButton.close {
-    background-image: url(../img/close_hacker.gif); }
+#side ul li a.active:after {
+  border-right-color: black; }

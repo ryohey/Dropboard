@@ -67,7 +67,8 @@ li
  *------------------------------------------------------------------*/
 
 h1
-  font-weight: normal
+  font-weight: bolder
+  font-size: 19px
 
 /*------------------------------------------------------------------
  *  5. その他
@@ -81,47 +82,43 @@ h1
  *------------------------------------------------------------------*/
 
 #side
-  > header
-    padding: 1em
-    color: white
-    background: #4b4f55
-  box-shadow: -1px 0px 0px rgb(204, 194, 194) inset
+  box-shadow: -10px 0px 12px rgba(0, 0, 0, 0.1) inset
   z-index: 10
   position: fixed
   top: 0
   height: 100%
   width: 170px
-  background: white
-
-
-#side nav ul li a
-  display: block
-  border-bottom: 1px solid #f0f0f0
-  padding: 14px
-  text-decoration: none
-  color: #8b8e93
-
-#side nav ul li a
-  position: relative
-  &.active
-    background: #6e757f
+  background: rgb(47, 49, 53)
+  > header
+    padding: 1em
     color: white
-    &:after
-      content: " "
-      display: block
-      width: 0
-      height: 0
-      position: absolute
-      top: 18px
-      right: -14px
-      border: 7px solid transparent
-      border-left: 7px solid #6e757f
-    &:hover
-      color: gray
+  ul li a
+    display: block
+    border-top: 1px solid rgb(56, 56, 56)
+    border-bottom: 1px solid rgb(43, 43, 43)
+    padding: 14px
+    text-decoration: none
+    color: #8b8e93
+    font-weight: bold
+    font-size: 13px
+    position: relative
+    &.active
+      border-bottom: 1px solid rgb(27, 28, 29)
+      background: rgb(39, 41, 44)
+      color: white
       &:after
-        border-left-color: rgb(219, 222, 228)
-  &:hover
-    background: rgb(219, 222, 228)
+        content: " "
+        display: block
+        width: 0
+        height: 0
+        position: absolute
+        top: 18px
+        right: 0
+        border: 7px solid transparent
+        border-right: 7px solid #f4f4f4
+    &:hover
+      background: rgb(37, 37, 37)
+      color: rgb(255, 255, 255)
 
 #content > header
   display: block
@@ -136,9 +133,7 @@ h1
   width: 100%
 
 #user
-  border-right: 1px solid rgb(196, 196, 196)
-  border-bottom: 1px solid rgb(197, 197, 197)
-  background: rgb(225, 228, 231)
+  border-bottom: 1px solid rgb(38, 39, 39)
 
 #user .name
   box-sizing: border-box
