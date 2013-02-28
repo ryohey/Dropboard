@@ -55,12 +55,20 @@ LBAjax = (function() {
   LBAjax.prototype.write = function(data, success) {
     var _this = this;
     lbNotify.progress("送信中");
-    return $.post("/timeline", data, function(response) {
-      if (response === "1") {
-        lbNotify.hide();
-        return success();
-      } else {
-        return lbNotify.warning("送信に失敗しました");
+    return $.ajax({
+      url: "/timeline",
+      type: "post",
+      data: data,
+      success: function(res) {
+        if (res) {
+          lbNotify.hide();
+          return success();
+        } else {
+          return lbNotify.warning("送信に失敗しました");
+        }
+      },
+      error: function(res) {
+        return lbNotify.warning("ユーザ名と本文が必要です");
       }
     });
   };

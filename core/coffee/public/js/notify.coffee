@@ -11,7 +11,7 @@ class LBNotify
   _show : (message, className) =>
       @lastShow = new Date()
       @elm.find(".inner").text message
-      @elm.removeClass("notice,progress,warning").addClass(className).stop().animate
+      @elm.removeClass("notice progress warning").addClass(className).stop().animate
         opacity: "1"
       , 400
 
