@@ -11,11 +11,7 @@ fs =        require "fs"
 Log =       require __dirname+"/helpers/log" 
 Watcher =   require __dirname+"/helpers/watcher" 
 Port =      require __dirname+"/helpers/port" 
-Timeline =  require __dirname+"/controllers/timeline" 
-Upload =    require __dirname+"/controllers/upload" 
-Calendar =  require __dirname+"/controllers/calendar" 
-Index =     require __dirname+"/controllers/index" 
-Note =      require __dirname+"/controllers/note" 
+Plugin =    require __dirname+"/helpers/plugin" 
 
 ### Application Configuration ###
 config = {
@@ -25,8 +21,11 @@ config = {
     data : "data/"
     public : "src/public/"
     views : "src/views/"
+    plugins : "src/plugins/"
   }
 }
+dropboard = {}
+dropboard.config = config
 
 config.location = fs.realpathSync config.location
 config.name = fs.realpathSync(config.location+"../../../../").replace(/.*[\\\/](.+?)$/, "$1");
@@ -44,6 +43,7 @@ log = new Log(isDevelopMode())
 
 ### app ###
 app = express();
+dropboard.app = app
 app.use require('connect').bodyParser()
 app.use partials()
 
@@ -60,19 +60,10 @@ app.use (req, res, next) ->
   else
     res.send(400)
 
-### API ###
-index = new Index(config);
-upload = new Upload(config);
-timeline = new Timeline(config);
-calendar = new Calendar(config);
-note = new Note(config);
-  
-index.bind(app)
-upload.bind(app)
-timeline.bind(app)
-calendar.bind(app)
-note.bind(app)
+### Plugins ###
+new Plugin().init(config.paths.plugins, dropboard, app, express)
 
+### Root API ### 
 app.get "/exit", (req, res) ->
   console.log "httpからサーバーが終了されました"
   process.exit(0)
@@ -83,6 +74,7 @@ process.on 'uncaughtException', (err) ->
     request url+"exit", (error, response, body) ->
       startListen()
 
+### socket ###
 server = require('http').createServer(app)
 io = socket.listen(server)
 watcher = new Watcher(io, config.paths.data)

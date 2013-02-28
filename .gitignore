@@ -5,3 +5,4 @@ core/src/public/js/*.js
 core/src/public/css/*.css
 core/src/controllers
 core/src/helpers
+core/src/plugins/*/*.js
