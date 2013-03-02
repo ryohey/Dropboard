@@ -25,8 +25,9 @@ class Timeline extends Rest
       res.send 400, "invalid input"
 
   archive : (req, res) =>
+    files = fs.readdirSync @dataPath
     allData = JSON.stringify(@reader.get().all())
-    for file in fs.readdirSync @dataPath
+    for file in files
       filePath = @dataPath+file
       fs.unlink filePath if fs.existsSync filePath
     fs.writeFile @dataPath+"/archive", allData
