@@ -7,14 +7,20 @@ partials =  require __dirname+"/node_modules/express-partials"
 Watcher =   require __dirname+"/helpers/watcher" 
 Port =      require __dirname+"/helpers/port" 
 Plugin =    require __dirname+"/helpers/plugin" 
+fs =        require "fs"
 
 class Dropboard
   constructor : (config) ->
     @config = config
+    @makeDataDir @config.paths.data
     @app = @initApp()
     @server = @initServer()
     @initPlugin()
     @bindRestart()
+
+  makeDataDir : (dataPath) =>
+    console.log dataPath
+    fs.mkdirSync(dataPath, "757") unless fs.existsSync dataPath
 
   run : () =>
     port = (new Port(50000, __dirname)).port

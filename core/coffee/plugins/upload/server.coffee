@@ -1,9 +1,9 @@
+fs =      require "fs"
 Rest =    require "../../controllers/rest"
 Reader =  require "../../helpers/reader"
 express = require "../../node_modules/express"
-path = require "../../node_modules/path"
+path =    require "../../node_modules/path"
 crypto =  require "crypto"
-fs =      require "fs"
 
 class Upload extends Rest
   constructor : (appConfig) ->
