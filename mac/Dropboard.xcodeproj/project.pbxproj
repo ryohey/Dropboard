@@ -182,7 +182,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd $SRCROOT/../core/\nsass --update ./sass/:$BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Resources/src\necho \"sass build complete\"\n#/usr/local/bin/coffee -o src/ -bc coffee/";
+			shellScript = "cd $SRCROOT/../core/\nsass --update ./sass/:$BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Resources/src\necho \"sass build complete\"\nexport PATH=$PATH:/usr/local/bin/\n/usr/local/bin/coffee -o $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Resources/src/ -bc coffee/\necho \"coffee build complete\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
