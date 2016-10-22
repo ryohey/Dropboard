@@ -1,5 +1,6 @@
 Notify = require "../../../public/js/notify.coffee"
 lbNotify = new Notify
+{ messageDiff, sortByDate } = require "./util.coffee"
 
 #
 #    通信部分だけ抜き出したクラス的なやつ

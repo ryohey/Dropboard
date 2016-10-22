@@ -1,6 +1,6 @@
 Ajax = require "./ajax.coffee"
 lbAjax = new Ajax
-require "./util.coffee"
+{ naturalFormatDate, formatMessage } = require "./util.coffee"
 require "./style.coffee"
 
 documentTitle = document.title

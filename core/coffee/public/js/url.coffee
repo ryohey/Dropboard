@@ -1,4 +1,4 @@
-class URLParser
+module.exports = class URLParser
   constructor : (url) ->
     @url = url
     slashes = url.split("/")

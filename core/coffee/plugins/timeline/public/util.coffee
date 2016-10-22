@@ -142,3 +142,18 @@ formatMessage = (str) ->
     str
 
   replaceURL(replaceTwitter(replaceYoutube(h(str))));
+
+module.exports = {
+  sortByDate
+  messageDiff
+  parseURL
+  isFileType
+  isImage
+  isAudio
+  isYoutubeDomain
+  isYoutube
+  isTwitter
+  to2keta
+  naturalFormatDate
+  formatMessage
+}
