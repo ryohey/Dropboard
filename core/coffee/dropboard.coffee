@@ -25,9 +25,9 @@ class Dropboard
     fs.mkdirSync(dataPath, "757") unless fs.existsSync dataPath
 
   run : () =>
-    port = (new Port(50000, @config.location)).port
-    @server.listen(port)
-    @url = "http://localhost:" + port + "/"
+    @port = (new Port(50000, @config.location)).port
+    @server.listen(@port)
+    @url = "http://localhost:" + @port + "/"
 
   # 起動に失敗した場合は起動済みDropboardを終了させ、再度起動を試みる(それでも出来なかった場合は諦める)
   bindRestart : () =>
@@ -40,7 +40,7 @@ class Dropboard
 
   initServer : () =>
     server = require('http').createServer(@app)
-    io = socket.listen(server)
+    io = socket(server, {origins: "http://lopcalhost:" + @port})
     watcher = new Watcher(io, @config.paths.data)
     watcher.start()
     server

@@ -38,8 +38,6 @@ config.name = fs.realpathSync(config.location+"../").replace(/.*[\\\/](.+?)$/, "
 for key, value of config.paths
   config.paths[key] = path.join config.location, value
 
-console.dir config
-
 dropboard = new Dropboard(config)
 
 # URLを出力して完了

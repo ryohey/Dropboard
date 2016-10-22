@@ -1,3 +1,5 @@
+contextMenu = require "../../../helpers/context-menu.coffee"
+
 class MyCalendar
   constructor : () ->
     $.getJSON "calendar", (events) =>
