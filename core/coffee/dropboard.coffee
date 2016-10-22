@@ -83,7 +83,6 @@ class Dropboard
     ### Template Setting ###
     app.engine '.html', ejs.__express
     app.set 'view engine', 'ejs'
-    console.log @config.paths.views
     app.set 'views', @config.paths.views
 
     ### localhost以外からのアクセスは400で応答 ###

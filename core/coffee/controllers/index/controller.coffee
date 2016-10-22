@@ -11,7 +11,6 @@ class Index extends Controller
     app.use @route, express.static(@appConfig.paths.public)
 
   get : (req, res) =>
-    console.log "res"
     res.render "index.ejs", {config: @appConfig}
 
 module.exports = Index
