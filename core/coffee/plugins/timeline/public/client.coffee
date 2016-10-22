@@ -128,7 +128,7 @@ module.exports = (path) ->
   return unless path is "/timeline"
 
   # auto update
-  socket = io.connect('http://localhost')
+  socket = io.connect(location.origin)
   socket.on 'update', (data) ->
     update()
 

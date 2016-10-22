@@ -168,7 +168,7 @@ module.exports = (path) ->
   calendar = new MyCalendar()
 
   # auto update
-  socket = io.connect('http://localhost')
+  socket = io.connect(location.origin)
   socket.on 'update', () ->
     calendar.fc.refetchEvents()
 

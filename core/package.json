@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js -d",
+    "start": "set DEBUG=* & node src/server.js -d",
     "watch": "npm-run-all --parallel watch:*",
     "watch:css": "sass --watch sass:src/",
     "watch:client": "webpack --watch --config client-webpack.config.js",

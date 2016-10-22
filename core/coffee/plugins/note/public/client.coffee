@@ -1,7 +1,7 @@
 module.exports = (path) ->
   return unless path is "/note"
   
-  socket = io.connect('http://localhost')
+  socket = io.connect(location.origin)
   update = () ->
     $.ajax {
       url: "/note"

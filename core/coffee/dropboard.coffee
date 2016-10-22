@@ -7,6 +7,7 @@ partials =  require "express-partials"
 fs =        require "fs"
 connect =   require "connect"
 bodyParser= require "body-parser"
+http =      require "http"
 Watcher =   require "./helpers/watcher.coffee" 
 Port =      require "./helpers/port.coffee"
 Plugin =    require "./helpers/plugin.coffee"
@@ -39,8 +40,12 @@ class Dropboard
           @run()
 
   initServer : () =>
-    server = require('http').createServer(@app)
-    io = socket(server, {origins: "http://lopcalhost:" + @port})
+    server = http.createServer(@app)
+    
+    io = socket(server,
+      transports: ["websocket", "polling"]
+    )
+
     watcher = new Watcher(io, @config.paths.data)
     watcher.start()
     server
@@ -49,7 +54,7 @@ class Dropboard
     new Plugin().init(@config.plugins, @, @app, express)
 
   initApp : () =>
-    app = express();
+    app = express()
     app.use bodyParser.json()
     app.use bodyParser.urlencoded()
     app.use partials()
