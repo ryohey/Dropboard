@@ -32,19 +32,19 @@ class Calendar extends Rest
     data = req.body
     fs.unlink @makePath(data), (err) ->
       if err
-        res.send 500, "Can't Delete"
+        res.status(500).send "Can't Delete"
       else
-        res.send 200, "Deleted"
+        res.status(200).send "Deleted"
 
   writeData : (data, res, fileName) =>
     unless fs.existsSync fileName
       fs.writeFile fileName, JSON.stringify(data), (err) =>
         if (err)
-          res.send 500, "Can't Write File"
+          res.status(500).send "Can't Write File"
         else
-          res.send 200, "Created"
+          res.status(200).send "Created"
     else
-      res.send 403, "File Already Exists"
+      res.status(403).send "File Already Exists"
       
   makePath : (data) =>
     @dataPath+data._id

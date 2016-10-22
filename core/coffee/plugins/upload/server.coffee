@@ -38,7 +38,7 @@ class Upload extends Rest
       if fs.existsSync fileName
         res.send fs.readFileSync(@dataPath + fileName)
       else
-        res.send 404, "Not Found"
+        res.status(404).send "Not Found"
     else
       files = fs.readdirSync(@dataPath)
       res.render "upload.ejs", {

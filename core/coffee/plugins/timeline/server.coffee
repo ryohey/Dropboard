@@ -22,7 +22,7 @@ class Timeline extends Rest
         console.log err if err
         res.send !err
     else
-      res.send 400, "invalid input"
+      res.status(400).send "invalid input"
 
   archive : (req, res) =>
     files = fs.readdirSync @dataPath
@@ -32,7 +32,7 @@ class Timeline extends Rest
       fs.unlink filePath if fs.existsSync filePath
     fs.writeFile @dataPath+"/archive", allData
     res.set {Location: "/timeline"}
-    res.send 302
+    res.status(302).send()
 
   get : (req, res) =>
     res.format {
