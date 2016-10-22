@@ -1,7 +1,7 @@
 express = require "express"
-Rest =    require "../../controllers/rest.coffee"
+Controller = require "../controller.coffee"
 
-class Index extends Rest
+class Index extends Controller
   constructor : (appConfig) ->
     super("index", appConfig)
     @route = "/"

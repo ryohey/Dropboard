@@ -1,6 +1,6 @@
 Reader = require "../helpers/reader.coffee"
 
-class Rest
+class Controller
   constructor : (name, appConfig) ->
     @name = name
     @route = "/"+@name
@@ -21,4 +21,4 @@ class Rest
   delete : (req, res) ->
     res.send 501, "Not Implemented"
 
-module.exports = Rest
+module.exports = Controller

@@ -10,7 +10,6 @@ bodyParser= require "body-parser"
 http =      require "http"
 Watcher =   require "./helpers/watcher.coffee" 
 Port =      require "./helpers/port.coffee"
-Plugin =    require "./helpers/plugin.coffee"
 
 class Dropboard
   constructor : (config) ->
@@ -18,7 +17,7 @@ class Dropboard
     @makeDataDir @config.paths.data
     @app = @initApp()
     @server = @initServer()
-    @initPlugin()
+    @initControllers()
     @bindRestart()
 
   makeDataDir : (dataPath) =>
@@ -49,9 +48,31 @@ class Dropboard
     watcher = new Watcher(io, @config.paths.data)
     watcher.start()
     server
+    
+  initControllers : () =>
+    controllers = @config.controllers
 
-  initPlugin : () =>
-    new Plugin().init(@config.plugins, @, @app, express)
+    controllers.forEach (controller) =>
+      publicPath = path.resolve("./src/controllers/" + controller.name + "/public")
+      console.log publicPath
+      @app.use "/controllers/"+controller.name, express.static(publicPath)
+
+    @config.menu = []
+    controllers.sort (a,b) ->
+      a.priority ?= 0
+      b.priority ?= 0
+      b.priority - a.priority
+      
+    for controller in controllers
+      ControllerClass = controller.controller
+      instance = new ControllerClass(@config)
+      instance.bind(@app)
+
+      if controller.menu
+        @config.menu.push {
+          name: controller.menu
+          url: controller.name
+        }
 
   initApp : () =>
     app = express()

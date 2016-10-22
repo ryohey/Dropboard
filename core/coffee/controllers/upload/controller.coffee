@@ -2,10 +2,10 @@ fs =      require "fs"
 express = require "express"
 path =    require "path"
 crypto =  require "crypto"
-Rest =    require "../../controllers/rest.coffee"
 Reader =  require "../../helpers/reader.coffee"
+Controller = require "../controller.coffee"
 
-class Upload extends Rest
+class Upload extends Controller
   constructor : (appConfig) ->
     super("upload", appConfig)
 

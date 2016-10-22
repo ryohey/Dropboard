@@ -3,9 +3,6 @@ core/data/*
 core/src/server.js
 core/src/public/js/*.js
 core/src/public/css/*.css
-core/src/controllers
-core/src/helpers
-core/src/plugins/*/*.js
 
 node_modules
 jspm_packages

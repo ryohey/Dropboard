@@ -1,11 +1,11 @@
 Shared = require "./public/js/client.coffee"
-Note = require "./plugins/note/public/client.coffee"
-Calendar =  require "./plugins/calendar/public/client.coffee"
-Timeline =  require "./plugins/timeline/public/client.coffee"
-Upload =  require "./plugins/upload/public/client.coffee"
+Note = require "./controllers/note/client/index.coffee"
+Calendar = require "./controllers/calendar/client/index.coffee"
+Timeline = require "./controllers/timeline/client/index.coffee"
+Upload = require "./controllers/upload/client/index.coffee"
 
 $(() ->
-  plugins = [Shared, Note, Calendar, Timeline, Upload]
-  for plugin in plugins
-    plugin(location.pathname)
+  controllers = [Shared, Note, Calendar, Timeline, Upload]
+  for controller in controllers
+    controller(location.pathname)
 )

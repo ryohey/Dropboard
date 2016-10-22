@@ -1,9 +1,9 @@
 fs =      require "fs"
-Rest =    require "../../controllers/rest.coffee"
 Reader =  require "../../helpers/reader.coffee"
 Q =       require "../../helpers/array-query.coffee"
+Controller = require "../controller.coffee"
 
-class Note extends Rest
+class Note extends Controller
   constructor : (appConfig) ->
     super("note", appConfig)
 

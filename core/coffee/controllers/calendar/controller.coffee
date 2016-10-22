@@ -1,8 +1,8 @@
 fs =      require "fs"
-Rest =    require "../../controllers/rest.coffee"
 Reader =  require "../../helpers/reader.coffee"
+Controller = require "../controller.coffee"
 
-class Calendar extends Rest
+class Calendar extends Controller
   constructor : (appConfig) ->
     super("calendar", appConfig)
 

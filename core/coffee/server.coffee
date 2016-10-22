@@ -6,11 +6,11 @@ Log =       require "./helpers/log.coffee"
 Dropboard = require "./dropboard.coffee"
 
 ### Plugins ###
-Index =     require "./plugins/index/init.coffee"
-Timeline =  require "./plugins/timeline/init.coffee"
-Calendar =  require "./plugins/calendar/init.coffee"
-Note =      require "./plugins/note/init.coffee"
-Upload =    require "./plugins/upload/init.coffee"
+Index =     require "./controllers/index/index.coffee"
+Timeline =  require "./controllers/timeline/index.coffee"
+Calendar =  require "./controllers/calendar/index.coffee"
+Note =      require "./controllers/note/index.coffee"
+Upload =    require "./controllers/upload/index.coffee"
 
 ###
  * node実行時に-dオプションが渡されていたらディベロップメントモード.
@@ -28,7 +28,7 @@ config = {
     public : "src/public/"
     views : "src/views/"
   }
-  plugins : [Index, Timeline, Calendar, Note, Upload]
+  controllers : [Index, Timeline, Calendar, Note, Upload]
 }
 dropboard = {}
 dropboard.config = config

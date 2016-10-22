@@ -1,10 +1,10 @@
-fs =      require "fs"
-Rest =    require "../../controllers/rest.coffee"
-Reader =  require "../../helpers/reader.coffee"
-Q =       require "../../helpers/array-query.coffee"
+fs =         require "fs"
+Controller = require "../controller.coffee"
+Reader =     require "../../helpers/reader.coffee"
+Q =          require "../../helpers/array-query.coffee"
 
 module.exports = 
-class Timeline extends Rest
+class Timeline extends Controller
   constructor : (appConfig) ->
     super("timeline", appConfig)
     @ext = ""  #dataディレクトリに保存するメッセージの拡張子
