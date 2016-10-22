@@ -1,6 +1,6 @@
 module.exports = {
   name: "upload"
-  menu: "アップロード"
+  menu: "Upload"
   init: (dropboard) ->
     Plugin = require "./server.js"
     plugin = new Plugin(dropboard.config)

@@ -1,6 +1,6 @@
 module.exports = {
   name: "calendar"
-  menu: "カレンダー"
+  menu: "Calendar"
   init: (dropboard) ->
     Plugin = require "./server.js"
     plugin = new Plugin(dropboard.config)

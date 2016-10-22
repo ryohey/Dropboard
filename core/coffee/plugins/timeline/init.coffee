@@ -1,6 +1,6 @@
 module.exports = {
   name: "timeline"
-  menu: "タイムライン"
+  menu: "Timeline"
   priority: 10
   init: (dropboard) ->
     Timeline = require "./server.js"

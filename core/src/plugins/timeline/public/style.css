@@ -1,0 +1,132 @@
+@charset "UTF-8";
+/*------------------------------------------------------------------
+ *  3. 発言フィード
+ *------------------------------------------------------------------ */
+article {
+  overflow: hidden;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  margin: 5px auto;
+  background: white;
+  font-size: 15px;
+  line-height: 1.4em;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  width: 86%; }
+  article header {
+    padding: 0.5em 1em; }
+    article header time {
+      font-family: Verdana;
+      font-size: 11px;
+      padding-left: 10px;
+      float: right; }
+  article a[rel="author"] {
+    font-weight: bold; }
+  article p {
+    padding: 0 1em 0.5em 1em;
+    white-space: pre;
+    white-space: pre-wrap;
+    white-space: pre-line;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -hp-pre-wrap;
+    word-wrap: break-word; }
+  article .file a img {
+    max-width: 100px; }
+  article .file a.otherfile {
+    font-size: 12px;
+    text-decoration: none;
+    color: #949494;
+    background: white;
+    border: 1px solid #cfc6c6;
+    padding: 2px 5px;
+    display: inline-block;
+    margin: 5px; }
+    article .file a.otherfile:hover {
+      color: white;
+      background: #00d3d3; }
+  article.new {
+    border-color: #d8c28a;
+    background: #f3f0e4; }
+
+#posts {
+  margin-top: 70px; }
+
+#files li:before {
+  content: "Attachments: "; }
+
+#input {
+  position: relative;
+  width: 545px;
+  height: 51px;
+  display: block;
+  margin: 0 auto;
+  text-align: center; }
+
+.file {
+  padding: 0.5em 1em;
+  border-top: 1px solid #e2e2e2;
+  background: #f3f3f3; }
+
+.video {
+  margin-bottom: 1em;
+  background: black; }
+  .video iframe {
+    display: block;
+    margin: 0 auto; }
+
+/*------------------------------------------------------------------
+ *  2. 入力フォーム
+ *------------------------------------------------------------------ */
+/* テキストボックス */
+#text {
+  resize: vertical;
+  overflow: hidden;
+  margin: 10px;
+  height: 16px;
+  border-radius: 3px;
+  float: left;
+  display: block;
+  border: 1px solid #b8b8b8;
+  width: 390px;
+  padding: 5px;
+  font-size: 15px; }
+  #text.attached {
+    background: lightgreen; }
+
+#files {
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+  clear: both;
+  padding: 0.5em 1em;
+  border-radius: 0 0 5px 5px;
+  background: white;
+  color: #444444;
+  font-size: smaller;
+  list-style-type: none;
+  display: none;
+  text-align: left; }
+  #files li {
+    margin-bottom: 0.4em;
+    display: block; }
+
+/* 名前欄 */
+#name {
+  float: left;
+  margin: 10px;
+  border: 1px solid gray;
+  display: block;
+  border-radius: 3px;
+  height: 26px;
+  width: 130px;
+  padding: 0px 5px; }
+  #name:before {
+    content: "お名前"; }
+
+/* 書き込むボタン */
+#write {
+  height: 29px;
+  float: left;
+  margin: 10px;
+  display: block; }

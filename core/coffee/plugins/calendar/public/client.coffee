@@ -64,10 +64,10 @@ class MyCalendar
     items = $("""
       <ul class="inputs">
         <li>タイトル<input type="text" class="title" value="#{event.title}"></li>
-        <li><input type="checkbox" class="allDay" value="allDay" #{if event.allDay or @isLongEvent(event) then "checked" else ""} #{if @isLongEvent(event) then "disabled" else ""}>終日</li>
-        <li class="range">開始<input type="text" class="start" value="#{start}"></li>
-        <li class="range">終了<input type="text" class="end" value="#{end}"></li>
-        <li><a class="delete button button_red">削除</a></li>
+        <li><input type="checkbox" class="allDay" value="allDay" #{if event.allDay or @isLongEvent(event) then "checked" else ""} #{if @isLongEvent(event) then "disabled" else ""}>All day</li>
+        <li class="range">Start<input type="text" class="start" value="#{start}"></li>
+        <li class="range">End<input type="text" class="end" value="#{end}"></li>
+        <li><a class="delete button button_red">Delete</a></li>
       </ul>
     """)
     
@@ -84,7 +84,7 @@ class MyCalendar
       $("#contextMenu").hide()
       @removeEvent event
 
-    contextMenu jsEvent.pageX, jsEvent.pageY, "イベントの編集", "キャンセル", "決定", items, (elm) =>
+    contextMenu jsEvent.pageX, jsEvent.pageY, "Edit the event", "Cancel", "OK", items, (elm) =>
       elm.hide()
       event.title = elm.find(".title").val()
       hourExp = /([0-9]+)[\:：\s\,]([0-9]+)/
@@ -107,10 +107,10 @@ class MyCalendar
   select : (start, end, allDay, jsEvent, view) =>
     items = $("""
       <ul class="inputs">
-        <li>タイトル<input type="text" class="title" value=""></li>
+        <li>Title<input type="text" class="title" value=""></li>
       </ul>
     """)
-    contextMenu jsEvent.pageX, jsEvent.pageY, "イベントの追加", "キャンセル", "決定", items, (elm) =>
+    contextMenu jsEvent.pageX, jsEvent.pageY, "Create an event", "Cancel", "OK", items, (elm) =>
       elm.hide()
       title = elm.find(".title").val()
       if (title) 
@@ -134,11 +134,6 @@ class MyCalendar
         center: 'title'
         right: 'month,agendaWeek,agendaDay'
       }
-      titleFormat: {
-        month: 'yyyy年 M月'
-        week: '[yyyy年 ]M月 d日{ &#8212;[yyyy年 ][ M月] d日}'
-        day: 'yyyy年 M月 d日 dddd'
-      }
       columnFormat: {
         month: 'ddd'
         week: 'M/d（ddd）'
@@ -148,19 +143,12 @@ class MyCalendar
         '': 'H:mm'
         agenda: 'H:mm{ - H:mm}'
       }
-      allDayText: "終日"
       axisFormat: 'H:mm'
-      dayNames: ['日曜日','月曜日','火曜日','水曜日','木曜日','金曜日','土曜日']
-      dayNamesShort: ['日','月','火','水','木','金','土']
       buttonText: {
         prev: '&nbsp;&#9668;&nbsp;'
         next: '&nbsp;&#9658;&nbsp;'
         prevYear: '&nbsp;&lt;&lt;&nbsp;'
         nextYear: '&nbsp;&gt;&gt;&nbsp;'
-        today: '今日'
-        month: '月'
-        week: '週'
-        day: '日'
       }
       selectable: true
       editable: true
