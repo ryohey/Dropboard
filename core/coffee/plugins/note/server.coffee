@@ -1,7 +1,7 @@
-Rest =    require "../../controllers/rest"
-Reader =  require "../../helpers/reader"
-Q =       require "../../helpers/array-query"
 fs =      require "fs"
+Rest =    require "../../controllers/rest.coffee"
+Reader =  require "../../helpers/reader.coffee"
+Q =       require "../../helpers/array-query.coffee"
 
 class Note extends Rest
   constructor : (appConfig) ->
@@ -18,7 +18,7 @@ class Note extends Rest
       json: () =>
         res.send @reader.get().all()
       html: () =>
-        res.render __dirname+"/view.ejs", {config: @appConfig}
+        res.render "note.ejs", {config: @appConfig}
     }
 
 module.exports = Note

@@ -161,7 +161,8 @@ class MyCalendar
       eventResize: @eventResize
     }
 
-$(() ->
+module.exports = (path) ->
+  return unless path is"/calendar"
   calendar = new MyCalendar()
 
   # auto update
@@ -178,4 +179,3 @@ $(() ->
     #  Escでフォーカスを外す
     if e.keyCode == 27
       $("#contextMenu").hide()
-)

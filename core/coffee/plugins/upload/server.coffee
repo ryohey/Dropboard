@@ -1,9 +1,9 @@
 fs =      require "fs"
-Rest =    require "../../controllers/rest"
-Reader =  require "../../helpers/reader"
-express = require "../../node_modules/express"
-path =    require "../../node_modules/path"
+express = require "express"
+path =    require "path"
 crypto =  require "crypto"
+Rest =    require "../../controllers/rest.coffee"
+Reader =  require "../../helpers/reader.coffee"
 
 class Upload extends Rest
   constructor : (appConfig) ->
@@ -41,7 +41,7 @@ class Upload extends Rest
         res.send 404, "Not Found"
     else
       files = fs.readdirSync(@dataPath)
-      res.render __dirname+"/view.ejs", {
+      res.render "upload.ejs", {
         config: @appConfig
         items: files
       }

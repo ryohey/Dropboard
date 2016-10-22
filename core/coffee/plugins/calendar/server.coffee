@@ -1,6 +1,6 @@
 fs =      require "fs"
-Rest =    require "../../controllers/rest"
-Reader =  require "../../helpers/reader"
+Rest =    require "../../controllers/rest.coffee"
+Reader =  require "../../helpers/reader.coffee"
 
 class Calendar extends Rest
   constructor : (appConfig) ->
@@ -16,7 +16,7 @@ class Calendar extends Rest
       json: () =>
         res.send @reader.get().all()
       html: () =>
-        res.render __dirname+"/view.ejs", {config: @appConfig}
+        res.render "calendar.ejs", {config: @appConfig}
     }
 
   put : (req, res) =>

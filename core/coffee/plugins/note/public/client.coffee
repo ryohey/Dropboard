@@ -1,4 +1,6 @@
-$( () ->
+module.exports = (path) ->
+  return unless path is "/note"
+  
   socket = io.connect('http://localhost')
   update = () ->
     $.ajax {
@@ -24,4 +26,3 @@ $( () ->
       error: (res) =>
         console.log res
     }
-)

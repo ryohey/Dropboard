@@ -1,5 +1,5 @@
-fs = require("fs")
-ArrayQuery = require("./array-query")
+fs = require "fs"
+ArrayQuery = require "./array-query.coffee"
 
 class Reader
   constructor : (dataPath) ->

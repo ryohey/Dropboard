@@ -1,13 +1,15 @@
-express =   require __dirname+"/node_modules/express" 
-request =   require __dirname+"/node_modules/request" 
-socket =    require __dirname+"/node_modules/socket.io"
-ejs =       require __dirname+"/node_modules/ejs"
-path =      require __dirname+"/node_modules/path"
-partials =  require __dirname+"/node_modules/express-partials"
-Watcher =   require __dirname+"/helpers/watcher" 
-Port =      require __dirname+"/helpers/port" 
-Plugin =    require __dirname+"/helpers/plugin" 
+ejs =       require "ejs"
+express =   require "express" 
+request =   require "request" 
+socket =    require "socket.io"
+path =      require "path"
+partials =  require "express-partials"
 fs =        require "fs"
+connect =   require "connect"
+bodyParser= require "body-parser"
+Watcher =   require "./helpers/watcher.coffee" 
+Port =      require "./helpers/port.coffee"
+Plugin =    require "./helpers/plugin.coffee"
 
 class Dropboard
   constructor : (config) ->
@@ -23,7 +25,7 @@ class Dropboard
     fs.mkdirSync(dataPath, "757") unless fs.existsSync dataPath
 
   run : () =>
-    port = (new Port(50000, __dirname)).port
+    port = (new Port(50000, @config.location)).port
     @server.listen(port)
     @url = "http://localhost:" + port + "/"
 
@@ -44,16 +46,17 @@ class Dropboard
     server
 
   initPlugin : () =>
-    new Plugin().init(@config.paths.plugins, @, @app, express)
+    new Plugin().init(@config.plugins, @, @app, express)
 
   initApp : () =>
     app = express();
-    app.use require('connect').bodyParser()
+    app.use bodyParser.json()
     app.use partials()
 
     ### Template Setting ###
     app.engine '.html', ejs.__express
     app.set 'view engine', 'ejs'
+    console.log @config.paths.views
     app.set 'views', @config.paths.views
 
     ### localhost以外からのアクセスは400で応答 ###

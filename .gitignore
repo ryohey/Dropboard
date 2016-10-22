@@ -6,3 +6,12 @@ core/src/public/css/*.css
 core/src/controllers
 core/src/helpers
 core/src/plugins/*/*.js
+
+node_modules
+jspm_packages
+logs
+*.log
+npm-debug.log*
+pids
+*.pid
+*.seed

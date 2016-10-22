@@ -1,4 +1,5 @@
-lbNotify = new LBNotify
+Notify = require "./notify.coffee"
+lbNotify = new Notify
 
 contextMenu = (x, y, title, cancelTitle, okTitle, items, complete) =>
   unless $("#contextMenu").length
@@ -43,7 +44,7 @@ contextMenu = (x, y, title, cancelTitle, okTitle, items, complete) =>
   elm
 
 #  onload
-$(() ->
+module.exports = () ->
   # 通知を追加
   lbNotify.elm.appendTo("body")
   lbNotify.setPosition("bottom")
@@ -53,4 +54,3 @@ $(() ->
 
   #  クッキー
   $("#user .name").val($.cookie('name'))
-)

@@ -1,7 +1,7 @@
-Rest =    require "../../controllers/rest"
-Reader =  require "../../helpers/reader"
-Q =       require "../../helpers/array-query"
 fs =      require "fs"
+Rest =    require "../../controllers/rest.coffee"
+Reader =  require "../../helpers/reader.coffee"
+Q =       require "../../helpers/array-query.coffee"
 
 module.exports = 
 class Timeline extends Rest
@@ -44,7 +44,7 @@ class Timeline extends Rest
         data = Q(sorted).page(page, per)
         res.send data
       html: () =>
-        res.render __dirname+"/view.ejs", {config: @appConfig}
+        res.render "timeline.ejs", {config: @appConfig}
     }
 
   digest : (data) ->

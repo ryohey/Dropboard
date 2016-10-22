@@ -1,3 +1,6 @@
+Notify = require "../../../public/js/notify.coffee"
+lbNotify = new Notify
+
 #
 #    通信部分だけ抜き出したクラス的なやつ
 #	引数に通信完了時の処理を書く
@@ -6,7 +9,7 @@
 #	})
 #	こういう感じで
 #
-class LBAjax
+module.exports = class LBAjax
   constructor : () ->
     @MESSAGE_PER_PAGE = 15
     @lastData = []  # 前回読み込んだデータ 

@@ -1,5 +1,5 @@
-Rest =    require "../../controllers/rest"
-express = require "../../node_modules/express"
+express = require "express"
+Rest =    require "../../controllers/rest.coffee"
 
 class Index extends Rest
   constructor : (appConfig) ->
@@ -11,6 +11,7 @@ class Index extends Rest
     app.use @route, express.static(@appConfig.paths.public)
 
   get : (req, res) =>
-    res.render __dirname+"/view.ejs", {config: @appConfig}
+    console.log "res"
+    res.render "index.ejs", {config: @appConfig}
 
 module.exports = Index

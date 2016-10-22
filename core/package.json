@@ -1,0 +1,37 @@
+{
+  "name": "dropboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js -d",
+    "watch": "npm-run-all --parallel watch:*",
+    "watch:css": "sass --watch sass:src/",
+    "watch:client": "webpack --watch --config client-webpack.config.js",
+    "watch:server": "webpack --watch --config server-webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ryohey",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "connect": "^3.5.0",
+    "ejs": "^2.5.2",
+    "express": "^4.14.0",
+    "express-partials": "^0.3.0",
+    "json-loader": "^0.5.4",
+    "path": "^0.12.7",
+    "request": "^2.75.0",
+    "socket.io": "^1.5.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "coffee-loader": "^0.7.2",
+    "coffee-script": "^1.11.1",
+    "ejs-loader": "^0.3.0",
+    "npm-run-all": "^3.1.1",
+    "sass": "^0.5.0",
+    "webpack-node-externals": "^1.5.4"
+  }
+}

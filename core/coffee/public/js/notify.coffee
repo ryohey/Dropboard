@@ -1,7 +1,7 @@
 #
 #    ポップアップ
 #
-class LBNotify
+module.exports = class LBNotify
   constructor : () ->
     @NOTIFY_MIN_TIME = 500 #閉じる最短時間
     @elm = $("<div/>").attr("id", "lbNotify" + $(".lbNotify").length).addClass("lbNotify").append($("<div/>").addClass("inner"))

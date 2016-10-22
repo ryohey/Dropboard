@@ -1,4 +1,6 @@
-$ ->
+module.exports = (path) ->
+  return unless path is "/upload"
+
   $("#uploads li a").each () ->
     url = new URLParser $(@).attr("href")
     switch url.type

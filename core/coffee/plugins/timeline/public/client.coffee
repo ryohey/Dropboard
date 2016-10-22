@@ -1,4 +1,8 @@
-lbAjax = new LBAjax
+Ajax = require "./ajax.coffee"
+lbAjax = new Ajax
+require "./util.coffee"
+require "./style.coffee"
+
 documentTitle = document.title
 
 getFileHTML = (data) ->
@@ -120,7 +124,9 @@ writeButton = () ->
   #  ファイル情報削除
   $("#files").html("").hide()
 
-$(() ->
+module.exports = (path) ->
+  return unless path is "/timeline"
+
   # auto update
   socket = io.connect('http://localhost')
   socket.on 'update', (data) ->
@@ -196,7 +202,6 @@ $(() ->
       $("#content header").removeClass("active")
 
   # 下まで来たらもっと読み込む
-  $(window).bottom()
   $(window).bind "bottom", () ->
     more()
 
@@ -216,4 +221,3 @@ $(() ->
 
   # 初回読み込み
   update checkUnread   #初回は全部既読にする
-)

@@ -1,4 +1,4 @@
-Reader = require "../helpers/reader"
+Reader = require "../helpers/reader.coffee"
 
 class Rest
   constructor : (name, appConfig) ->

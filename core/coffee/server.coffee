@@ -1,8 +1,16 @@
-### my modules ###
 fs =        require "fs"
-path =      require __dirname+"/node_modules/path"
-Log =       require __dirname+"/helpers/log" 
-Dropboard = require __dirname+"/dropboard" 
+path =      require "path"
+
+### my modules ###
+Log =       require "./helpers/log.coffee" 
+Dropboard = require "./dropboard.coffee"
+
+### Plugins ###
+Index =     require "./plugins/index/init.coffee"
+Timeline =  require "./plugins/timeline/init.coffee"
+Calendar =  require "./plugins/calendar/init.coffee"
+Note =      require "./plugins/note/init.coffee"
+Upload =    require "./plugins/upload/init.coffee"
 
 ###
  * node実行時に-dオプションが渡されていたらディベロップメントモード.
@@ -14,25 +22,25 @@ log = new Log(isDevelopMode())
 ### Application Configuration ###
 config = {
   name : ""
-  location :  __dirname + "/../"
+  location : path.resolve("") + "/"
   paths : {
     data : "data/"
     public : "src/public/"
     views : "src/views/"
-    plugins : "src/plugins/"
   }
+  plugins : [Index, Timeline, Calendar, Note, Upload]
 }
 dropboard = {}
 dropboard.config = config
 
-### Realize Paths ###
-config.location = fs.realpathSync config.location
-config.name = fs.realpathSync(config.location+"../../").replace(/.*[\\\/](.+?)$/, "$1");
+config.name = fs.realpathSync(config.location+"../").replace(/.*[\\\/](.+?)$/, "$1");
 
 for key, value of config.paths
   config.paths[key] = path.join config.location, value
 
-dropboard = new Dropboard(config);
+console.dir config
+
+dropboard = new Dropboard(config)
 
 # URLを出力して完了
 log.echo dropboard.run()

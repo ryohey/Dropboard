@@ -4,7 +4,7 @@ util = require "util"
 fs = require "fs"
 
 class Log
-  constructor : (isDevMode, basePath) ->
+  constructor : (isDevMode, basePath = "") ->
     @basePath = basePath
     @fileName = "log.txt"
     
