@@ -51,6 +51,7 @@ class Dropboard
   initApp : () =>
     app = express();
     app.use bodyParser.json()
+    app.use bodyParser.urlencoded()
     app.use partials()
 
     ### Template Setting ###
