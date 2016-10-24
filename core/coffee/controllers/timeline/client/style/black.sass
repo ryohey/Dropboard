@@ -8,30 +8,28 @@
  *  1. 全体設定
  *------------------------------------------------------------------*/
 
-body
+body.black
   background-color: #000
 
 /*------------------------------------------------------------------
  *  2. 入力フォーム
  *------------------------------------------------------------------*/
-#content > header.active
+.black #content > header.active
   background: rgba(0,0,0,0.5)
 
 /*------------------------------------------------------------------
  *  3. 発言フィード
  *------------------------------------------------------------------*/
 
-article
+.black article
   color: white
   background: rgb(39, 39, 39)
   header time
     color: #666
-  p!
   .file
     border-top-color: rgb(31, 31, 31)
     background: rgb(51, 51, 51)
     a
-      img!
       &.otherfile
         color: blue
         background: white
@@ -46,5 +44,5 @@ article
 /*------------------------------------------------------------------
  *  5. その他
  *------------------------------------------------------------------*/
-#side ul li a.active:after
+.black #side ul li a.active:after
   border-right-color: black

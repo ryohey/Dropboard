@@ -1,7 +1,11 @@
 Ajax = require "./ajax.coffee"
 lbAjax = new Ajax
 { naturalFormatDate, formatMessage } = require "./util.coffee"
-require "./style.coffee"
+
+require "./style/style.sass"
+require "./style/white.sass"
+require "./style/black.sass"
+require "./style/hacker.sass"
 
 documentTitle = document.title
 
@@ -124,8 +128,29 @@ writeButton = () ->
   #  ファイル情報削除
   $("#files").html("").hide()
 
+changeStyle = (styleName) ->
+  allStyles = $("#colorSelector ul li")
+    .map((i, e) => e.attributes["style-name"].value)
+    .toArray()
+
+  $("body").removeClass(allStyles.join(" "))
+  $("body").addClass(styleName)
+
+setupStyle = () ->
+  # クッキー
+  changeStyle $.cookie("color") if $.cookie("color")?
+  
+  # カラーセレクタ
+  $("#colorSelector ul li").click ->
+    css = $(this).attr("style-name")
+    changeStyle css
+    $.cookie "color", css,
+      expires: 30
+
 module.exports = (path) ->
   return unless path is "/timeline"
+
+  setupStyle()
 
   # auto update
   socket = io.connect(location.origin)

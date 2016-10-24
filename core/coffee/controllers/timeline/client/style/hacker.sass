@@ -8,7 +8,7 @@
  *  1. 全体設定
  *------------------------------------------------------------------*/
 
-body
+body.hacker
   background-color: #000
   color: lime
 
@@ -17,7 +17,7 @@ body
  *------------------------------------------------------------------*/
 
 /* 入力フォームコンテナ */
-#content > header
+.hacker #content > header
   background: rgba(0,0,0,0.5)
   border-bottom: 1px solid lime
   &.active
@@ -25,7 +25,7 @@ body
 
 /* テキストボックス */
 
-#text
+.hacker #text
   border-radius: 0px
   border: 1px solid lime
   background: #000
@@ -36,7 +36,7 @@ body
 
 /* 名前欄 */
 
-#name
+.hacker #name
   border-radius: 0px
   border: 1px solid lime
   background: #000
@@ -44,7 +44,7 @@ body
 
 /* 書き込むボタン */
 
-#write
+.hacker #write
   text-shadow: none
   box-shadow: none
   border-radius: 0px
@@ -59,7 +59,7 @@ body
  *  3. 発言フィード
  *------------------------------------------------------------------*/
 
-article
+.hacker article
   border-radius: 0px
   background: transparent
   padding-bottom: 10px
@@ -71,7 +71,6 @@ article
   header time
     color: #666
   .file a
-    img!
     &.otherfile
       color: blue
       background: white
@@ -90,5 +89,5 @@ article
 /*------------------------------------------------------------------
  *  5. その他
  *------------------------------------------------------------------*/
-#side ul li a.active:after
+.hacker #side ul li a.active:after
   border-right-color: black
