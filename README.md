@@ -2,6 +2,27 @@
 
 Chat on Dropbox
 
+## Development
+
+install dependencies
+
+```bash
+cd core
+npm install
+```
+
+build sources
+
+```bash
+npm watch
+```
+
+start server
+
+```bash
+npm start
+```
+
 ## Timeline
 
 - Sync messages in real time
