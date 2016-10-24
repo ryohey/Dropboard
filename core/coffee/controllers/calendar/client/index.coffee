@@ -1,4 +1,5 @@
 contextMenu = require "../../../helpers/context-menu.coffee"
+require "./style.sass"
 
 class MyCalendar
   constructor : () ->

@@ -1,4 +1,5 @@
 URLParser = require "../../../public/js/url.coffee"
+require "./style.sass"
 
 module.exports = (path) ->
   return unless path is "/upload"

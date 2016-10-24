@@ -1,3 +1,5 @@
+require "./style.sass"
+
 module.exports = (path) ->
   return unless path is "/note"
   
