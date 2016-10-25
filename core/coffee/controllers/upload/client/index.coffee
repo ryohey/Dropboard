@@ -1,4 +1,5 @@
-URLParser = require "../../../public/js/url.coffee"
+$ = require "jQuery"
+URLParser = require "../../../helpers/url.coffee"
 require "./style.sass"
 
 module.exports = (path) ->

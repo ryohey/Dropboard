@@ -1,4 +1,5 @@
-Notify = require "../../../public/js/notify.coffee"
+$ = require "jQuery"
+Notify = require "../../../components/notify.coffee"
 lbNotify = new Notify
 { messageDiff, sortByDate } = require "./util.coffee"
 

@@ -1,3 +1,6 @@
+$ = require "jQuery"
+require "./notify.sass"
+
 #
 #    ポップアップ
 #

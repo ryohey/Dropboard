@@ -1,3 +1,6 @@
+$ = require "jQuery"
+require "./context.sass"
+
 module.exports = contextMenu = (x, y, title, cancelTitle, okTitle, items, complete) =>
   unless $("#contextMenu").length
     $("body").append("<div id='#contextMenu'></div>")

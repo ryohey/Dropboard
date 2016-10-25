@@ -1,0 +1,54 @@
+.fc-border-separate {
+  background: white; }
+
+.fc-sun {
+  color: #fc1947; }
+
+.fc-sat {
+  color: #2389f8; }
+
+#calendar {
+  margin: 1em;
+  margin-top: 70px; }
+
+.fc-content thead {
+  color: #838383;
+  background: whitesmoke; }
+
+.fc-widget-header {
+  font-weight: normal; }
+
+.fc-widget-content:hover {
+  background: rgba(219, 222, 228, 0.2); }
+
+.fc-event-time {
+  font-family: Verdana;
+  font-size: 11px; }
+
+.fc-day-number {
+  font-family: Verdana;
+  font-size: 14px; }
+
+.fc-header {
+  height: 51px;
+  display: block;
+  padding-left: 170px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  text-align: center;
+  background: rgba(228, 228, 228, 0.77);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9;
+  color: #616161; }
+  .fc-header tbody {
+    padding: 9px;
+    width: 520px;
+    margin: 0 auto;
+    display: block; }
+
+.fc-header-title {
+  padding: 3px;
+  font-size: 18px; }

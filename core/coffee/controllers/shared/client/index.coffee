@@ -1,7 +1,12 @@
-Notify = require "./notify.coffee"
+$ = require "jQuery"
+Notify = require "../../../components/notify.coffee"
 lbNotify = new Notify
 
-#  onload
+require "./reset.css"
+require "./style.sass"
+require "./button.sass"
+
+# 全ページ共通で走る onload
 module.exports = () ->
   # 通知を追加
   lbNotify.elm.appendTo("body")

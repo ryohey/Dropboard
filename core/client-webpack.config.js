@@ -26,6 +26,16 @@ module.exports = {
         test: /\.sass$/,
         exclude: /node_modules/,
         loaders: ["style", "css", "sass"]
+      },
+      {
+        test: /\.css$/,
+        exclude: /node_modules/,
+        loaders: ["style", "css"]
+      },
+      {
+        test: /\.(jpg|png|gif)$/,
+        exclude: /node_modules/,
+        loader: "url-loader"
       }
     ]
   }
