@@ -4,6 +4,8 @@ path =    require "path"
 crypto =  require "crypto"
 Reader =  require "../../helpers/reader.coffee"
 Controller = require "../controller.coffee"
+layout =     require "../../views/layout.coffee"
+view =       require "./view.ejs"
 
 class Upload extends Controller
   constructor : (appConfig) ->
@@ -41,9 +43,6 @@ class Upload extends Controller
         res.status(404).send "Not Found"
     else
       files = fs.readdirSync(@dataPath)
-      res.render "upload.ejs", {
-        config: @appConfig
-        items: files
-      }
+      res.send layout(view({items: files}), @appConfig)
 
 module.exports = Upload
