@@ -1,3 +1,4 @@
+$ = require "jQuery"
 fs =         require "fs"
 Controller = require "../controller.coffee"
 Reader =     require "../../helpers/reader.coffee"

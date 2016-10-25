@@ -1,3 +1,4 @@
+$ = require "jQuery"
 require "./style.sass"
 
 module.exports = (path) ->

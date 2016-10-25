@@ -1,3 +1,5 @@
+$ = require "jQuery"
+
 #
 #    特定のHTMLやURLに関係しないコード
 #

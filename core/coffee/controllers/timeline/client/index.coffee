@@ -1,3 +1,4 @@
+$ = require "jQuery"
 Ajax = require "./ajax.coffee"
 lbAjax = new Ajax
 { naturalFormatDate, formatMessage } = require "./util.coffee"
