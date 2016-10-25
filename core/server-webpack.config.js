@@ -31,7 +31,7 @@ module.exports = {
       },
       { 
         test: /\.ejs$/, 
-        loader: "ejs-loader?variable=data"
+        loader: "ejs-loader"
       }
     ]
   }

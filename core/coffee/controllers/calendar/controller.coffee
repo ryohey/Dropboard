@@ -1,6 +1,8 @@
 fs =      require "fs"
 Reader =  require "../../helpers/reader.coffee"
 Controller = require "../controller.coffee"
+layout =     require "../../views/layout.coffee"
+view =       require "./view.ejs"
 
 class Calendar extends Controller
   constructor : (appConfig) ->
@@ -16,7 +18,7 @@ class Calendar extends Controller
       json: () =>
         res.send @reader.get().all()
       html: () =>
-        res.render "calendar.ejs", {config: @appConfig}
+        res.send layout(view(), @appConfig)
     }
 
   put : (req, res) =>

@@ -1,5 +1,7 @@
 express = require "express"
 Controller = require "../controller.coffee"
+layout =     require "../../views/layout.coffee"
+view =       require "./view.ejs"
 
 class Index extends Controller
   constructor : (appConfig) ->
@@ -11,6 +13,6 @@ class Index extends Controller
     app.use @route, express.static(@appConfig.paths.public)
 
   get : (req, res) =>
-    res.render "index.ejs", {config: @appConfig}
+    res.send layout(view(), @appConfig)
 
 module.exports = Index

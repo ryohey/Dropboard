@@ -2,6 +2,8 @@ fs =         require "fs"
 Controller = require "../controller.coffee"
 Reader =     require "../../helpers/reader.coffee"
 Q =          require "../../helpers/array-query.coffee"
+layout =     require "../../views/layout.coffee"
+view =       require "./view.ejs"
 
 module.exports = 
 class Timeline extends Controller
@@ -44,7 +46,7 @@ class Timeline extends Controller
         data = Q(sorted).page(page, per)
         res.send data
       html: () =>
-        res.render "timeline.ejs", {config: @appConfig}
+        res.send layout(view(), @appConfig)
     }
 
   digest : (data) ->

@@ -2,6 +2,8 @@ fs =      require "fs"
 Reader =  require "../../helpers/reader.coffee"
 Q =       require "../../helpers/array-query.coffee"
 Controller = require "../controller.coffee"
+layout =     require "../../views/layout.coffee"
+view =       require "./view.ejs"
 
 class Note extends Controller
   constructor : (appConfig) ->
@@ -18,7 +20,7 @@ class Note extends Controller
       json: () =>
         res.send @reader.get().all()
       html: () =>
-        res.render "note.ejs", {config: @appConfig}
+        res.send layout(view(), @appConfig)
     }
 
 module.exports = Note

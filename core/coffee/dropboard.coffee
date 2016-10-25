@@ -80,11 +80,6 @@ class Dropboard
     app.use bodyParser.urlencoded()
     app.use partials()
 
-    ### Template Setting ###
-    app.engine '.html', ejs.__express
-    app.set 'view engine', 'ejs'
-    app.set 'views', @config.paths.views
-
     ### localhost以外からのアクセスは400で応答 ###
     app.use (req, res, next) ->
       hostname = req.headers.host
