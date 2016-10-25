@@ -1,4 +1,5 @@
 $ = require "jQuery"
+Cookies = require "js-cookie"
 Ajax = require "./ajax.coffee"
 lbAjax = new Ajax
 { naturalFormatDate, formatMessage } = require "./util.coffee"
@@ -124,7 +125,7 @@ writeButton = () ->
     )
 
   #  名前のクッキーを焼く
-  $.cookie('name', userName, {expires: 30})
+  Cookies.set('name', userName, {expires: 30})
 
   #  ファイル情報削除
   $("#files").html("").hide()
@@ -139,13 +140,13 @@ changeStyle = (styleName) ->
 
 setupStyle = () ->
   # クッキー
-  changeStyle $.cookie("color") if $.cookie("color")?
+  changeStyle Cookies.get("color") if Cookies.get("color")?
   
   # カラーセレクタ
   $("#colorSelector ul li").click ->
     css = $(this).attr("style-name")
     changeStyle css
-    $.cookie "color", css,
+    Cookies.set "color", css,
       expires: 30
 
 module.exports = (path) ->

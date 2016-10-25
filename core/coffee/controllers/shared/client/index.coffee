@@ -1,5 +1,6 @@
 $ = require "jQuery"
 Notify = require "../../../components/notify.coffee"
+Cookies = require "js-cookie"
 lbNotify = new Notify
 
 require "./reset.css"
@@ -16,4 +17,4 @@ module.exports = () ->
   $("#side nav ul li").find("."+activePage).addClass("active")
 
   #  クッキー
-  $("#user .name").val($.cookie('name'))
+  $("#user .name").val(Cookies.get('name'))
